@@ -1,13 +1,102 @@
 @extends('layouts.app')
+
 @section('content')
-<section class="hero-slider" x-data="{active:0, slides:[0,1,2]}" x-init="setInterval(()=>active=(active+1)%slides.length, 6500)"><div class="hero-slides">
-<div class="hero-slide" x-show="active===0" x-transition.opacity><div class="hero-slide-media"><img src="https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=1800&q=88" alt="Fındık kreması" width="1800" height="1100" fetchpriority="high"></div><div class="container hero-content"><p class="eyebrow">DOĞADAN GELEN İYİ FİKİR</p><h1>Lezzet,<br><em>doğallık</em><br>ve iyi his.</h1><p>En iyi kuruyemişleri, özenle ve sevgiyle işleyerek hayatınıza katıyoruz.</p><a class="button" href="{{ url('/urunlerimiz') }}">Ürünleri keşfet <span>↗</span></a></div></div>
-<div class="hero-slide" x-show="active===1" x-transition.opacity><div class="hero-slide-media"><img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=1800&q=88" alt="Antep fıstıklı krema" width="1800" height="1100"><div></div></div><div class="container hero-content"><p class="eyebrow">NUTTIME SEÇKİSİ</p><h1>Gerçek tadın<br><em>izinde.</em></h1><p>Her kavanozda sade içerik, özenli üretim ve unutulmaz bir lezzet.</p><a class="button" href="{{ url('/urunler/antep-fistikli-kremasi') }}">İncele <span>↗</span></a></div></div>
-<div class="hero-slide" x-show="active===2" x-transition.opacity><div class="hero-slide-media"><img src="https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&w=1800&q=88" alt="Doğal bademler" width="1800" height="1100"></div><div class="container hero-content"><p class="eyebrow">İYİ SEÇİMLER</p><h1>Günün her<br>anına <em>iyi</em><br>eşlik eder.</h1><p>Doğanın sunduğu en iyi lezzetleri keşfedin.</p><a class="button" href="{{ url('/urunlerimiz') }}">Keşfet <span>↗</span></a></div></div></div><div class="container slider-controls"><span x-text="`0${active+1}`"></span><div class="slider-line"><i :style="`width:${(active+1)*33.33}%`"></i></div><span>03</span></div></section>
-<section class="section featured"><div class="container"><div class="section-head"><div><p class="eyebrow">ÖZENLE SEÇTİK</p><h2>Öne çıkan<br><em>lezzetler.</em></h2></div><a class="text-link" href="{{ url('/urunlerimiz') }}">Tüm ürünler <span>↗</span></a></div><div class="product-grid">@forelse(collect($products)->filter(fn($p)=>$p['featured'] ?? false)->take(3) as $product)<x-product-card :product="$product" />@empty<p>Öne çıkan ürünler yakında burada.</p>@endforelse</div></div></section>
-<section class="category-section section"><div class="container"><div class="section-head"><div><p class="eyebrow">KATEGORİLER</p><h2>İyi olanı<br><em>bul.</em></h2></div></div><div class="category-grid">@foreach($categories as $category)<a class="category-card" href="{{ url('/kategori/'.$category['slug']) }}"><img src="{{ $category['image'] }}" alt="{{ $category['name'] }}" width="800" height="500" loading="lazy"><div><small>KEŞFET</small><h3>{{ $category['name'] }}</h3><span>↗</span></div></a>@endforeach</div></div></section>
-<section class="brand-story"><div class="story-image"><img src="https://images.unsplash.com/photo-1536591375667-4c7a6e1b9c13?auto=format&fit=crop&w=1200&q=85" alt="Doğal kuruyemişler" width="1200" height="900" loading="lazy"></div><div class="story-copy"><p class="eyebrow">BİZ KİMİZ?</p><h2>İyi ürün,<br><em>iyi his,</em><br>iyi bir hayat.</h2><p>Nuttime, doğanın sunduğu en iyi lezzetleri modern yaşamın ritmiyle buluşturur.</p><a class="text-link" href="{{ url('/hakkimizda') }}">Hikâyemizi keşfet <span>↗</span></a></div></section>
-@if(count($certificates))<section class="certificates-section section"><div class="container"><div class="section-head"><div><p class="eyebrow">GÜVENLE ÜRETİYORUZ</p><h2>Kalite<br><em>belgelerimiz.</em></h2></div><a class="text-link" href="{{ url('/sertifikalarimiz') }}">Tümünü gör <span>↗</span></a></div><div class="certificate-grid">@foreach($certificates as $certificate)<article class="certificate-card">@if($certificate['image'])<img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="320" height="220" loading="lazy">@else<div class="certificate-mark">nt</div>@endif<div><p>{{ $certificate['name'] }}</p>@if($certificate['description'])<small>{{ $certificate['description'] }}</small>@endif</div>@if($certificate['document'])<a href="{{ $certificate['document'] }}" target="_blank" rel="noopener" aria-label="{{ $certificate['name'] }} belgesini aç">↗</a>@endif</article>@endforeach</div></div></section>@endif
+<section class="home-hero">
+    <img src="{{ asset('images/nuttime/brand-moment.jpg') }}" alt="Yer fıstıkları arasında Nuttime yer fıstığı ezmesi" width="1920" height="1280" fetchpriority="high">
+    <div class="home-hero__shade"></div>
+    <div class="container home-hero__copy">
+        <p class="kicker">DOĞADAN GELEN İYİ FİKİR</p>
+        <h1>Gerçek lezzet,<br><em>iyi his.</em></h1>
+        <p>Özenle seçilmiş kuruyemişlerle hazırlanan yoğun ve karakterli ezmeler.</p>
+        <a class="button" href="{{ url('/urunlerimiz') }}">Seçkiyi keşfet <span>↗</span></a>
+    </div>
+</section>
+
+<section class="home-intro">
+    <div class="container home-intro__inner">
+        <p class="kicker">NUTTIME</p>
+        <p>İyi kuruyemişleri, yalın içeriklerle <em>günün en keyifli anına</em> dönüştürüyoruz.</p>
+        <a class="arrow-link" href="{{ url('/hakkimizda') }}">Hikâyemizi keşfet <span>↗</span></a>
+    </div>
+</section>
+
+@php($featured = collect($products)->filter(fn ($product) => $product['featured'] ?? false)->take(3))
+@if($featured->isNotEmpty())
+<section class="feature-showcase home-section">
+    <div class="container">
+        <x-section-heading kicker="ÖZENLE SEÇTİK" title="Öne çıkan<br><em>lezzetler.</em>" href="{{ url('/urunlerimiz') }}" />
+        <div class="feature-showcase__grid">
+            @foreach($featured as $key => $product)
+                <x-product-card :product="$product" :variant="$key === 0 ? 'hero' : 'mini'" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+@if(count($categories))
+<section class="category-showcase home-section">
+    <div class="container">
+        <x-section-heading kicker="KATEGORİLER" title="İyi olanı<br><em>bul.</em>" />
+        <div class="category-showcase__grid">
+            @foreach($categories as $index => $category)
+                <x-category-card :category="$category" :index="$index" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+<section class="brand-moment" aria-label="Nuttime ürün seçkisi">
+    <img src="{{ asset('images/nuttime/collection-banner.jpg') }}" alt="Fındık, Hindistan cevizi, Antep fıstığı ve badem Nuttime ezmeleri" width="1900" height="500" loading="lazy">
+    <div class="brand-moment__shade"></div>
+    <div class="container brand-moment__copy">
+        <p class="kicker">BİR KAVANOZDAN DAHA FAZLASI</p>
+        <p>Her zevke, her ritme<br><em>iyi eşlik eder.</em></p>
+    </div>
+</section>
+
+<section class="brand-story">
+    <div class="brand-story__image">
+        <img src="{{ asset('images/nuttime/brand-story.jpg') }}" alt="Nuttime fındık ezmesi ve fındıklı ekmek" width="1707" height="2560" loading="lazy">
+    </div>
+    <div class="brand-story__copy">
+        <p class="kicker">BİZ KİMİZ?</p>
+        <h2>İyi ürün,<br><em>iyi his,</em><br>iyi bir hayat.</h2>
+        <p>Nuttime, özenle seçilmiş kuruyemişlerin doğal karakterini her gün yeniden keşfetmeniz için hazırlar.</p>
+        <a class="arrow-link arrow-link--light" href="{{ url('/hakkimizda') }}">Hikâyemizi keşfet <span>↗</span></a>
+    </div>
+</section>
+
+@php($certificatesWithImages = collect($certificates)->filter(fn ($certificate) => !empty($certificate['image'])))
+@if($certificatesWithImages->isNotEmpty())
+<section class="quality-rail home-section">
+    <div class="container">
+        <x-section-heading kicker="GÜVENLE ÜRETİYORUZ" title="Kalite, her<br><em>detayda.</em>" href="{{ url('/sertifikalarimiz') }}" />
+        <div class="quality-rail__items">
+            @foreach($certificatesWithImages as $certificate)
+            <article>
+                <img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy">
+                <div><h3>{{ $certificate['name'] }}</h3>@if($certificate['description'])<p>{{ $certificate['description'] }}</p>@endif</div>
+                @if($certificate['document'])<a href="{{ $certificate['document'] }}" target="_blank" rel="noopener">Belgeyi aç ↗</a>@endif
+            </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <x-factory-location :factory="$factory" />
+
+@if(!empty($settings['instagram']) && $settings['instagram'] !== '#')
+<section class="social-callout">
+    <div class="container">
+        <p class="kicker">GÜNLÜK İLHAM</p>
+        <h2>Nuttime'ı<br><em>yakından takip edin.</em></h2>
+        <a class="arrow-link arrow-link--light" href="{{ $settings['instagram'] }}" target="_blank" rel="noopener">Instagram'da aç <span>↗</span></a>
+    </div>
+</section>
+@endif
+
 <x-final-cta />
 @endsection

@@ -1,2 +1,7 @@
-@props(['category', 'featured' => false])
-<a class="category-card {{ $featured ? 'category-card--featured' : '' }}" href="{{ url('/kategori/'.$category['slug']) }}"><div class="category-card-image"><img src="{{ $category['image'] ?? asset('images/category-placeholder.svg') }}" alt="{{ $category['name'] }}" width="900" height="620" loading="lazy"></div><div class="category-card-content"><p class="eyebrow">KATEGORİ</p><h3>{{ $category['name'] }}</h3><span class="round-arrow">↗</span></div></a>
+@props(['category', 'index' => 0])
+<a class="category-tile category-tile--{{ $index % 4 }}" href="{{ url('/kategori/'.$category['slug']) }}">
+    @if(!empty($category['image']))
+    <img src="{{ $category['image'] }}" alt="{{ $category['name'] }}" width="1200" height="800" loading="lazy">
+    @endif
+    <div class="category-tile__veil"></div><div class="category-tile__caption"><p>0{{ $index + 1 }} / KATEGORİ</p><h3>{{ $category['name'] }}</h3><span>↗</span></div>
+</a>

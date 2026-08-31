@@ -26,29 +26,59 @@ class SiteController extends Controller
                 'description' => $product->short_description ?? $product->description ?? '',
                 'featured' => $product->is_featured,
                 'accent' => '#d7b66c',
-                'image' => $product->main_image ? asset('storage/'.$product->main_image) : 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=1200&q=85',
+                'image' => $product->main_image
+                    ? asset('storage/'.$product->main_image)
+                    : $this->fallbackProductImage($product->name, $product->category?->name),
+                'gallery' => collect($product->additional_images ?? [])
+                    ->filter()
+                    ->map(fn (string $image) => asset('storage/'.$image))
+                    ->values()
+                    ->all(),
             ])->all();
         }
 
         return [
-            ['slug' => 'findik-kremasi', 'name' => ['tr' => 'Fındık Kreması', 'en' => 'Hazelnut Cream', 'de' => 'Haselnusscreme'], 'category' => 'Nut Creams', 'description' => 'Özenle seçilmiş fındıklarla hazırlanan pürüzsüz, yoğun ve dengeli lezzet.', 'accent' => '#d7b66c', 'image' => 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=1200&q=85'],
-            ['slug' => 'antep-fistikli-kremasi', 'name' => ['tr' => 'Antep Fıstıklı Krema', 'en' => 'Pistachio Cream', 'de' => 'Pistaziencreme'], 'category' => 'Nut Creams', 'description' => 'Antep fıstığının karakteristik aromasıyla rafine bir deneyim.', 'accent' => '#aac09e', 'image' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=1200&q=85'],
-            ['slug' => 'badem-unu', 'name' => ['tr' => 'Badem Unu', 'en' => 'Almond Flour', 'de' => 'Mandelmehl'], 'category' => 'Ingredients', 'description' => 'Mutfakta yaratıcı tarifler için ince öğütülmüş, doğal badem.', 'accent' => '#c9a87f', 'image' => 'https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&w=1200&q=85'],
+            ['slug' => 'findik-kremasi', 'name' => ['tr' => 'Fındık Ezmesi', 'en' => 'Hazelnut Butter', 'de' => 'Haselnusscreme'], 'category' => 'Nut Creams', 'description' => 'Özenle seçilmiş fındıklarla hazırlanan pürüzsüz, yoğun ve dengeli lezzet.', 'featured' => true, 'accent' => '#c6a36e', 'image' => asset('images/nuttime/hazelnut-butter.jpg'), 'gallery' => []],
+            ['slug' => 'antep-fistikli-kremasi', 'name' => ['tr' => 'Antep Fıstığı Ezmesi', 'en' => 'Pistachio Butter', 'de' => 'Pistaziencreme'], 'category' => 'Nut Creams', 'description' => 'Antep fıstığının karakteristik aromasıyla rafine bir deneyim.', 'featured' => true, 'accent' => '#a6ad76', 'image' => asset('images/nuttime/pistachio-butter.jpg'), 'gallery' => []],
+            ['slug' => 'badem-unu', 'name' => ['tr' => 'Badem Ezmesi', 'en' => 'Almond Butter', 'de' => 'Mandelcreme'], 'category' => 'Nut Creams', 'description' => 'Özenle seçilmiş bademlerin yumuşak ve karakterli lezzeti.', 'featured' => true, 'accent' => '#c8a077', 'image' => asset('images/nuttime/almond-butter.jpg'), 'gallery' => []],
+            ['slug' => 'yer-fistigi-ezmesi', 'name' => ['tr' => 'Yer Fıstığı Ezmesi', 'en' => 'Peanut Butter', 'de' => 'Erdnusscreme'], 'category' => 'Nut Creams', 'description' => 'Yoğun fıstık tadı ve parçacıklı dokusuyla günün her anına eşlik eder.', 'featured' => false, 'accent' => '#a97845', 'image' => asset('images/nuttime/peanut-butter.jpg'), 'gallery' => []],
         ];
     }
 
     private function categories(): array
     {
         if (! Schema::hasTable('categories')) {
-            return [['name' => 'Nut Creams', 'slug' => 'nut-creams', 'description' => 'Natural, creamy and full of character.', 'image' => 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=900&q=80']];
+            return $this->fallbackCategories();
         }
 
         $categories = Category::query()->where('is_active', true)->orderBy('sort_order')->get()->map(fn (Category $category) => [
             'name' => $category->name ?? 'Nut Creams', 'slug' => $category->slug ?? 'nut-creams', 'description' => $category->description ?? '',
-            'image' => $category->image ? asset('storage/'.$category->image) : 'https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&w=900&q=80',
+            'image' => $category->image ? asset('storage/'.$category->image) : $this->fallbackProductImage($category->name, $category->name),
         ])->all();
 
-        return $categories ?: [['name' => 'Nut Creams', 'slug' => 'nut-creams', 'description' => 'Natural, creamy and full of character.', 'image' => 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=900&q=80']];
+        return $categories ?: $this->fallbackCategories();
+    }
+
+    private function fallbackCategories(): array
+    {
+        return [
+            ['name' => 'Nut Creams', 'slug' => 'nut-creams', 'description' => 'Fındık, Antep fıstığı ve bademin yoğun, gerçek lezzeti.', 'image' => asset('images/nuttime/hazelnut-butter.jpg')],
+            ['name' => 'Yer Fıstığı', 'slug' => 'yer-fistigi', 'description' => 'Parçacıklı dokusuyla güçlü ve dengeli bir klasik.', 'image' => asset('images/nuttime/peanut-butter.jpg')],
+            ['name' => 'Özel Seçki', 'slug' => 'ozel-secki', 'description' => 'Her güne küçük, iyi bir lezzet molası.', 'image' => asset('images/nuttime/pistachio-butter.jpg')],
+        ];
+    }
+
+    private function fallbackProductImage(?string $name, ?string $category = null): string
+    {
+        $label = mb_strtolower(($name ?? '').' '.($category ?? ''), 'UTF-8');
+
+        return match (true) {
+            str_contains($label, 'antep'), str_contains($label, 'pistachio') => asset('images/nuttime/pistachio-butter.jpg'),
+            str_contains($label, 'badem'), str_contains($label, 'almond') => asset('images/nuttime/almond-butter.jpg'),
+            str_contains($label, 'hindistan'), str_contains($label, 'coconut') => asset('images/nuttime/coconut-butter.jpg'),
+            str_contains($label, 'fındık'), str_contains($label, 'hazelnut') => asset('images/nuttime/hazelnut-butter.jpg'),
+            default => asset('images/nuttime/peanut-butter.jpg'),
+        };
     }
 
     private function settings(): array

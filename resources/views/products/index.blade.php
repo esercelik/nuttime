@@ -1,1 +1,5 @@
-@extends('layouts.app') @section('content')<section class="page-hero"><div class="container"><p class="eyebrow">NUTTIME SEÇKİSİ</p><h1>Ürünlerimiz</h1><p>Günün her anına eşlik eden doğal lezzetler.</p></div></section><section class="section"><div class="container"><div class="product-grid">@forelse($products as $product)<x-product-card :product="$product" />@empty<p>Henüz aktif ürün bulunmuyor.</p>@endforelse</div></div></section>@endsection
+@extends('layouts.app')
+@section('content')
+<x-page-hero kicker="NUTTIME SEÇKİSİ" title="Her ana eşlik eden<br><em>iyi lezzetler.</em>" copy="Doğadan gelen yalın ve yoğun tatlar." />
+<section class="catalog-page"><div class="container"><div class="catalog-page__bar"><span>{{ count($products) }} ürün</span><a href="#catalog">Seçkiyi keşfet ↓</a></div><div id="catalog" class="catalog-page__grid">@forelse($products as $index => $product)<x-product-card :product="$product" :variant="$index === 0 ? 'hero' : 'default'" />@empty<p class="empty-state">Seçkimiz yakında burada yer alacak.</p>@endforelse</div></div></section><x-final-cta />
+@endsection
