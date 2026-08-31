@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class SiteController extends Controller
 {
@@ -109,9 +110,82 @@ class SiteController extends Controller
         ])->all();
     }
 
+    /**
+     * @param  array<int, array<string, mixed>>  $products
+     * @return array<int, array<string, mixed>>
+     */
+    private function heroSlides(array $products): array
+    {
+        [$featuredProducts, $otherProducts] = collect($products)
+            ->filter(fn (array $product) => filled($product['slug'] ?? null) && filled($product['image'] ?? null))
+            ->partition(fn (array $product) => (bool) ($product['featured'] ?? false));
+
+        return $featuredProducts
+            ->merge($otherProducts)
+            ->unique('slug')
+            ->values()
+            ->map(function (array $product): array {
+                $name = $product['name']['tr'] ?? 'Nuttime ürünü';
+                $theme = $this->heroTheme(Str::lower(implode(' ', [$product['slug'] ?? '', $name, $product['category'] ?? ''])));
+                $isPistachio = $theme === 'pistachio';
+
+                return [
+                    'slug' => $product['slug'],
+                    'name' => $name,
+                    'category' => $product['category'] ?? 'Nuttime',
+                    'description' => filled($product['description'] ?? null)
+                        ? $product['description']
+                        : 'Özenle seçilmiş kuruyemişlerle hazırlanan yoğun ve karakterli lezzet.',
+                    'url' => route('product', ['slug' => $product['slug']]),
+                    'theme' => $theme,
+                    'background_image' => $isPistachio
+                        ? asset('images/nuttime/spylt/nuttime-antep-hero-background.png')
+                        : $product['image'],
+                    'product_image' => $isPistachio
+                        ? asset('images/nuttime/spylt/nuttime-antep-jar-transparent.png')
+                        : $product['image'],
+                    'product_is_photo' => ! $isPistachio,
+                ];
+            })
+            ->all();
+    }
+
+    private function heroTheme(string $label): string
+    {
+        if (Str::contains($label, ['antep', 'pistachio'])) {
+            return 'pistachio';
+        }
+
+        if (Str::contains($label, ['fındık', 'findik', 'hazelnut'])) {
+            return 'hazelnut';
+        }
+
+        if (Str::contains($label, ['badem', 'almond'])) {
+            return 'almond';
+        }
+
+        if (Str::contains($label, ['çikolata', 'cikolata', 'chocolate', 'kakao', 'cocoa'])) {
+            return 'cocoa';
+        }
+
+        if (Str::contains($label, ['bal', 'honey'])) {
+            return 'honey';
+        }
+
+        if (Str::contains($label, ['fıstık', 'fistik', 'peanut'])) {
+            return 'peanut';
+        }
+
+        $themes = ['peanut', 'almond', 'cocoa', 'honey'];
+
+        return $themes[(int) sprintf('%u', crc32($label)) % count($themes)];
+    }
+
     public function home()
     {
-        return view('pages.home', ['products' => $this->catalog(), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
+        $products = $this->catalog();
+
+        return view('pages.home', ['products' => $products, 'heroSlides' => $this->heroSlides($products), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
     }
 
     public function products()

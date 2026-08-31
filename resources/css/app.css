@@ -396,6 +396,82 @@ body:has(.product-hero).is-compact .masthead {
   object-position: center;
 }
 
+.product-hero__gradient,
+.product-hero__backdrop-type,
+.product-hero__decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.product-hero__gradient {
+  z-index: -2;
+  background: linear-gradient(90deg, rgba(5, 12, 1, .92) 0%, rgba(8, 17, 2, .7) 35%, rgba(8, 17, 2, .2) 71%);
+}
+
+.product-hero__backdrop-type {
+  z-index: -1;
+  top: auto;
+  bottom: -5vw;
+  left: -1vw;
+  width: max-content;
+  max-width: 96vw;
+  overflow: hidden;
+  color: rgba(255, 250, 240, .12);
+  font-size: clamp(94px, 15.5vw, 255px);
+  font-weight: 600;
+  letter-spacing: -.1em;
+  line-height: .72;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.product-hero__decorations {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.product-hero__decorations span {
+  position: absolute;
+  display: block;
+  width: clamp(24px, 3vw, 52px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(255, 250, 240, .42);
+  border-radius: 58% 42% 52% 48%;
+  background: radial-gradient(circle at 34% 30%, #f4e9c7 0 10%, var(--hero-decoration) 12% 57%, transparent 59%);
+  box-shadow: inset -7px -8px 11px rgba(0, 0, 0, .18), 0 15px 25px rgba(4, 8, 1, .22);
+}
+
+.product-hero__decorations span:nth-child(1) {
+  top: 20%;
+  right: 38%;
+}
+
+.product-hero__decorations span:nth-child(2) {
+  top: 62%;
+  right: 11%;
+  width: clamp(35px, 4.6vw, 78px);
+}
+
+.product-hero__decorations span:nth-child(3) {
+  top: 12%;
+  right: 12%;
+  width: clamp(16px, 1.7vw, 30px);
+}
+
+.product-hero--pistachio { --hero-decoration: #9aac42; }
+.product-hero--hazelnut { --hero-decoration: #a56e43; }
+.product-hero--almond { --hero-decoration: #d7ae7a; }
+.product-hero--cocoa { --hero-decoration: #754329; }
+.product-hero--honey { --hero-decoration: #dba638; }
+.product-hero--peanut { --hero-decoration: #bd7742; }
+
+.product-hero--hazelnut .product-hero__gradient { background: linear-gradient(90deg, rgba(25, 11, 5, .94), rgba(48, 22, 8, .7) 40%, rgba(48, 22, 8, .18) 74%); }
+.product-hero--almond .product-hero__gradient { background: linear-gradient(90deg, rgba(44, 28, 15, .88), rgba(101, 66, 29, .62) 43%, rgba(101, 66, 29, .14) 75%); }
+.product-hero--cocoa .product-hero__gradient { background: linear-gradient(90deg, rgba(18, 7, 3, .94), rgba(48, 17, 8, .7) 41%, rgba(48, 17, 8, .18) 75%); }
+.product-hero--honey .product-hero__gradient { background: linear-gradient(90deg, rgba(52, 31, 4, .92), rgba(99, 60, 8, .65) 41%, rgba(99, 60, 8, .18) 75%); }
+.product-hero--peanut .product-hero__gradient { background: linear-gradient(90deg, rgba(32, 13, 4, .93), rgba(77, 34, 8, .68) 41%, rgba(77, 34, 8, .18) 75%); }
+
 .product-hero__visual-anchor {
   top: 11%;
   right: clamp(20px, 6.5vw, 130px);
@@ -466,6 +542,23 @@ body:has(.product-hero).is-compact .masthead {
 .product-hero__counter b {
   color: #fffaf0;
   font-weight: 600;
+}
+
+.product-hero__progress {
+  width: 52px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255, 250, 240, .25);
+}
+
+.product-hero__progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: #eed17f;
 }
 
 .product-hero__scroll-hint {
@@ -591,6 +684,18 @@ body:has(.product-hero).is-compact .masthead {
     bottom: 14px;
   }
 
+  .product-hero__gradient {
+    background: linear-gradient(180deg, rgba(5, 12, 1, .84), rgba(7, 17, 2, .45) 51%, rgba(5, 12, 1, .12));
+  }
+
+  .product-hero--hazelnut .product-hero__gradient,
+  .product-hero--almond .product-hero__gradient,
+  .product-hero--cocoa .product-hero__gradient,
+  .product-hero--honey .product-hero__gradient,
+  .product-hero--peanut .product-hero__gradient {
+    background: linear-gradient(180deg, rgba(25, 12, 5, .87), rgba(38, 18, 6, .44) 51%, rgba(25, 12, 5, .12));
+  }
+
   .product-hero__controls {
     right: 20px;
     bottom: 19px;
@@ -628,6 +733,20 @@ body:has(.product-hero).is-compact .masthead {
   .product-hero__visual-anchor {
     bottom: 62px;
     height: min(45svh, 350px);
+  }
+
+  .product-hero__backdrop-type {
+    bottom: 12%;
+    font-size: clamp(72px, 23vw, 120px);
+  }
+
+  .product-hero__decorations span:nth-child(1) {
+    top: 43%;
+    right: 16%;
+  }
+
+  .product-hero__decorations span:nth-child(2) {
+    display: none;
   }
 
   .product-hero__actions {

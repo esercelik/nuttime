@@ -10,8 +10,8 @@ final class HomeHeroTest extends TestCase
     {
         $response = $this->get(route('home'));
 
-        $response->assertSee('ANTEP FISTIĞININ')
-            ->assertSee('EN YOĞUN HALİ')
+        $response->assertSee('Fındık Ezmesi')
+            ->assertSee('Ürünü İncele')
             ->assertSee('data-product-hero-background', false)
             ->assertSee('data-product-hero-jar', false)
             ->assertSee('data-autoplay="6500"', false)
