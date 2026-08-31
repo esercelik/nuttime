@@ -56,6 +56,17 @@ class SiteController extends Controller
         return Schema::hasTable('site_settings') ? SiteSetting::current()->toArray() : ['site_name' => 'Nuttime', 'email' => 'hello@nuttime.com.tr', 'phone' => '+90 212 123 45 67', 'whatsapp' => '', 'instagram' => '#', 'facebook' => '#', 'youtube' => '#'];
     }
 
+    private function factoryLocation(): array
+    {
+        $settings = $this->settings();
+        $enabled = (bool) ($settings['factory_map_enabled'] ?? false);
+        $url = filter_var($settings['factory_google_maps_url'] ?? null, FILTER_VALIDATE_URL);
+        $key = config('services.google_maps.embed_api_key');
+        $hasCoordinates = is_numeric($settings['factory_map_latitude'] ?? null) && is_numeric($settings['factory_map_longitude'] ?? null);
+
+        return ['enabled' => $enabled && filled($settings['factory_address'] ?? null), 'name' => $settings['factory_name'] ?? '', 'address' => $settings['factory_address'] ?? '', 'url' => $url && str_starts_with($url, 'https://') ? $url : null, 'embed_url' => $enabled && $hasCoordinates && $key ? 'https://www.google.com/maps/embed/v1/place?key='.rawurlencode($key).'&q='.rawurlencode($settings['factory_map_latitude'].','.$settings['factory_map_longitude']) : null];
+    }
+
     private function certificates(): array
     {
         if (! Schema::hasTable('certificates')) {
@@ -70,7 +81,7 @@ class SiteController extends Controller
 
     public function home()
     {
-        return view('pages.home', ['products' => $this->catalog(), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'settings' => $this->settings()]);
+        return view('pages.home', ['products' => $this->catalog(), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
     }
 
     public function products()
@@ -102,7 +113,7 @@ class SiteController extends Controller
 
     public function contact()
     {
-        return view('pages.contact', ['settings' => $this->settings()]);
+        return view('pages.contact', ['factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
     }
 
     public function storeContact(Request $request)

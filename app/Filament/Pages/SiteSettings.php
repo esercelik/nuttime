@@ -38,6 +38,12 @@ class SiteSettings extends Page
             'data.seo_title' => ['nullable', 'string', 'max:160'],
             'data.seo_description' => ['nullable', 'string', 'max:320'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'data.factory_name' => ['nullable', 'string', 'max:160'],
+            'data.factory_address' => ['nullable', 'string', 'max:1000'],
+            'data.factory_map_latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'data.factory_map_longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'data.factory_google_maps_url' => ['nullable', 'url:https', 'max:2048'],
+            'data.factory_map_enabled' => ['boolean'],
         ]);
         if ($this->logo) {
             $this->data['logo'] = $this->logo->store('site', 'public');
