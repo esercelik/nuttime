@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Certificate;
 use App\Models\ContactMessage;
 use App\Models\Product;
 use App\Models\SiteSetting;
@@ -23,6 +24,7 @@ class SiteController extends Controller
                 'name' => ['tr' => $product->name, 'en' => $product->name, 'de' => $product->name],
                 'category' => $product->category?->name ?? 'Nut Creams',
                 'description' => $product->short_description ?? $product->description ?? '',
+                'featured' => $product->is_featured,
                 'accent' => '#d7b66c',
                 'image' => $product->main_image ? asset('storage/'.$product->main_image) : 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=1200&q=85',
             ])->all();
@@ -54,14 +56,26 @@ class SiteController extends Controller
         return Schema::hasTable('site_settings') ? SiteSetting::current()->toArray() : ['site_name' => 'Nuttime', 'email' => 'hello@nuttime.com.tr', 'phone' => '+90 212 123 45 67', 'whatsapp' => '', 'instagram' => '#', 'facebook' => '#', 'youtube' => '#'];
     }
 
+    private function certificates(): array
+    {
+        if (! Schema::hasTable('certificates')) {
+            return [];
+        }
+
+        return Certificate::query()->active()->orderBy('sort_order')->get()->map(fn (Certificate $certificate) => [
+            'name' => $certificate->name, 'description' => $certificate->description, 'image' => $certificate->image ? asset('storage/'.$certificate->image) : null,
+            'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : $certificate->document_url,
+        ])->all();
+    }
+
     public function home()
     {
-        return view('pages.home', ['products' => $this->catalog(), 'categories' => $this->categories(), 'settings' => $this->settings()]);
+        return view('pages.home', ['products' => $this->catalog(), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'settings' => $this->settings()]);
     }
 
     public function products()
     {
-        return view('products.index', ['products' => $this->catalog()]);
+        return view('products.index', ['products' => $this->catalog(), 'settings' => $this->settings()]);
     }
 
     public function product(string $slug)
@@ -83,7 +97,7 @@ class SiteController extends Controller
 
     public function page(string $page)
     {
-        return view('pages.static', ['page' => $page]);
+        return view('pages.static', ['page' => $page, 'certificates' => $page === 'certificates' ? $this->certificates() : []]);
     }
 
     public function contact()
