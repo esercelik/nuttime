@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactMessage;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
@@ -41,10 +41,12 @@ class SiteController extends Controller
             return [['name' => 'Nut Creams', 'slug' => 'nut-creams', 'description' => 'Natural, creamy and full of character.', 'image' => 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=900&q=80']];
         }
 
-        return Category::query()->where('is_active', true)->orderBy('sort_order')->get()->map(fn (Category $category) => [
+        $categories = Category::query()->where('is_active', true)->orderBy('sort_order')->get()->map(fn (Category $category) => [
             'name' => $category->name ?? 'Nut Creams', 'slug' => $category->slug ?? 'nut-creams', 'description' => $category->description ?? '',
             'image' => $category->image ? asset('storage/'.$category->image) : 'https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&w=900&q=80',
         ])->all();
+
+        return $categories ?: [['name' => 'Nut Creams', 'slug' => 'nut-creams', 'description' => 'Natural, creamy and full of character.', 'image' => 'https://images.unsplash.com/photo-1599599810694-b5ac8dd71e6d?auto=format&fit=crop&w=900&q=80']];
     }
 
     private function settings(): array
@@ -75,6 +77,7 @@ class SiteController extends Controller
         $category = collect($this->categories())->firstWhere('slug', $slug);
         abort_unless($category, 404);
         $products = collect($this->catalog())->filter(fn ($product) => $product['category'] === $category['name'])->values()->all();
+
         return view('pages.category', compact('category', 'products'));
     }
 

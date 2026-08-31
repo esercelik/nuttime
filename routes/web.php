@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [SiteController::class, 'home'])->name('home');
@@ -25,3 +26,4 @@ Route::redirect('/en/ourproducts/', '/en/products', 301);
 Route::redirect('/de/ourprodukte/', '/de/produkte', 301);
 Route::redirect('/de/kommunikation/', '/de/kontakt', 301);
 Route::get('/robots.txt', fn () => response("User-agent: *\nAllow: /\nDisallow: /admin\n", 200, ['Content-Type' => 'text/plain']));
+Route::get('/sitemap.xml', SitemapController::class);

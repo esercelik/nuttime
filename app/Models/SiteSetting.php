@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class SiteSetting extends Model
 {
@@ -10,6 +11,14 @@ class SiteSetting extends Model
 
     public static function current(): self
     {
-        return static::firstOrCreate([], ['site_name' => 'Nuttime']);
+        $data = Cache::rememberForever('site_settings.current', fn () => static::firstOrCreate([], ['site_name' => 'Nuttime'])->toArray());
+
+        return (new static)->newFromBuilder($data);
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(fn () => Cache::forget('site_settings.current'));
+        static::deleted(fn () => Cache::forget('site_settings.current'));
     }
 }
