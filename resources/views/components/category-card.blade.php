@@ -1,0 +1,2 @@
+@props(['category', 'featured' => false])
+<a class="category-card {{ $featured ? 'category-card--featured' : '' }}" href="{{ url('/kategori/'.$category['slug']) }}"><div class="category-card-image"><img src="{{ $category['image'] ?? asset('images/category-placeholder.svg') }}" alt="{{ $category['name'] }}" width="900" height="620" loading="lazy"></div><div class="category-card-content"><p class="eyebrow">KATEGORİ</p><h3>{{ $category['name'] }}</h3><span class="round-arrow">↗</span></div></a>

@@ -1,0 +1,1 @@
+<section class="final-cta"><div class="container final-cta-inner"><p class="eyebrow">NUTTIME İLE TANIŞIN</p><h2>İyi olanı<br><em>paylaşalım.</em></h2><a class="button button-light" href="{{ url('/iletisim') }}">Bizimle iletişime geç <span>↗</span></a></div></section>
