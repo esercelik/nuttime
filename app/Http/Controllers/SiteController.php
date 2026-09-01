@@ -136,7 +136,10 @@ class SiteController extends Controller
                     'description' => filled($product['description'] ?? null)
                         ? $product['description']
                         : 'Özenle seçilmiş kuruyemişlerle hazırlanan yoğun ve karakterli lezzet.',
-                    'url' => route('product', ['slug' => $product['slug']]),
+                    'url' => route(
+                        app()->getLocale() === 'tr' ? 'product' : 'localized.product',
+                        app()->getLocale() === 'tr' ? ['slug' => $product['slug']] : ['locale' => app()->getLocale(), 'slug' => $product['slug']],
+                    ),
                     'theme' => $theme,
                     'background_image' => $isPistachio
                         ? asset('images/nuttime/spylt/nuttime-antep-hero-background.png')

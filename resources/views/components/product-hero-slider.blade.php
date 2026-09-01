@@ -36,8 +36,8 @@
                             <h1><span class="product-hero__headline-line" data-product-hero-headline>{{ $slide['name'] }}</span></h1>
                             <p class="product-hero__description">{{ $slide['description'] }}</p>
                             <div class="product-hero__actions" data-product-hero-actions>
-                                <a class="button product-hero__primary-action" href="{{ $slide['url'] }}">Ürünü İncele <span>↗</span></a>
-                                <a class="product-hero__secondary-action" href="{{ route('products') }}">Tüm Ürünler <span>↗</span></a>
+                                <a class="button product-hero__primary-action" href="{{ $slide['url'] }}">{{ __('site.actions.view_product') }} <span>↗</span></a>
+                                <a class="product-hero__secondary-action" href="{{ route(app()->getLocale() === 'tr' ? 'products' : 'localized.products', app()->getLocale() === 'tr' ? [] : ['locale' => app()->getLocale()]) }}">{{ __('site.actions.all_products') }} <span>↗</span></a>
                             </div>
                         </div>
                     </div>

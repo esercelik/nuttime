@@ -12,15 +12,15 @@ Route::get('/hakkimizda', fn () => app(SiteController::class)->page('about'))->n
 Route::get('/sertifikalarimiz', fn () => app(SiteController::class)->page('certificates'))->name('certificates');
 Route::get('/iletisim', [SiteController::class, 'contact'])->name('contact');
 Route::post('/iletisim', [SiteController::class, 'storeContact'])->middleware('throttle:contact')->name('contact.store');
-Route::prefix('{locale}')->whereIn('locale', ['en', 'de'])->middleware('locale')->group(function () {
-    Route::get('/', [SiteController::class, 'home']);
-    Route::get('/products', [SiteController::class, 'products']);
-    Route::get('/products/{slug}', [SiteController::class, 'product']);
-    Route::get('/category/{slug}', [SiteController::class, 'category']);
-    Route::get('/about-us', fn () => app(SiteController::class)->page('about'));
-    Route::get('/certificates', fn () => app(SiteController::class)->page('certificates'));
-    Route::get('/contact', [SiteController::class, 'contact']);
-    Route::post('/contact', [SiteController::class, 'storeContact'])->middleware('throttle:contact');
+Route::prefix('{locale}')->whereIn('locale', ['en', 'de'])->middleware('locale')->name('localized.')->group(function () {
+    Route::get('/', [SiteController::class, 'home'])->name('home');
+    Route::get('/products', [SiteController::class, 'products'])->name('products');
+    Route::get('/products/{slug}', [SiteController::class, 'product'])->name('product');
+    Route::get('/category/{slug}', [SiteController::class, 'category'])->name('category');
+    Route::get('/about-us', fn () => app(SiteController::class)->page('about'))->name('about');
+    Route::get('/certificates', fn () => app(SiteController::class)->page('certificates'))->name('certificates');
+    Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
+    Route::post('/contact', [SiteController::class, 'storeContact'])->middleware('throttle:contact')->name('contact.store');
 });
 Route::redirect('/en/ourproducts/', '/en/products', 301);
 Route::redirect('/de/ourprodukte/', '/de/produkte', 301);
