@@ -7,12 +7,15 @@ use App\Models\Certificate;
 use App\Models\ContactMessage;
 use App\Models\Product;
 use App\Models\SiteSetting;
+use App\Support\SeoMetadata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class SiteController extends Controller
 {
+    public function __construct(private SeoMetadata $seoMetadata) {}
+
     private function catalog(): array
     {
         $managedProducts = Schema::hasTable('products')
@@ -25,11 +28,20 @@ class SiteController extends Controller
                 'name' => ['tr' => $product->name, 'en' => $product->name, 'de' => $product->name],
                 'category' => $product->category?->name ?? 'Nut Creams',
                 'description' => $product->short_description ?? $product->description ?? '',
+                'seo_title' => $product->seo_title,
+                'seo_description' => $product->seo_description,
+                'seo_canonical' => $product->seo_canonical,
+                'previous_slugs' => $product->previous_slugs ?? [],
+                'sku' => $product->sku,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'stock_tracking' => $product->stock_tracking,
                 'featured' => $product->is_featured,
                 'accent' => '#d7b66c',
                 'image' => $product->main_image
                     ? asset('storage/'.$product->main_image)
                     : $this->fallbackProductImage($product->name, $product->category?->name),
+                'image_alt' => $product->main_image_alt ?: trim($product->name.' - '.($product->category?->name ?? 'Nuttime')),
                 'gallery' => collect($product->additional_images ?? [])
                     ->filter()
                     ->map(fn (string $image) => asset('storage/'.$image))
@@ -56,7 +68,9 @@ class SiteController extends Controller
 
         $categories = Category::query()->where('is_active', true)->orderBy('sort_order')->get()->map(fn (Category $category) => [
             'name' => $category->name ?? 'Nut Creams', 'slug' => $category->slug ?? 'nut-creams', 'description' => $category->description ?? '',
+            'seo_title' => $category->seo_title, 'seo_description' => $category->seo_description, 'seo_canonical' => $category->seo_canonical,
             'image' => $category->image ? asset('storage/'.$category->image) : $this->fallbackProductImage($category->name, $category->name),
+            'image_alt' => $category->image_alt ?: trim(($category->name ?? 'Nuttime').' kategorisi'),
         ])->all();
 
         return $categories ?: $this->fallbackCategories();
@@ -183,21 +197,42 @@ class SiteController extends Controller
     public function home()
     {
         $products = $this->catalog();
+        $settings = $this->settings();
+        $schemas = array_filter([$this->seoMetadata->organization($settings), $this->seoMetadata->website(), $this->seoMetadata->localBusiness($settings)]);
 
-        return view('pages.home', ['products' => $products, 'heroSlides' => $this->heroSlides($products), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
+        return view('pages.home', ['products' => $products, 'heroSlides' => $this->heroSlides($products), 'categories' => $this->categories(), 'certificates' => $this->certificates(), 'factory' => $this->factoryLocation(), 'settings' => $settings, 'seo' => $this->seoMetadata->page($settings['seo_title'] ?? 'Nuttime', $settings['seo_description'] ?? 'Kuruyemiş üreticisi Nuttime ile yalın ve yoğun lezzetleri keşfedin.', $this->siteRoute('home'), $settings, $schemas)]);
     }
 
     public function products()
     {
-        return view('products.index', ['products' => $this->catalog(), 'settings' => $this->settings()]);
+        $settings = $this->settings();
+
+        return view('products.index', ['products' => $this->catalog(), 'settings' => $settings, 'seo' => $this->seoMetadata->page('Nuttime Ürünleri', 'Nuttime kuruyemiş ezmeleri ve özenle hazırlanan ürün seçkisini keşfedin.', $this->siteRoute('products'), $settings)]);
     }
 
     public function product(string $slug)
     {
         $product = collect($this->catalog())->firstWhere('slug', $slug);
+
+        if (! $product) {
+            $product = collect($this->catalog())->first(fn (array $catalogProduct): bool => in_array($slug, $catalogProduct['previous_slugs'] ?? [], true));
+
+            if ($product) {
+                return redirect()->to($this->siteRoute('product', ['slug' => $product['slug']]), 301);
+            }
+        }
+
         abort_unless($product, 404);
 
-        return view('products.show', ['product' => $product, 'related' => collect($this->catalog())->reject(fn ($item) => $item['slug'] === $slug)->take(2)->all(), 'settings' => $this->settings()]);
+        $settings = $this->settings();
+        $productUrl = $this->canonical($product['seo_canonical'] ?? null, $this->siteRoute('product', ['slug' => $product['slug']]));
+        $breadcrumbs = $this->seoMetadata->breadcrumbs([
+            ['name' => 'Ana Sayfa', 'url' => $this->siteRoute('home')],
+            ['name' => 'Ürünler', 'url' => $this->siteRoute('products')],
+            ['name' => $product['name']['tr'], 'url' => $productUrl],
+        ]);
+
+        return view('products.show', ['product' => $product, 'related' => collect($this->catalog())->reject(fn ($item) => $item['slug'] === $product['slug'])->take(2)->all(), 'settings' => $settings, 'breadcrumbs' => $breadcrumbs['itemListElement'], 'seo' => $this->seoMetadata->page($product['seo_title'] ?: $product['name']['tr'], $product['seo_description'] ?: $product['description'], $productUrl, $settings, [$breadcrumbs, $this->seoMetadata->product($product, $settings, $productUrl)], 'product', $product['image'])]);
     }
 
     public function category(string $slug)
@@ -205,18 +240,32 @@ class SiteController extends Controller
         $category = collect($this->categories())->firstWhere('slug', $slug);
         abort_unless($category, 404);
         $products = collect($this->catalog())->filter(fn ($product) => $product['category'] === $category['name'])->values()->all();
+        $settings = $this->settings();
+        $categoryUrl = $this->canonical($category['seo_canonical'] ?? null, $this->siteRoute('category', ['slug' => $category['slug']]));
+        $breadcrumbs = $this->seoMetadata->breadcrumbs([
+            ['name' => 'Ana Sayfa', 'url' => $this->siteRoute('home')],
+            ['name' => 'Kategoriler', 'url' => $this->siteRoute('products')],
+            ['name' => $category['name'], 'url' => $categoryUrl],
+        ]);
 
-        return view('pages.category', compact('category', 'products'));
+        return view('pages.category', compact('category', 'products') + ['breadcrumbs' => $breadcrumbs['itemListElement'], 'seo' => $this->seoMetadata->page($category['seo_title'] ?: $category['name'], $category['seo_description'] ?: $category['description'], $categoryUrl, $settings, [$breadcrumbs], 'website', $category['image'])]);
     }
 
     public function page(string $page)
     {
-        return view('pages.static', ['page' => $page, 'certificates' => $page === 'certificates' ? $this->certificates() : []]);
+        $settings = $this->settings();
+        $details = $page === 'certificates'
+            ? ['title' => 'Nuttime Sertifikaları', 'description' => 'Nuttime kalite belgeleri ve üretim standartlarını inceleyin.', 'route' => 'certificates']
+            : ['title' => 'Nuttime Hakkında', 'description' => 'Kuruyemiş üreticisi Nuttime’ın üretim yaklaşımını, kalite odağını ve özel markalı üretim kabiliyetini keşfedin.', 'route' => 'about'];
+
+        return view('pages.static', ['page' => $page, 'certificates' => $page === 'certificates' ? $this->certificates() : [], 'seo' => $this->seoMetadata->page($details['title'], $details['description'], $this->siteRoute($details['route']), $settings)]);
     }
 
     public function contact()
     {
-        return view('pages.contact', ['factory' => $this->factoryLocation(), 'settings' => $this->settings()]);
+        $settings = $this->settings();
+
+        return view('pages.contact', ['factory' => $this->factoryLocation(), 'settings' => $settings, 'seo' => $this->seoMetadata->page('Nuttime İletişim', 'Toptan kuruyemiş, özel markalı üretim ve iş birliği talepleriniz için Nuttime ile iletişime geçin.', $this->siteRoute('contact'), $settings, array_filter([$this->seoMetadata->localBusiness($settings)]))]);
     }
 
     public function storeContact(Request $request)
@@ -225,5 +274,15 @@ class SiteController extends Controller
         ContactMessage::create($request->only(['name', 'email', 'phone', 'subject', 'message']) + ['locale' => app()->getLocale()]);
 
         return back()->with('success', 'Mesajınız için teşekkür ederiz. Ekibimiz en kısa sürede size dönüş yapacaktır.');
+    }
+
+    private function siteRoute(string $name, array $parameters = []): string
+    {
+        return route(app()->getLocale() === 'tr' ? $name : 'localized.'.$name, app()->getLocale() === 'tr' ? $parameters : ['locale' => app()->getLocale()] + $parameters);
+    }
+
+    private function canonical(?string $preferredUrl, string $fallback): string
+    {
+        return filter_var($preferredUrl, FILTER_VALIDATE_URL) ? $preferredUrl : $fallback;
     }
 }
