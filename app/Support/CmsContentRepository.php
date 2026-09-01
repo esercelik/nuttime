@@ -2,9 +2,11 @@
 
 namespace App\Support;
 
+use App\Models\Menu;
 use App\Models\PageSection;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 final class CmsContentRepository
 {
@@ -15,6 +17,10 @@ final class CmsContentRepository
      */
     public function homeSections(string $locale): array
     {
+        if (! Schema::hasTable('page_sections')) {
+            return [];
+        }
+
         return Cache::remember('cms.home.sections.'.$locale, now()->addMinutes(10), function () use ($locale): array {
             return PageSection::query()->published()->where('page_key', 'home')->with('translations')->orderBy('sort_order')->orderBy('id')->get()
                 ->map(function (PageSection $section) use ($locale): array {
@@ -37,6 +43,10 @@ final class CmsContentRepository
      */
     public function homeSlider(string $locale): array
     {
+        if (! Schema::hasTable('sliders') || ! Schema::hasTable('slider_items')) {
+            return [];
+        }
+
         return Cache::remember('cms.home.slider.'.$locale, now()->addMinutes(10), function () use ($locale): array {
             $slider = Slider::query()->where('key', 'home')->where('status', 'published')->where('is_active', true)
                 ->with(['items' => fn ($query) => $query->published()->with(['translations', 'product.category.translations', 'product.translations'])->orderBy('sort_order')])->first();
@@ -72,7 +82,45 @@ final class CmsContentRepository
         foreach (array_keys(config('nuttime.locales')) as $locale) {
             Cache::forget('cms.home.sections.'.$locale);
             Cache::forget('cms.home.slider.'.$locale);
+            Cache::forget('cms.menu.header-primary.'.$locale);
+            Cache::forget('cms.menu.footer-primary.'.$locale);
+            Cache::forget('cms.menu.footer-legal.'.$locale);
         }
+    }
+
+    /**
+     * @return array<int, array{label: string, url: string, new_tab: bool}>
+     */
+    public function menu(string $key, string $locale): array
+    {
+        if (! Schema::hasTable('menus') || ! Schema::hasTable('menu_items')) {
+            return [];
+        }
+
+        return Cache::remember('cms.menu.'.$key.'.'.$locale, now()->addMinutes(10), function () use ($key, $locale): array {
+            $menu = Menu::query()
+                ->where('key', $key)
+                ->where('is_active', true)
+                ->with(['items' => fn ($query) => $query->whereNull('parent_id')->where('is_active', true)->with('translations')->orderBy('sort_order')])
+                ->first();
+
+            if (! $menu) {
+                return [];
+            }
+
+            return $menu->items->map(function ($item) use ($locale): array {
+                $translation = $item->translationFor($locale);
+                $url = $item->link_type === 'external'
+                    ? $item->url
+                    : ($item->route_name ? $this->localizedUrl->route($item->route_name, $locale) : null);
+
+                return [
+                    'label' => $translation?->label ?? '',
+                    'url' => $url ?? $this->localizedUrl->route('home', $locale),
+                    'new_tab' => $item->open_in_new_tab,
+                ];
+            })->filter(fn (array $item): bool => filled($item['label']))->values()->all();
+        });
     }
 
     private function assetUrl(?string $path): ?string

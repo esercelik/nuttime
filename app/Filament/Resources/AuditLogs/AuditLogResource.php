@@ -17,8 +17,10 @@ class AuditLogResource extends Resource
     protected static ?string $model = AuditLog::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static ?string $navigationLabel = 'İşlem Geçmişi';
-    protected static ?string $navigationGroup = 'Sistem';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Sistem';
 
     public static function form(Schema $schema): Schema
     {

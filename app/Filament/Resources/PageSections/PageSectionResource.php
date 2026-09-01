@@ -21,9 +21,13 @@ class PageSectionResource extends Resource
     protected static ?string $model = PageSection::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static ?string $navigationLabel = 'Sayfa Bölümleri';
-    protected static ?string $navigationGroup = 'Ana Sayfa';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Ana Sayfa';
+
     protected static ?string $modelLabel = 'Bölüm';
+
     protected static ?string $pluralModelLabel = 'Sayfa Bölümleri';
 
     public static function form(Schema $schema): Schema

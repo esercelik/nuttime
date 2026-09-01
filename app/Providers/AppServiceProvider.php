@@ -13,8 +13,10 @@ use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\Slider;
 use App\Models\SliderItem;
+use App\Models\User;
 use App\Observers\CmsAuditObserver;
 use App\Policies\CmsPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('contact', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
+        Gate::policy(User::class, UserPolicy::class);
 
         foreach ([Category::class, Certificate::class, Content::class, Media::class, Menu::class, MenuItem::class, PageSection::class, Product::class, SiteSetting::class, Slider::class, SliderItem::class] as $model) {
             Gate::policy($model, CmsPolicy::class);

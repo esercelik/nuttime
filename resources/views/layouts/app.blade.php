@@ -29,15 +29,21 @@
 </head>
 @php($localizedRoute = static fn (string $name, array $parameters = []): string => app(\App\Support\LocalizedUrl::class)->route($name, null, $parameters))
 @php($alternateUrls = $seo['alternates'] ?? [])
+@php($managedHeaderNavigation = app(\App\Support\CmsContentRepository::class)->menu('header-primary', app()->getLocale()))
+@php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
 <body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" :class="{'has-menu':menu,'is-compact':compact}">
     <header class="masthead">
         <div class="container masthead__inner">
             <a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}">nut<span>time</span><i></i></a>
             <nav class="masthead__nav" aria-label="{{ __('site.nav.home') }}">
+                @if(count($managedHeaderNavigation))
+                    @foreach($managedHeaderNavigation as $item)<a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>@endforeach
+                @else
                 <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
                 <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
                 <a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>
                 <a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>
+                @endif
             </nav>
             <div class="masthead__actions">
                 <div class="language-picker" aria-label="{{ __('site.language.choose') }}">
@@ -56,11 +62,17 @@
         </div>
         <div x-show="menu" x-transition.opacity class="mobile-drawer">
             <nav aria-label="{{ __('site.nav.home') }}">
+                @if(count($managedHeaderNavigation))
+                    @foreach($managedHeaderNavigation as $item)
+                        <a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>
+                    @endforeach
+                @else
                 <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
                 <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
                 <a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>
                 <a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>
                 <a href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} ↗</a>
+                @endif
             </nav>
             <div class="language-picker language-picker--mobile" aria-label="{{ __('site.language.choose') }}">
                 @foreach(config('nuttime.locales') as $locale => $configuration)
@@ -76,7 +88,7 @@
             <a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a>
         </div>
         <div class="container site-footer__links">
-            <div><small>{{ __('site.footer.explore') }}</small><a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a></div>
+            <div><small>{{ __('site.footer.explore') }}</small>@if(count($managedFooterNavigation))@foreach($managedFooterNavigation as $item)<a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>@endforeach @else<a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>@endif</div>
             <div><small>{{ __('site.footer.contact') }}</small><a href="tel:{{ $settings['phone'] ?? '' }}">{{ $settings['phone'] ?? '+90 212 123 45 67' }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div>
             <div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" rel="noopener">Instagram</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" rel="noopener">Facebook</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" rel="noopener">YouTube</a>@endif</div></div>
         </div>
