@@ -10,18 +10,18 @@ final class HomeHeroTest extends TestCase
     {
         $response = $this->get(route('home'));
 
-        $response->assertSee('Fındık Ezmesi')
+        $response->assertSee('FINDIĞIN KAVRULMUŞ ZENGİNLİĞİ')
             ->assertSee('Ürünü İncele')
             ->assertSee('data-product-hero-background', false)
             ->assertSee('data-product-hero-jar', false)
             ->assertSee('data-autoplay="6500"', false)
             ->assertSee('data-product-hero-pagination="0"', false)
-            ->assertSee('data-product-hero-pagination="2"', false)
+            ->assertSee('data-product-hero-pagination="5"', false)
             ->assertSee('data-product-hero-previous', false)
             ->assertSee('data-product-hero-next', false)
             ->assertSee('id="home-banners"', false)
-            ->assertSee('/images/nuttime/spylt/nuttime-antep-hero-background.png', false)
-            ->assertSee('/images/nuttime/spylt/nuttime-antep-jar-transparent.png', false)
+            ->assertSee('/images/nuttime/spylt/nuttime-hindistan-cevizi-hero-background.png', false)
+            ->assertSee('/images/nuttime/spylt/nuttime-antep-ingredient-elements-transparent.png', false)
             ->assertSee(route('product', ['slug' => 'antep-fistikli-kremasi']), false)
             ->assertSee(route('product', ['slug' => 'findik-kremasi']), false)
             ->assertSee(route('product', ['slug' => 'yer-fistigi-ezmesi']), false)

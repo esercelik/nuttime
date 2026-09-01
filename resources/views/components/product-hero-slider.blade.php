@@ -4,27 +4,18 @@
     <section class="product-hero" aria-label="Öne çıkan ürünler" aria-roledescription="carousel" tabindex="0" data-product-hero data-autoplay="6500">
         <div class="product-hero__slides">
             @foreach($slides as $index => $slide)
-                <article class="product-hero__slide product-hero--{{ $slide['theme'] }} {{ $index === 0 ? 'is-active' : '' }}" aria-roledescription="slide" aria-label="{{ $index + 1 }} / {{ count($slides) }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}" @if($index !== 0) hidden @endif data-product-hero-slide>
-                    @if($slide['theme'] === 'pistachio')
-                        <x-optimized-image class="product-hero__background" src="images/nuttime/spylt/nuttime-antep-hero-background.png" alt="" width="1672" height="941" sizes="100vw" :loading="$index < 2 ? 'eager' : 'lazy'" :fetchpriority="$index === 0 ? 'high' : 'auto'" data-product-hero-background />
-                    @else
-                        <img class="product-hero__background" src="{{ $slide['background_image'] }}" alt="" width="1200" height="900" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-background>
-                    @endif
+                <article class="product-hero__slide {{ $index === 0 ? 'is-active' : '' }}" aria-roledescription="slide" aria-label="{{ $index + 1 }} / {{ count($slides) }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}" @if($index !== 0) hidden @endif data-product-hero-slide>
+                    <img class="product-hero__background" src="{{ $slide['background_image'] }}" alt="" width="1920" height="1080" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-background>
                     <div class="product-hero__gradient" aria-hidden="true"></div>
                     <div class="product-hero__backdrop-type" aria-hidden="true">{{ $slide['name'] }}</div>
-                    <div class="product-hero__decorations" aria-hidden="true">
-                        <span data-product-hero-decoration></span><span data-product-hero-decoration></span><span data-product-hero-decoration></span>
-                    </div>
+                    <img class="product-hero__ingredients product-hero__ingredients--back" src="{{ $slide['ingredient_image'] }}" alt="" width="1600" height="1200" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" decoding="async" data-product-hero-decoration>
+                    <img class="product-hero__ingredients product-hero__ingredients--front" src="{{ $slide['ingredient_image'] }}" alt="" width="1600" height="1200" loading="lazy" decoding="async" data-product-hero-decoration>
 
                     <div class="product-hero__visual-anchor">
                         <div class="product-hero__scroll-visual" data-product-hero-scroll-visual>
                             <div class="product-hero__visual" data-product-hero-visual>
                                 <div class="product-hero__jar-float" data-product-hero-jar-float>
-                                    @if($slide['theme'] === 'pistachio')
-                                        <x-optimized-image class="product-hero__jar" src="images/nuttime/spylt/nuttime-antep-jar-transparent.png" :alt="$slide['name']" width="1024" height="1536" sizes="(max-width: 900px) 86vw, 47vw" :loading="$index < 2 ? 'eager' : 'lazy'" :fetchpriority="$index === 0 ? 'high' : 'auto'" data-product-hero-jar />
-                                    @else
-                                        <img class="product-hero__jar product-hero__jar--photo" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="900" height="1200" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
-                                    @endif
+                                    <img class="product-hero__jar" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="1024" height="1536" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
                                 </div>
                             </div>
                         </div>

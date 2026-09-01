@@ -42,7 +42,9 @@ class SiteController extends Controller
             ['slug' => 'findik-kremasi', 'name' => ['tr' => 'Fındık Ezmesi', 'en' => 'Hazelnut Butter', 'de' => 'Haselnusscreme'], 'category' => 'Nut Creams', 'description' => 'Özenle seçilmiş fındıklarla hazırlanan pürüzsüz, yoğun ve dengeli lezzet.', 'featured' => true, 'accent' => '#c6a36e', 'image' => asset('images/nuttime/hazelnut-butter.jpg'), 'gallery' => []],
             ['slug' => 'antep-fistikli-kremasi', 'name' => ['tr' => 'Antep Fıstığı Ezmesi', 'en' => 'Pistachio Butter', 'de' => 'Pistaziencreme'], 'category' => 'Nut Creams', 'description' => 'Antep fıstığının karakteristik aromasıyla rafine bir deneyim.', 'featured' => true, 'accent' => '#a6ad76', 'image' => asset('images/nuttime/pistachio-butter.jpg'), 'gallery' => []],
             ['slug' => 'badem-unu', 'name' => ['tr' => 'Badem Ezmesi', 'en' => 'Almond Butter', 'de' => 'Mandelcreme'], 'category' => 'Nut Creams', 'description' => 'Özenle seçilmiş bademlerin yumuşak ve karakterli lezzeti.', 'featured' => true, 'accent' => '#c8a077', 'image' => asset('images/nuttime/almond-butter.jpg'), 'gallery' => []],
-            ['slug' => 'yer-fistigi-ezmesi', 'name' => ['tr' => 'Yer Fıstığı Ezmesi', 'en' => 'Peanut Butter', 'de' => 'Erdnusscreme'], 'category' => 'Nut Creams', 'description' => 'Yoğun fıstık tadı ve parçacıklı dokusuyla günün her anına eşlik eder.', 'featured' => false, 'accent' => '#a97845', 'image' => asset('images/nuttime/peanut-butter.jpg'), 'gallery' => []],
+            ['slug' => 'yer-fistigi-ezmesi', 'name' => ['tr' => 'Yer Fıstığı Ezmesi', 'en' => 'Peanut Butter', 'de' => 'Erdnusscreme'], 'category' => 'Nut Creams', 'description' => 'Yoğun fıstık tadı ve parçacıklı dokusuyla günün her anına eşlik eder.', 'featured' => true, 'accent' => '#a97845', 'image' => asset('images/nuttime/peanut-butter.jpg'), 'gallery' => []],
+            ['slug' => 'seker-ilavesiz-yer-fistigi-ezmesi', 'name' => ['tr' => 'Şeker İlavesiz Yer Fıstığı Ezmesi', 'en' => 'No Added Sugar Peanut Butter', 'de' => 'Erdnusscreme ohne Zuckerzusatz'], 'category' => 'Nut Creams', 'description' => 'Şeker ilavesiz formülüyle sade, güçlü ve parçacıklı lezzet.', 'featured' => true, 'accent' => '#c5a65a', 'image' => asset('images/nuttime/peanut-butter.jpg'), 'gallery' => []],
+            ['slug' => 'hindistan-cevizi-ezmesi', 'name' => ['tr' => 'Hindistan Cevizi Ezmesi', 'en' => 'Coconut Butter', 'de' => 'Kokoscreme'], 'category' => 'Nut Creams', 'description' => 'Hafif, aromatik ve tropikal bir lezzet.', 'featured' => true, 'accent' => '#d9f2f4', 'image' => asset('images/nuttime/coconut-butter.jpg'), 'gallery' => []],
         ];
     }
 
@@ -116,41 +118,35 @@ class SiteController extends Controller
      */
     private function heroSlides(array $products): array
     {
-        [$featuredProducts, $otherProducts] = collect($products)
-            ->filter(fn (array $product) => filled($product['slug'] ?? null) && filled($product['image'] ?? null))
-            ->partition(fn (array $product) => (bool) ($product['featured'] ?? false));
+        $assets = [
+            'yer-fistigi-ezmesi' => ['key' => 'yer-fistigi', 'eyebrow' => 'NUTTIME • %52 YER FISTIĞI', 'title' => 'YER FISTIĞININ EN YOĞUN HALİ'],
+            'findik-kremasi' => ['key' => 'findik', 'eyebrow' => 'NUTTIME • %45 FINDIK', 'title' => 'FINDIĞIN KAVRULMUŞ ZENGİNLİĞİ'],
+            'antep-fistikli-kremasi' => ['key' => 'antep', 'eyebrow' => 'NUTTIME • %42 ANTEP FISTIĞI', 'title' => 'ANTEP FISTIĞININ EN YOĞUN HALİ'],
+            'badem-unu' => ['key' => 'badem', 'eyebrow' => 'NUTTIME • %45 BADEM', 'title' => 'BADEMİN ZARİF VE YOĞUN DOKUSU'],
+            'seker-ilavesiz-yer-fistigi-ezmesi' => ['key' => 'seker-ilavesiz-yer-fistigi', 'eyebrow' => 'NUTTIME • ŞEKER İLAVESİZ • %72', 'title' => 'DAHA SADE, DAHA YOĞUN FISTIK'],
+            'hindistan-cevizi-ezmesi' => ['key' => 'hindistan-cevizi', 'eyebrow' => 'NUTTIME • %42 HİNDİSTAN CEVİZİ', 'title' => 'FERAH VE KREMAMSI BİR DOKU'],
+        ];
 
-        return $featuredProducts
-            ->merge($otherProducts)
-            ->unique('slug')
-            ->values()
-            ->map(function (array $product): array {
-                $name = $product['name']['tr'] ?? 'Nuttime ürünü';
-                $theme = $this->heroTheme(Str::lower(implode(' ', [$product['slug'] ?? '', $name, $product['category'] ?? ''])));
-                $isPistachio = $theme === 'pistachio';
+        return collect($assets)->map(function (array $asset, string $slug) use ($products): ?array {
+            $product = collect($products)->firstWhere('slug', $slug);
 
-                return [
-                    'slug' => $product['slug'],
-                    'name' => $name,
-                    'category' => $product['category'] ?? 'Nuttime',
-                    'description' => filled($product['description'] ?? null)
-                        ? $product['description']
-                        : 'Özenle seçilmiş kuruyemişlerle hazırlanan yoğun ve karakterli lezzet.',
-                    'url' => route(
-                        app()->getLocale() === 'tr' ? 'product' : 'localized.product',
-                        app()->getLocale() === 'tr' ? ['slug' => $product['slug']] : ['locale' => app()->getLocale(), 'slug' => $product['slug']],
-                    ),
-                    'theme' => $theme,
-                    'background_image' => $isPistachio
-                        ? asset('images/nuttime/spylt/nuttime-antep-hero-background.png')
-                        : $product['image'],
-                    'product_image' => $isPistachio
-                        ? asset('images/nuttime/spylt/nuttime-antep-jar-transparent.png')
-                        : $product['image'],
-                    'product_is_photo' => ! $isPistachio,
-                ];
-            })
-            ->all();
+            if (! $product) {
+                return null;
+            }
+
+            $path = 'images/nuttime/spylt/nuttime-'.$asset['key'];
+
+            return [
+                'slug' => $slug, 'name' => $asset['title'], 'category' => $asset['eyebrow'], 'description' => $product['description'],
+                'url' => route(app()->getLocale() === 'tr' ? 'product' : 'localized.product', app()->getLocale() === 'tr' ? ['slug' => $slug] : ['locale' => app()->getLocale(), 'slug' => $slug]),
+                'background_image' => asset($path.'-hero-background.png'), 'ingredient_image' => asset($path.'-ingredient-elements-transparent.png'), 'product_image' => asset($path.'-jar-transparent.png'),
+            ];
+        })->filter()->concat(collect($products)->reject(fn (array $product): bool => array_key_exists($product['slug'], $assets))->map(function (array $product): array {
+            return [
+                'slug' => $product['slug'], 'name' => $product['name']['tr'], 'category' => $product['category'], 'description' => $product['description'],
+                'url' => route('product', ['slug' => $product['slug']]), 'background_image' => $product['image'], 'ingredient_image' => $product['image'], 'product_image' => $product['image'],
+            ];
+        }))->values()->all();
     }
 
     private function heroTheme(string $label): string
