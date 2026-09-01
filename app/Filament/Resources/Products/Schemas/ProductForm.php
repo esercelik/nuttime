@@ -39,7 +39,7 @@ class ProductForm
                     TextInput::make('primary_ingredient_percentage')->label('Ana içerik oranı')->numeric()->suffix('%')->minValue(0)->maxValue(100),
                     TagsInput::make('feature_tags')->label('Özellik etiketleri')->helperText('Örn. Şeker ilavesiz, Vegan.'),
                     KeyValue::make('nutrition_facts')->label('Besin değerleri')->helperText('Değerleri güvenli anahtar/değer çiftleri olarak girin.'),
-                    KeyValue::make('packaging_details')->label('Ambalaj bilgileri'),
+                    KeyValue::make('packaging_details')->label('Ambalaj bilgileri')->helperText('Gruplu görünüm için anahtarları kavanoz.net_agirlik veya koli.koli_ici biçiminde girin.'),
                     TextInput::make('price')->numeric()->prefix('₺'),
                     TextInput::make('compare_price')->numeric()->prefix('₺'), TextInput::make('stock')->numeric()->integer(), Toggle::make('stock_tracking')->label('Stok takibi'),
                 ])->columns(3),

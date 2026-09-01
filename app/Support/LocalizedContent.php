@@ -35,6 +35,8 @@ final class LocalizedContent
             'weight_grams' => $product->weight_grams,
             'primary_ingredient_percentage' => $product->primary_ingredient_percentage,
             'feature_tags' => $product->feature_tags ?? [],
+            'ingredients' => $translation?->ingredients,
+            'allergen_information' => $translation?->allergen_information,
             'nutrition_facts' => $product->nutrition_facts ?? [],
             'packaging_details' => $product->packaging_details ?? [],
             'featured' => $product->is_featured,
