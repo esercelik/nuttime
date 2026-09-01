@@ -15,6 +15,10 @@ class RedirectPublicQueryParameters
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->isMethod('GET') && $request->query() !== [] && ! $request->is('admin', 'admin/*', 'api/*', 'livewire/*')) {
+            return redirect()->to($request->url(), 301);
+        }
+
         return $next($request);
     }
 }

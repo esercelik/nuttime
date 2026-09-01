@@ -20,6 +20,12 @@ class ContentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'İçerikler';
+
+    protected static ?string $modelLabel = 'İçerik';
+
+    protected static ?string $pluralModelLabel = 'İçerikler';
+
     public static function form(Schema $schema): Schema
     {
         return ContentForm::configure($schema);

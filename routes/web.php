@@ -12,6 +12,8 @@ Route::get('/hakkimizda', fn () => app(SiteController::class)->page('about'))->n
 Route::get('/sertifikalarimiz', fn () => app(SiteController::class)->page('certificates'))->name('certificates');
 Route::get('/iletisim', [SiteController::class, 'contact'])->name('contact');
 Route::post('/iletisim', [SiteController::class, 'storeContact'])->middleware('throttle:contact')->name('contact.store');
+Route::get('/icerikler', [ContentController::class, 'index'])->name('contents');
+Route::get('/icerikler/{slug}', [ContentController::class, 'show'])->name('content');
 Route::prefix('{locale}')->whereIn('locale', ['en', 'de'])->middleware('locale')->name('localized.')->group(function () {
     Route::get('/', [SiteController::class, 'home'])->name('home');
     Route::get('/products', [SiteController::class, 'products'])->name('products');
@@ -25,5 +27,7 @@ Route::prefix('{locale}')->whereIn('locale', ['en', 'de'])->middleware('locale')
 Route::redirect('/en/ourproducts/', '/en/products', 301);
 Route::redirect('/de/ourprodukte/', '/de/produkte', 301);
 Route::redirect('/de/kommunikation/', '/de/kontakt', 301);
-Route::get('/robots.txt', fn () => response("User-agent: *\nAllow: /\nDisallow: /admin\n", 200, ['Content-Type' => 'text/plain']));
-Route::get('/sitemap.xml', SitemapController::class);
+Route::get('/robots.txt', RobotsController::class)->name('robots');
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\RobotsController;
