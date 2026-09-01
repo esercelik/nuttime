@@ -674,7 +674,7 @@ main { overflow: clip; }
 .product-information__ingredients>p:not(.kicker) { max-width:560px; color:#d4cfc2; font-size:clamp(17px,1.45vw,20px); line-height:1.72; }
 .product-information__allergens { display:flex; gap:10px; align-items:flex-start; margin-top:30px; padding-top:17px; border-top:1px solid rgba(250,247,239,.2); font-size:13px!important; }
 .product-information__allergens strong { flex:0 0 auto; color:#e3bd6b; font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
-.product-information__nutrition dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; border-top:1px solid rgba(250,247,239,.25); }
+.product-information__nutrition dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:48px; margin:0; border-top:1px solid rgba(250,247,239,.25); }
 .product-information__nutrition dl div { display:flex; justify-content:space-between; gap:15px; min-width:0; padding:15px 0; border-bottom:1px solid rgba(250,247,239,.16); }
 .product-information__nutrition dt { color:#bab3a4; font-size:11px; line-height:1.45; }
 .product-information__nutrition dd { flex:0 0 auto; margin:0; color:#f2d58f; font-size:13px; text-align:right; }
@@ -1228,6 +1228,15 @@ body.has-lightbox {
   color:var(--ink);
 }
 
+body:has(.product-hero) .language-picker__menu .language-picker__option {
+  color:var(--muted);
+}
+
+body:has(.product-hero) .language-picker__menu .language-picker__option:hover,
+body:has(.product-hero) .language-picker__menu .language-picker__option.is-active {
+  color:var(--cream);
+}
+
 html[dir="rtl"] .masthead__inner {
   flex-direction:row-reverse;
 }
@@ -1254,6 +1263,10 @@ html[dir="rtl"] .language-picker__menu {
 
 html[dir="rtl"] .language-picker__option {
   text-align:right;
+}
+
+html[dir="rtl"] body {
+  direction:rtl;
 }
 
 @media (max-width:900px) {

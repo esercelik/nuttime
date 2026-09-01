@@ -23,6 +23,18 @@ final class LocalizedNavigationTest extends TestCase
             ->assertSee('Português');
     }
 
+    public function test_new_locales_keep_product_pages_available_with_the_existing_content_fallback(): void
+    {
+        foreach (['fr', 'es', 'it', 'ru', 'ar', 'zh', 'pt'] as $locale) {
+            $response = $this->get(route('site.'.$locale.'.product', ['slug' => 'hazelnut-butter']));
+
+            $response
+                ->assertOk()
+                ->assertSee('hreflang="'.$locale.'"', false)
+                ->assertSee(route('site.fr.product', ['slug' => 'hazelnut-butter']), false);
+        }
+    }
+
     public function test_english_homepage_renders_localized_navigation_and_links(): void
     {
         $response = $this->get('/en/');
