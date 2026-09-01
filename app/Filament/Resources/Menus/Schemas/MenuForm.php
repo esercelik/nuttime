@@ -36,6 +36,17 @@ class MenuForm
                             Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
                             TextInput::make('label')->label('Menü metni')->required(),
                         ])->columns(2),
+                        Repeater::make('children')->relationship()->orderColumn('sort_order')->reorderableWithButtons()->collapsed()->schema([
+                            Select::make('link_type')->options(['internal' => 'Dahili rota', 'external' => 'Harici URL'])->default('internal')->required()->live(),
+                            Select::make('route_name')->label('Dahili rota')->options(['home' => 'Ana sayfa', 'products' => 'Ürünler', 'about' => 'Hakkımızda', 'certificates' => 'Sertifikalar', 'contact' => 'İletişim', 'contents' => 'İçerikler'])->visible(fn ($get): bool => $get('link_type') === 'internal'),
+                            TextInput::make('url')->label('Harici URL')->url()->maxLength(2048)->visible(fn ($get): bool => $get('link_type') === 'external'),
+                            Toggle::make('open_in_new_tab')->label('Yeni sekmede aç'),
+                            Toggle::make('is_active')->label('Aktif')->default(true),
+                            Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                                Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                                TextInput::make('label')->label('Menü metni')->required(),
+                            ])->columns(2),
+                        ])->columns(2),
                     ])->columns(2),
                 ]),
             ])]);

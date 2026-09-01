@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['category_id', 'name', 'slug', 'previous_slugs', 'sku', 'short_description', 'description', 'main_image', 'social_image', 'main_image_alt', 'additional_images', 'weight_grams', 'primary_ingredient_percentage', 'feature_tags', 'certificate_ids', 'price', 'compare_price', 'stock', 'stock_tracking', 'is_active', 'is_featured', 'sort_order', 'seo_title', 'seo_description', 'seo_canonical'];
+    protected $fillable = ['category_id', 'name', 'slug', 'previous_slugs', 'sku', 'short_description', 'description', 'main_image', 'social_image', 'main_image_alt', 'additional_images', 'nutrition_facts', 'packaging_details', 'weight_grams', 'primary_ingredient_percentage', 'feature_tags', 'certificate_ids', 'price', 'compare_price', 'stock', 'stock_tracking', 'is_active', 'is_featured', 'sort_order', 'seo_title', 'seo_description', 'seo_canonical'];
 
-    protected $casts = ['additional_images' => 'array', 'previous_slugs' => 'array', 'feature_tags' => 'array', 'certificate_ids' => 'array', 'stock_tracking' => 'boolean', 'is_active' => 'boolean', 'is_featured' => 'boolean', 'published_at' => 'datetime', 'price' => 'decimal:2', 'primary_ingredient_percentage' => 'decimal:2'];
+    protected $casts = ['additional_images' => 'array', 'previous_slugs' => 'array', 'nutrition_facts' => 'array', 'packaging_details' => 'array', 'feature_tags' => 'array', 'certificate_ids' => 'array', 'stock_tracking' => 'boolean', 'is_active' => 'boolean', 'is_featured' => 'boolean', 'published_at' => 'datetime', 'price' => 'decimal:2', 'primary_ingredient_percentage' => 'decimal:2'];
 
-    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -40,7 +42,7 @@ class Product extends Model
         return null;
     }
 
-    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }

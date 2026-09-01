@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\Sliders\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Support\MediaLibraryOptions;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -30,6 +31,7 @@ class SliderForm
                         Toggle::make('settings.show_arrows')->label('Oklar')->default(true),
                         Toggle::make('settings.show_counter')->label('Sayaç')->default(true),
                         Toggle::make('settings.show_progress')->label('Progress çizgisi')->default(true),
+                        Toggle::make('settings.swipe')->label('Kaydırma (swipe)')->default(true),
                     ])->columns(2),
                 ]),
                 Tab::make('Slaytlar')->schema([
@@ -37,16 +39,16 @@ class SliderForm
                         Select::make('product_id')->relationship('product', 'name')->searchable()->preload()->label('Bağlı ürün'),
                         Select::make('status')->options(['draft' => 'Taslak', 'published' => 'Yayında', 'archived' => 'Arşiv'])->default('published')->required(),
                         Toggle::make('is_active')->label('Aktif')->default(true),
-                        FileUpload::make('background_image')->image()->disk('public')->directory('sliders')->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->maxSize(8192)->required(),
-                        FileUpload::make('mobile_background_image')->image()->disk('public')->directory('sliders')->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->maxSize(8192),
-                        FileUpload::make('product_image')->image()->disk('public')->directory('sliders')->acceptedFileTypes(['image/png', 'image/webp'])->maxSize(8192)->helperText('Şeffaf ambalaj PNG/WebP; alfa kanalı korunur.'),
-                        FileUpload::make('decoration_image')->image()->disk('public')->directory('sliders')->acceptedFileTypes(['image/png', 'image/webp'])->maxSize(8192),
-                        FileUpload::make('mobile_decoration_image')->image()->disk('public')->directory('sliders')->acceptedFileTypes(['image/png', 'image/webp'])->maxSize(8192),
+                        Select::make('background_image')->options(fn (): array => MediaLibraryOptions::images())->searchable()->required(),
+                        Select::make('mobile_background_image')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
+                        Select::make('product_image')->options(fn (): array => MediaLibraryOptions::images())->searchable()->helperText('Şeffaf PNG/WEBP kaynak dosyası değiştirilmeden kullanılır.'),
+                        Select::make('decoration_image')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
+                        Select::make('mobile_decoration_image')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
                         TextInput::make('background_color')->regex('/^#[0-9A-Fa-f]{6}$/')->placeholder('#1A2606'),
                         TextInput::make('text_color')->regex('/^#[0-9A-Fa-f]{6}$/')->placeholder('#FFFAF0'),
                         TextInput::make('accent_color')->regex('/^#[0-9A-Fa-f]{6}$/')->placeholder('#EED17F'),
-                        \Filament\Forms\Components\DateTimePicker::make('published_from')->label('Yayın başlangıcı'),
-                        \Filament\Forms\Components\DateTimePicker::make('published_until')->label('Yayın bitişi')->after('published_from'),
+                        DateTimePicker::make('published_from')->label('Yayın başlangıcı'),
+                        DateTimePicker::make('published_until')->label('Yayın bitişi')->after('published_from'),
                         Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
                             Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
                             TextInput::make('eyebrow')->label('Üst etiket'),

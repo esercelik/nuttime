@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<x-product-hero-slider :slides="$heroSlides" />
+<x-product-hero-slider :slides="$heroSlides" :settings="$heroSliderSettings" />
 
+@if(collect($homeSections ?? [])->isNotEmpty())
+    @foreach($homeSections as $section)
+        <x-home-managed-section :section="$section" :products="$products" :categories="$categories" :certificates="$certificates" :factory="$factory" :settings="$settings" />
+    @endforeach
+@else
 @php($bannerProduct = collect($products)->firstWhere('id', 'antep-fistikli-kremasi') ?? collect($products)->first())
 @php($managedSections = collect($homeSections ?? [])->keyBy('key'))
 @php($firstBanner = $managedSections->get('banner_one'))
@@ -24,11 +29,11 @@
 
 @php($featured = collect($products)->filter(fn (array $product): bool => $product['featured'] ?? false)->take(3))
 @if($featured->isNotEmpty())
-<section class="feature-showcase home-section"><div class="container"><x-section-heading :kicker="__('site.home.featured_kicker')" :title="__('site.home.featured_title')" :href="app(\App\Support\LocalizedUrl::class)->route('products')" :link-text="__('site.actions.all_products')" /><div class="feature-showcase__grid">@foreach($featured as $key => $product)<x-product-card :product="$product" :variant="$key === 0 ? 'hero' : 'mini'" />@endforeach</div></div></section>
+<section class="feature-showcase home-section"><div class="container"><x-section-heading :kicker="__('site.home.featured_kicker')" :title="__('site.home.featured_title')" :href="app(\App\Support\LocalizedUrl::class)->route('products')" :link-text="__('site.actions.all_products')" rich-title /><div class="feature-showcase__grid">@foreach($featured as $key => $product)<x-product-card :product="$product" :index="$key" :variant="$key === 0 ? 'hero' : 'mini'" />@endforeach</div></div></section>
 @endif
 
 @if(count($categories))
-<section class="category-showcase home-section"><div class="container"><x-section-heading :kicker="__('site.home.categories_kicker')" :title="__('site.home.categories_title')" /><div class="category-showcase__grid">@foreach($categories as $index => $category)<x-category-card :category="$category" :index="$index" />@endforeach</div></div></section>
+<section class="category-showcase home-section"><div class="container"><x-section-heading :kicker="__('site.home.categories_kicker')" :title="__('site.home.categories_title')" rich-title /><div class="category-showcase__grid">@foreach($categories as $index => $category)<x-category-card :category="$category" :index="$index" />@endforeach</div></div></section>
 @endif
 
 <section class="brand-moment" aria-label="{{ __('site.home.banners_label') }}"><x-optimized-image src="images/nuttime/collection-banner.jpg" alt="Nuttime" width="1900" height="500" /><div class="brand-moment__shade"></div><div class="container brand-moment__copy"><p class="kicker">{{ __('site.home.moment_kicker') }}</p><p>{!! __('site.home.moment_title') !!}</p></div></section>
@@ -37,7 +42,7 @@
 
 @php($certificatesWithImages = collect($certificates)->filter(fn (array $certificate): bool => !empty($certificate['image'])))
 @if($certificatesWithImages->isNotEmpty())
-<section class="quality-rail home-section"><div class="container"><x-section-heading :kicker="__('site.home.quality_kicker')" :title="__('site.home.quality_title')" :href="app(\App\Support\LocalizedUrl::class)->route('certificates')" :link-text="__('site.nav.certificates')" /><div class="quality-rail__items">@foreach($certificatesWithImages as $certificate)<article><img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy" decoding="async"><div><h3>{{ $certificate['name'] }}</h3>@if($certificate['description'])<p>{{ $certificate['description'] }}</p>@endif</div>@if($certificate['document'])<a href="{{ $certificate['document'] }}" target="_blank" rel="noopener">{{ __('site.actions.open_document') }} ↗</a>@endif</article>@endforeach</div></div></section>
+<section class="quality-rail home-section"><div class="container"><x-section-heading :kicker="__('site.home.quality_kicker')" :title="__('site.home.quality_title')" :href="app(\App\Support\LocalizedUrl::class)->route('certificates')" :link-text="__('site.nav.certificates')" rich-title /><div class="quality-rail__items">@foreach($certificatesWithImages as $certificate)<article><img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy" decoding="async"><div><h3>{{ $certificate['name'] }}</h3>@if($certificate['description'])<p>{{ $certificate['description'] }}</p>@endif</div>@if($certificate['document'])<a href="{{ $certificate['document'] }}" target="_blank" rel="noopener noreferrer">{{ __('site.actions.open_document') }} ↗</a>@endif</article>@endforeach</div></div></section>
 @endif
 
 <x-factory-location :factory="$factory" />
@@ -47,4 +52,5 @@
 @endif
 
 <x-final-cta />
+@endif
 @endsection

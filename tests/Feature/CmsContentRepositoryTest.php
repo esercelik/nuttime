@@ -99,6 +99,7 @@ final class CmsContentRepositoryTest extends TestCase
             'label' => 'Shop',
             'url' => route('site.en.products'),
             'new_tab' => false,
+            'children' => [],
         ]], $menuItems);
     }
 }

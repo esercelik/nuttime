@@ -32,6 +32,11 @@ final class LocalizedContent
             'price' => $product->price,
             'stock' => $product->stock,
             'stock_tracking' => $product->stock_tracking,
+            'weight_grams' => $product->weight_grams,
+            'primary_ingredient_percentage' => $product->primary_ingredient_percentage,
+            'feature_tags' => $product->feature_tags ?? [],
+            'nutrition_facts' => $product->nutrition_facts ?? [],
+            'packaging_details' => $product->packaging_details ?? [],
             'featured' => $product->is_featured,
             'accent' => '#d7b66c',
             'image' => $product->main_image ? asset('storage/'.$product->main_image) : null,
@@ -58,7 +63,7 @@ final class LocalizedContent
             'seo_description' => $translation?->meta_description ?: $category->seo_description,
             'seo_canonical' => $category->seo_canonical,
             'image' => $category->image ? asset('storage/'.$category->image) : null,
-            'image_alt' => $category->image_alt ?: trim(($translation?->name ?: $category->name).' '. __('site.catalog.category')),
+            'image_alt' => $category->image_alt ?: trim(($translation?->name ?: $category->name).' '.__('site.catalog.category')),
         ];
     }
 

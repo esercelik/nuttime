@@ -1,5 +1,5 @@
 @props(['category', 'index' => 0])
-<a class="category-tile category-tile--{{ $index % 4 }}" href="{{ app(\App\Support\LocalizedUrl::class)->route('category', null, ['slug' => $category['slug']]) }}">
+<a {{ $attributes->class('category-tile category-tile--'.($index % 4)) }} href="{{ app(\App\Support\LocalizedUrl::class)->route('category', null, ['slug' => $category['slug']]) }}">
     @if(!empty($category['image']))
     <img src="{{ $category['image'] }}" alt="{{ $category['name'] }}" width="1200" height="800" loading="lazy" decoding="async">
     @endif

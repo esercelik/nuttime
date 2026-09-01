@@ -32,7 +32,7 @@ class MediaTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->requiresConfirmation()->modalDescription('Kullanımda olan medya kayıtları silinmez; kullanılmayan dosyalar diskten kaldırılır.'),
                 ]),
             ]);
     }

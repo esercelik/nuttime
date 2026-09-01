@@ -19,22 +19,22 @@ final class CmsPolicy
 
     public function create(User $user): bool
     {
-        return $user->canPublishCms();
+        return in_array($user->role, ['super_admin', 'manager', 'editor'], true);
     }
 
     public function update(User $user, Model $model): bool
     {
-        return $user->canEditCms();
+        return in_array($user->role, ['super_admin', 'manager', 'editor'], true);
     }
 
     public function delete(User $user, Model $model): bool
     {
-        return $user->canPublishCms();
+        return in_array($user->role, ['super_admin', 'manager'], true);
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->canPublishCms();
+        return in_array($user->role, ['super_admin', 'manager'], true);
     }
 
     public function restore(User $user, Model $model): bool
@@ -59,6 +59,6 @@ final class CmsPolicy
 
     public function reorder(User $user): bool
     {
-        return $user->canEditCms();
+        return in_array($user->role, ['super_admin', 'manager', 'editor'], true);
     }
 }

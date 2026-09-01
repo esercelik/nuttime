@@ -43,4 +43,13 @@ final class MenuItem extends Model
 
         return null;
     }
+
+    protected static function booted(): void
+    {
+        self::creating(function (self $item): void {
+            if (! $item->menu_id && $item->parent_id) {
+                $item->menu_id = static::query()->whereKey($item->parent_id)->value('menu_id');
+            }
+        });
+    }
 }

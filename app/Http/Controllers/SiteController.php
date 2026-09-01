@@ -7,9 +7,9 @@ use App\Models\Certificate;
 use App\Models\ContactMessage;
 use App\Models\Product;
 use App\Models\SiteSetting;
+use App\Support\CmsContentRepository;
 use App\Support\LocalizedContent;
 use App\Support\LocalizedUrl;
-use App\Support\CmsContentRepository;
 use App\Support\SeoMetadata;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +33,7 @@ final class SiteController extends Controller
         return view('pages.home', [
             'products' => $products,
             'heroSlides' => $this->cmsContent->homeSlider(app()->getLocale()) ?: $this->heroSlides($products),
+            'heroSliderSettings' => $this->cmsContent->homeSliderSettings(),
             'homeSections' => $this->cmsContent->homeSections(app()->getLocale()),
             'categories' => $this->categories(),
             'certificates' => $this->certificates(),

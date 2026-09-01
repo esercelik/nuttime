@@ -31,13 +31,15 @@
 @php($alternateUrls = $seo['alternates'] ?? [])
 @php($managedHeaderNavigation = app(\App\Support\CmsContentRepository::class)->menu('header-primary', app()->getLocale()))
 @php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
-<body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" :class="{'has-menu':menu,'is-compact':compact}">
+@php($managedLegalNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-legal', app()->getLocale()))
+<body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false" :class="{'has-menu':menu,'is-compact':compact}">
+    <a class="skip-link" href="#main-content">İçeriğe geç</a>
     <header class="masthead">
         <div class="container masthead__inner">
-            <a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}">nut<span>time</span><i></i></a>
+            <a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}"><span class="wordmark__mark">n</span>nut<span>time</span><i></i></a>
             <nav class="masthead__nav" aria-label="{{ __('site.nav.home') }}">
                 @if(count($managedHeaderNavigation))
-                    @foreach($managedHeaderNavigation as $item)<a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>@endforeach
+                    @foreach($managedHeaderNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach
                 @else
                 <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
                 <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
@@ -60,12 +62,10 @@
                 <button class="menu-toggle" @click="menu=!menu" :aria-expanded="menu.toString()" aria-label="{{ __('site.actions.open_menu') }}"><span></span><span></span></button>
             </div>
         </div>
-        <div x-show="menu" x-transition.opacity class="mobile-drawer">
+        <div x-show="menu" x-transition.opacity class="mobile-drawer" x-cloak>
             <nav aria-label="{{ __('site.nav.home') }}">
                 @if(count($managedHeaderNavigation))
-                    @foreach($managedHeaderNavigation as $item)
-                        <a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>
-                    @endforeach
+                    @foreach($managedHeaderNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach
                 @else
                 <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
                 <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
@@ -81,18 +81,18 @@
             </div>
         </div>
     </header>
-    <main>@yield('content')</main>
+    <main id="main-content">@yield('content')</main>
     <footer class="site-footer">
         <div class="container site-footer__top">
-            <div><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}">nut<span>time</span><i></i></a><p>{{ $settings['footer_description'] ?? __('site.footer.description') }}</p></div>
+            <div class="site-footer__brand"><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}"><span class="wordmark__mark">n</span>nut<span>time</span><i></i></a><p>{{ $settings['footer_description'] ?? __('site.footer.description') }}</p></div>
             <a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a>
         </div>
         <div class="container site-footer__links">
-            <div><small>{{ __('site.footer.explore') }}</small>@if(count($managedFooterNavigation))@foreach($managedFooterNavigation as $item)<a href="{{ $item['url'] }}" @if($item['new_tab']) target="_blank" rel="noopener" @endif>{{ $item['label'] }}</a>@endforeach @else<a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>@endif</div>
+            <div><small>{{ __('site.footer.explore') }}</small>@if(count($managedFooterNavigation))@foreach($managedFooterNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else<a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>@endif</div>
             <div><small>{{ __('site.footer.contact') }}</small><a href="tel:{{ $settings['phone'] ?? '' }}">{{ $settings['phone'] ?? '+90 212 123 45 67' }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div>
-            <div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" rel="noopener">Instagram</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" rel="noopener">Facebook</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" rel="noopener">YouTube</a>@endif</div></div>
+            <div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" target="_blank" rel="noopener noreferrer">Facebook ↗</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>@endif</div></div>
         </div>
-        <div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>{{ __('site.footer.tagline') }}</span></div>
+        <div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>@if(count($managedLegalNavigation))@foreach($managedLegalNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else{{ __('site.footer.tagline') }}@endif</span></div>
     </footer>
 </body>
 </html>

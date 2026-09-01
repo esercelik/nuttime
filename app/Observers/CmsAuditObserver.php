@@ -3,6 +3,14 @@
 namespace App\Observers;
 
 use App\Models\AuditLog;
+use App\Models\Menu;
+use App\Models\MenuItem;
+use App\Models\MenuItemTranslation;
+use App\Models\PageSection;
+use App\Models\PageSectionTranslation;
+use App\Models\Slider;
+use App\Models\SliderItem;
+use App\Models\SliderItemTranslation;
 use App\Support\CmsContentRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -63,6 +71,13 @@ final class CmsAuditObserver
             'user_agent' => $request?->userAgent(),
         ]);
 
-        app(CmsContentRepository::class)->forget();
+        $cmsContent = app(CmsContentRepository::class);
+
+        match (true) {
+            $model instanceof Slider, $model instanceof SliderItem, $model instanceof SliderItemTranslation => $cmsContent->forgetHomeSlider(),
+            $model instanceof PageSection, $model instanceof PageSectionTranslation => $cmsContent->forgetHomeSections(),
+            $model instanceof Menu, $model instanceof MenuItem, $model instanceof MenuItemTranslation => $cmsContent->forgetMenus(),
+            default => null,
+        };
     }
 }

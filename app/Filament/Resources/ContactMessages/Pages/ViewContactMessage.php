@@ -16,4 +16,9 @@ class ViewContactMessage extends ViewRecord
             EditAction::make(),
         ];
     }
+
+    protected function afterFill(): void
+    {
+        $this->record->markRead();
+    }
 }

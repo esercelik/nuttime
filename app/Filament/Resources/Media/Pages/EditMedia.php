@@ -13,7 +13,7 @@ class EditMedia extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()->requiresConfirmation()->modalDescription('Kullanımda olan medya dosyaları silinemez. Silme işlemi onaydan sonra fiziksel dosyayı da kaldırır.'),
         ];
     }
 }

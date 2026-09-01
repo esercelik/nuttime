@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\Media\Pages;
 
 use App\Filament\Resources\Media\MediaResource;
+use App\Models\Media;
+use App\Support\MediaUploadMetadata;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class CreateMedia extends CreateRecord
 {
@@ -16,15 +19,16 @@ class CreateMedia extends CreateRecord
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $path = Storage::disk('public')->path($data['path']);
-        $image = @getimagesize($path);
+        $metadata = app(MediaUploadMetadata::class)->forStoredFile('public', $data['path']);
+
+        if (Media::query()->where('checksum', $metadata['checksum'])->exists()) {
+            Storage::disk('public')->delete($data['path']);
+
+            throw ValidationException::withMessages(['path' => 'Bu dosya medya kütüphanesinde zaten mevcut.']);
+        }
 
         $data['original_name'] ??= basename((string) $data['path']);
-        $data['mime_type'] = mime_content_type($path) ?: 'application/octet-stream';
-        $data['size'] = Storage::disk('public')->size($data['path']);
-        $data['width'] = $image[0] ?? null;
-        $data['height'] = $image[1] ?? null;
-        $data['checksum'] = hash_file('sha256', $path);
+        $data = [...$data, ...$metadata];
 
         return $data;
     }

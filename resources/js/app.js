@@ -15,6 +15,8 @@ const initializeProductHeroes = () => {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const desktopPointer = window.matchMedia('(min-width: 901px) and (pointer: fine)').matches;
         const autoplayDelay = Number(hero.dataset.autoplay) || 6500;
+        const shouldLoop = hero.dataset.loop !== 'false';
+        const swipeEnabled = hero.dataset.swipe !== 'false';
         const previousButton = hero.querySelector('[data-product-hero-previous]');
         const nextButton = hero.querySelector('[data-product-hero-next]');
         const currentLabel = hero.querySelector('[data-product-hero-current]');
@@ -68,7 +70,7 @@ const initializeProductHeroes = () => {
         };
 
         const startAutoplay = () => {
-            if (reduceMotion || slides.length < 2 || document.hidden) {
+            if (reduceMotion || slides.length < 2 || document.hidden || (!shouldLoop && activeIndex === slides.length - 1)) {
                 return;
             }
 
@@ -157,7 +159,9 @@ const initializeProductHeroes = () => {
         };
 
         const activateSlide = (nextIndex) => {
-            const normalizedIndex = (nextIndex + slides.length) % slides.length;
+            const normalizedIndex = shouldLoop
+                ? (nextIndex + slides.length) % slides.length
+                : Math.min(Math.max(nextIndex, 0), slides.length - 1);
 
             if (normalizedIndex === activeIndex) {
                 startAutoplay();
@@ -236,7 +240,7 @@ const initializeProductHeroes = () => {
             const deltaY = event.clientY - pointerStart.y;
             pointerStart = undefined;
 
-            if (Math.abs(deltaX) > 44 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (swipeEnabled && Math.abs(deltaX) > 44 && Math.abs(deltaX) > Math.abs(deltaY)) {
                 activateSlide(activeIndex + (deltaX < 0 ? 1 : -1));
 
                 return;

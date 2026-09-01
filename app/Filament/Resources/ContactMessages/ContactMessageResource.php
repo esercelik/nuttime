@@ -22,6 +22,12 @@ class ContactMessageResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'İletişim Mesajları';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'İletişim';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Schema $schema): Schema
     {
         return ContactMessageForm::configure($schema);
