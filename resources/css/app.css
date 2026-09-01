@@ -47,10 +47,12 @@
 .home-intro__inner>p:not(.kicker){margin:0;max-width:760px;font-size:clamp(28px,3.8vw,55px);letter-spacing:-.055em;line-height:1.05}
 .home-section{padding:84px 0}
 .feature-showcase{padding-top:76px;padding-bottom:94px}
-.feature-showcase__grid{grid-template-columns:1.12fr .88fr;grid-template-rows:310px 310px;gap:18px}
+.feature-showcase__grid{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);grid-auto-rows:auto;align-items:start;gap:clamp(20px,2vw,32px)}
+.feature-showcase__grid>.catalog-card{min-width:0}
 .feature-showcase__grid>.catalog-card--hero{grid-row:span 2}
-.feature-showcase__grid .catalog-card__media,.feature-showcase__grid .catalog-card--hero .catalog-card__media{height:100%}
-.feature-showcase__grid .catalog-card__media img{object-position:center;background:var(--product-tint)}
+.feature-showcase__grid .catalog-card__media{height:clamp(260px,23vw,340px);min-height:0;aspect-ratio:16 / 10}
+.feature-showcase__grid .catalog-card--hero .catalog-card__media{height:clamp(540px,50vw,720px);min-height:0;aspect-ratio:4 / 5}
+.feature-showcase__grid .catalog-card__media img{width:82%;height:82%;object-fit:contain;object-position:center;background:transparent}
 .catalog-card__info{padding-top:14px}
 .catalog-card__info h3{font-size:23px}
 .category-showcase{padding:82px 0 88px;background:#e6dfcf}
@@ -91,10 +93,10 @@
   .home-intro .arrow-link{margin-top:7px}
   .home-section{padding:65px 0}
   .feature-showcase{padding-top:57px;padding-bottom:68px}
-  .feature-showcase__grid{grid-template-columns:1fr;grid-template-rows:420px;gap:28px}
+  .feature-showcase__grid{grid-template-columns:1fr;grid-template-rows:none;gap:28px}
   .feature-showcase__grid>.catalog-card--hero{grid-row:auto}
-  .feature-showcase__grid .catalog-card__media,.feature-showcase__grid .catalog-card--hero .catalog-card__media{height:420px}
-  .feature-showcase__grid .catalog-card--hero .catalog-card__media{height:480px}
+  .feature-showcase__grid .catalog-card__media{height:clamp(270px,48vw,365px);aspect-ratio:5 / 4}
+  .feature-showcase__grid .catalog-card--hero .catalog-card__media{height:clamp(390px,68vw,540px);aspect-ratio:4 / 5}
   .category-showcase{padding:65px 0 70px}
   .category-showcase__grid{grid-template-columns:1fr 1fr;grid-template-rows:230px 230px;gap:12px}
   .brand-moment{height:360px}
@@ -611,6 +613,12 @@ main { overflow: clip; }
 .catalog-card__action b { margin-left:8px; color:#a17624; font-size:15px; }
 .catalog-card:hover .catalog-card__arrow { transform:translate(4px, -4px); }
 .catalog-card:hover .catalog-card__media img { transform:translateY(-8px) scale(1.02); }
+
+/* The hero card spans two content-sized rows; card metadata stays in normal flow. */
+@media (max-width:550px) {
+  .feature-showcase__grid .catalog-card__info { grid-template-columns:minmax(0,1fr); }
+  .feature-showcase__grid .catalog-card__action { grid-column:1; grid-row:auto; justify-self:start; margin-top:16px; }
+}
 
 .category-showcase { background:#d9cfbc; padding:var(--space-4) 0; }
 .category-tile { min-height:0; }

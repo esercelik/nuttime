@@ -267,7 +267,17 @@ final class SiteController extends Controller
             return [];
         }
 
-        return Certificate::query()->active()->orderBy('sort_order')->get()->map(fn (Certificate $certificate): array => ['name' => $certificate->name, 'description' => $certificate->description, 'image' => $certificate->image ? asset('storage/'.$certificate->image) : null, 'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : $certificate->document_url])->all();
+        return Certificate::query()->with('translations')->active()->orderBy('sort_order')->get()->map(function (Certificate $certificate): array {
+            $translation = $certificate->translationFor(app()->getLocale());
+            $image = $translation?->image ?: $certificate->image;
+
+            return [
+                'name' => $translation?->name ?: $certificate->name,
+                'description' => $translation?->description ?: $certificate->description,
+                'image' => $image ? asset('storage/'.$image) : null,
+                'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : $certificate->document_url,
+            ];
+        })->all();
     }
 
     private function fallbackProductImage(?string $name, ?string $category = null): string

@@ -23,7 +23,7 @@ class CertificateForm
                 TextInput::make('certificate_number')->label('Sertifika numarası')->maxLength(120),
                 DatePicker::make('issued_at')->label('Veriliş tarihi'),
                 DatePicker::make('expires_at')->label('Bitiş tarihi')->after('issued_at'),
-                Select::make('image')->label('Sertifika görseli')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
+                Select::make('image')->label('Varsayılan sertifika görseli')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
                 Select::make('document_file')->label('Belge (PDF)')->options(fn (): array => MediaLibraryOptions::documents())->searchable(),
                 TextInput::make('document_url')->label('Belge bağlantısı')->url()->maxLength(2048),
                 Toggle::make('is_active')->label('Aktif')->default(true), TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0),
@@ -31,6 +31,7 @@ class CertificateForm
                     Select::make('locale')->label('Dil')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
                     TextInput::make('name')->label('Sertifika adı')->required(),
                     Textarea::make('description')->label('Açıklama')->rows(3),
+                    Select::make('image')->label('Dil görseli')->options(fn (): array => MediaLibraryOptions::images())->searchable(),
                 ])->columns(2),
             ]);
     }

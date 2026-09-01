@@ -19,6 +19,21 @@ class Certificate extends Model
         return $this->hasMany(CertificateTranslation::class);
     }
 
+    public function translationFor(string $locale): ?CertificateTranslation
+    {
+        $translations = $this->relationLoaded('translations') ? $this->translations : $this->translations()->get();
+
+        foreach (array_unique([$locale, config('nuttime.fallback_locale'), config('nuttime.default_locale')]) as $fallbackLocale) {
+            $translation = $translations->firstWhere('locale', $fallbackLocale);
+
+            if ($translation) {
+                return $translation;
+            }
+        }
+
+        return null;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

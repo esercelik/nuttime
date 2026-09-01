@@ -27,4 +27,15 @@ final class HomeHeroTest extends TestCase
             ->assertSee(route('site.tr.product', ['slug' => 'yer-fistigi-ezmesi']), false)
             ->assertSee(route('site.tr.products'), false);
     }
+
+    public function test_featured_product_cards_keep_their_localized_product_links(): void
+    {
+        $this->get(route('site.en.home'))
+            ->assertSee('feature-showcase__grid', false)
+            ->assertSee('catalog-card--hero', false)
+            ->assertSee('catalog-card--mini', false)
+            ->assertSee(route('site.en.product', ['slug' => 'hazelnut-butter']), false)
+            ->assertSee(route('site.en.product', ['slug' => 'pistachio-butter']), false)
+            ->assertSee(route('site.en.product', ['slug' => 'almond-butter']), false);
+    }
 }
