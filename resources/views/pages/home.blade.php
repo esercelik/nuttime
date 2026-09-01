@@ -5,12 +5,12 @@
 
 <section id="home-banners" class="hero-banners" aria-label="Nuttime seçkileri">
     <a class="hero-banner hero-banner--pistachio" href="{{ route('product', ['slug' => 'antep-fistikli-kremasi']) }}">
-        <img src="{{ asset('images/nuttime/collection-banner.jpg') }}" alt="Nuttime Antep fıstığı ezmesi seçkisi" width="1900" height="500" loading="lazy" decoding="async">
+        <x-optimized-image src="images/nuttime/collection-banner.jpg" alt="Nuttime Antep fıstığı ezmesi seçkisi" width="1900" height="500" sizes="(max-width: 900px) 100vw, 58vw" />
         <span class="hero-banner__veil"></span>
         <span class="hero-banner__copy"><small>YENİ NESİL LEZZET</small><strong>Antep fıstığını<br>yeniden keşfet.</strong><em>İncele ↗</em></span>
     </a>
     <a class="hero-banner hero-banner--spread" href="{{ route('products') }}">
-        <img src="{{ asset('images/nuttime/spread-banner.jpg') }}" alt="Nuttime ezme seçkisi" width="1900" height="500" loading="lazy" decoding="async">
+        <x-optimized-image src="images/nuttime/spread-banner.jpg" alt="Nuttime ezme seçkisi" width="1900" height="500" sizes="(max-width: 900px) 100vw, 42vw" />
         <span class="hero-banner__veil"></span>
         <span class="hero-banner__copy"><small>HER GÜNE EŞLİK EDER</small><strong>Bir kaşıkta<br>iyi his.</strong><em>Tüm ürünler ↗</em></span>
     </a>
@@ -52,7 +52,7 @@
 @endif
 
 <section class="brand-moment" aria-label="Nuttime ürün seçkisi">
-    <img src="{{ asset('images/nuttime/collection-banner.jpg') }}" alt="Fındık, Hindistan cevizi, Antep fıstığı ve badem Nuttime ezmeleri" width="1900" height="500" loading="lazy">
+    <x-optimized-image src="images/nuttime/collection-banner.jpg" alt="Fındık, Hindistan cevizi, Antep fıstığı ve badem Nuttime ezmeleri" width="1900" height="500" />
     <div class="brand-moment__shade"></div>
     <div class="container brand-moment__copy">
         <p class="kicker">BİR KAVANOZDAN DAHA FAZLASI</p>
@@ -62,7 +62,7 @@
 
 <section class="brand-story">
     <div class="brand-story__image">
-        <img src="{{ asset('images/nuttime/brand-story.jpg') }}" alt="Nuttime fındık ezmesi ve fındıklı ekmek" width="1707" height="2560" loading="lazy">
+        <x-optimized-image src="images/nuttime/brand-story.jpg" alt="Nuttime fındık ezmesi ve fındıklı ekmek" width="1707" height="2560" sizes="(max-width: 900px) 100vw, 57vw" />
     </div>
     <div class="brand-story__copy">
         <p class="kicker">BİZ KİMİZ?</p>
@@ -80,7 +80,7 @@
         <div class="quality-rail__items">
             @foreach($certificatesWithImages as $certificate)
             <article>
-                <img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy">
+                <img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy" decoding="async">
                 <div><h3>{{ $certificate['name'] }}</h3>@if($certificate['description'])<p>{{ $certificate['description'] }}</p>@endif</div>
                 @if($certificate['document'])<a href="{{ $certificate['document'] }}" target="_blank" rel="noopener">Belgeyi aç ↗</a>@endif
             </article>

@@ -2,6 +2,15 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
+import { execFileSync } from 'node:child_process';
+
+const optimizeImages = () => ({
+    name: 'nuttime:optimize-images',
+    apply: 'build',
+    buildStart() {
+        execFileSync('php', ['scripts/optimize-images.php'], { stdio: 'inherit' });
+    },
+});
 
 export default defineConfig({
     plugins: [
@@ -15,6 +24,7 @@ export default defineConfig({
             ],
         }),
         tailwindcss(),
+        optimizeImages(),
     ],
     server: {
         watch: {

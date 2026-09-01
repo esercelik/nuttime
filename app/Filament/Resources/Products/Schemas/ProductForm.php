@@ -25,8 +25,8 @@ class ProductForm
                     Textarea::make('description')->label('Açıklama')->rows(6),
                 ])->columns(2),
                 Section::make('Görseller')->schema([
-                    FileUpload::make('main_image')->label('Ana görsel')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
-                    FileUpload::make('additional_images')->label('Ek görseller')->image()->multiple()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
+                    FileUpload::make('main_image')->label('Ana görsel')->image()->imageResizeMode('contain')->imageResizeTargetWidth(2000)->imageResizeUpscale(false)->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
+                    FileUpload::make('additional_images')->label('Ek görseller')->image()->multiple()->imageResizeMode('contain')->imageResizeTargetWidth(2000)->imageResizeUpscale(false)->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
                 ])->columns(2),
                 Section::make('Yayın ve e-ticarete hazırlık')->schema([
                     Toggle::make('is_active')->label('Aktif')->default(true), Toggle::make('is_featured')->label('Öne çıkan'),

@@ -5,7 +5,11 @@
         <div class="product-hero__slides">
             @foreach($slides as $index => $slide)
                 <article class="product-hero__slide product-hero--{{ $slide['theme'] }} {{ $index === 0 ? 'is-active' : '' }}" aria-roledescription="slide" aria-label="{{ $index + 1 }} / {{ count($slides) }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}" @if($index !== 0) hidden @endif data-product-hero-slide>
-                    <img class="product-hero__background" src="{{ $slide['background_image'] }}" alt="" width="1707" height="1280" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-background>
+                    @if($slide['theme'] === 'pistachio')
+                        <x-optimized-image class="product-hero__background" src="images/nuttime/spylt/nuttime-antep-hero-background.png" alt="" width="1672" height="941" sizes="100vw" :loading="$index < 2 ? 'eager' : 'lazy'" :fetchpriority="$index === 0 ? 'high' : 'auto'" data-product-hero-background />
+                    @else
+                        <img class="product-hero__background" src="{{ $slide['background_image'] }}" alt="" width="1200" height="900" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-background>
+                    @endif
                     <div class="product-hero__gradient" aria-hidden="true"></div>
                     <div class="product-hero__backdrop-type" aria-hidden="true">{{ $slide['name'] }}</div>
                     <div class="product-hero__decorations" aria-hidden="true">
@@ -16,7 +20,11 @@
                         <div class="product-hero__scroll-visual" data-product-hero-scroll-visual>
                             <div class="product-hero__visual" data-product-hero-visual>
                                 <div class="product-hero__jar-float" data-product-hero-jar-float>
-                                    <img class="product-hero__jar {{ $slide['product_is_photo'] ? 'product-hero__jar--photo' : '' }}" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="1024" height="1536" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
+                                    @if($slide['theme'] === 'pistachio')
+                                        <x-optimized-image class="product-hero__jar" src="images/nuttime/spylt/nuttime-antep-jar-transparent.png" :alt="$slide['name']" width="1024" height="1536" sizes="(max-width: 900px) 86vw, 47vw" :loading="$index < 2 ? 'eager' : 'lazy'" :fetchpriority="$index === 0 ? 'high' : 'auto'" data-product-hero-jar />
+                                    @else
+                                        <img class="product-hero__jar product-hero__jar--photo" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="900" height="1200" loading="{{ $index < 2 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
+                                    @endif
                                 </div>
                             </div>
                         </div>
