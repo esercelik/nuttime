@@ -42,8 +42,10 @@ final class LocalizedContent
             'featured' => $product->is_featured,
             'accent' => '#d7b66c',
             'image' => $product->main_image ? asset('storage/'.$product->main_image) : null,
+            'image_path' => $product->main_image ? 'storage/'.$product->main_image : null,
             'image_alt' => $product->main_image_alt ?: trim(($translation?->name ?: $product->name).' - '.($category?->name ?: $product->category?->name ?: 'Nuttime')),
             'gallery' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => asset('storage/'.$image))->values()->all(),
+            'gallery_paths' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => 'storage/'.$image)->values()->all(),
         ];
     }
 

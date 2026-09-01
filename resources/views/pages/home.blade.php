@@ -12,6 +12,8 @@
 @php($managedSections = collect($homeSections ?? [])->keyBy('key'))
 @php($firstBanner = $managedSections->get('banner_one'))
 @php($secondBanner = $managedSections->get('banner_two'))
+<section class="home-intro"><div class="container home-intro__inner"><p class="kicker">NUTTIME</p><p>{!! __('site.home.intro') !!}</p><a class="arrow-link" href="{{ app(\App\Support\LocalizedUrl::class)->route('about') }}">{{ __('site.actions.discover_story') }} <span>↗</span></a></div></section>
+
 <section id="home-banners" class="hero-banners" aria-label="{{ __('site.home.banners_label') }}">
     <a class="hero-banner hero-banner--pistachio" href="{{ $firstBanner['button_url'] ?? ($bannerProduct ? app(\App\Support\LocalizedUrl::class)->route('product', null, ['slug' => $bannerProduct['slug']]) : app(\App\Support\LocalizedUrl::class)->route('products')) }}">
         @if($firstBanner['desktop_image'] ?? false)<img src="{{ $firstBanner['desktop_image'] }}" alt="{{ $firstBanner['title'] ?? __('site.home.banner_one_title') }}" width="1900" height="500" loading="lazy" decoding="async">@else<x-optimized-image src="images/nuttime/collection-banner.jpg" alt="{{ __('site.home.banner_one_title') }}" width="1900" height="500" sizes="(max-width: 900px) 100vw, 58vw" />@endif
@@ -24,8 +26,6 @@
         <span class="hero-banner__copy"><small>{{ $secondBanner['eyebrow'] ?? __('site.home.banner_two_kicker') }}</small><strong>@if($secondBanner['title'] ?? false){{ $secondBanner['title'] }}@else{!! __('site.home.banner_two_title') !!}@endif</strong><em>{{ $secondBanner['button_label'] ?? __('site.actions.all_products') }} ↗</em></span>
     </a>
 </section>
-
-<section class="home-intro"><div class="container home-intro__inner"><p class="kicker">NUTTIME</p><p>{!! __('site.home.intro') !!}</p><a class="arrow-link" href="{{ app(\App\Support\LocalizedUrl::class)->route('about') }}">{{ __('site.actions.discover_story') }} <span>↗</span></a></div></section>
 
 @php($featured = collect($products)->filter(fn (array $product): bool => $product['featured'] ?? false)->take(3))
 @if($featured->isNotEmpty())

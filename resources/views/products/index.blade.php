@@ -2,5 +2,29 @@
 @section('content')
 <x-page-hero class="page-hero--catalog" kicker="NUTTIME / {{ str_pad((string) count($products), 2, '0', STR_PAD_LEFT) }}" :title="__('site.meta.products.title')" :copy="__('site.meta.products.description')" />
 @php($categoryLinks = collect($products)->filter(fn (array $product): bool => filled($product['category_slug'] ?? null))->unique('category_slug')->values())
-<section class="catalog-page catalog-page--editorial"><div class="container"><div class="catalog-page__bar"><span>{{ __('site.catalog.products_count', ['count' => count($products)]) }}</span>@if($categoryLinks->isNotEmpty())<nav class="catalog-page__filters" aria-label="{{ __('site.nav.categories') }}"><a href="#catalog" class="is-active">{{ __('site.actions.discover') }}</a>@foreach($categoryLinks as $category)<a href="{{ app(\App\Support\LocalizedUrl::class)->route('category', null, ['slug' => $category['category_slug']]) }}">{{ $category['category'] }}</a>@endforeach</nav>@endif</div><div id="catalog" class="catalog-page__grid">@forelse($products as $index => $product)<x-product-card :product="$product" :index="$index" :priority="$index < 2" :variant="$index === 0 ? 'hero' : 'default'" />@empty<p class="empty-state">{{ __('site.catalog.empty') }}</p>@endforelse</div></div></section><x-final-cta />
+<section class="catalog-page catalog-page--editorial">
+    <div class="container">
+        <div class="catalog-page__bar">
+            <span>{{ __('site.catalog.products_count', ['count' => count($products)]) }}</span>
+            @if($categoryLinks->isNotEmpty())
+                <nav class="catalog-page__filters" aria-label="{{ __('site.nav.categories') }}">
+                    <a href="#catalog" class="is-active">{{ __('site.actions.discover') }}</a>
+                    @foreach($categoryLinks as $category)
+                        <a href="{{ app(\App\Support\LocalizedUrl::class)->route('category', null, ['slug' => $category['category_slug']]) }}">{{ $category['category'] }}</a>
+                    @endforeach
+                </nav>
+            @endif
+        </div>
+
+        <div id="catalog" class="catalog-page__grid">
+            @forelse($products as $index => $product)
+                <x-product-card :product="$product" :index="$index" variant="default" />
+            @empty
+                <p class="empty-state">{{ __('site.catalog.empty') }}</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<x-final-cta />
 @endsection

@@ -10,6 +10,7 @@ use App\Models\SiteSetting;
 use App\Support\CmsContentRepository;
 use App\Support\LocalizedContent;
 use App\Support\LocalizedUrl;
+use App\Support\NuttimeProductMedia;
 use App\Support\SeoMetadata;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ final class SiteController extends Controller
         private LocalizedContent $localizedContent,
         private LocalizedUrl $localizedUrl,
         private CmsContentRepository $cmsContent,
+        private NuttimeProductMedia $productMedia,
     ) {}
 
     public function home(): View
@@ -74,6 +76,9 @@ final class SiteController extends Controller
 
         $settings = $this->settings();
         $url = $this->localizedUrl->route('product', null, ['slug' => $product['slug']]);
+        $seoTitle = filled($product['seo_title'] ?? null) ? $product['seo_title'] : $product['name'];
+        $seoDescription = filled($product['seo_description'] ?? null) ? $product['seo_description'] : $product['description'];
+        $canonical = filled($product['seo_canonical'] ?? null) ? $product['seo_canonical'] : $url;
         $breadcrumbs = $this->seoMetadata->breadcrumbs([
             ['name' => __('site.nav.home'), 'url' => $this->localizedUrl->route('home')],
             ['name' => __('site.nav.products'), 'url' => $this->localizedUrl->route('products')],
@@ -86,9 +91,9 @@ final class SiteController extends Controller
             'settings' => $settings,
             'breadcrumbs' => $breadcrumbs['itemListElement'],
             'seo' => $this->seoMetadata->page(
-                $product['seo_title'] ?? $product['name'],
-                $product['seo_description'] ?? $product['description'],
-                $url,
+                $seoTitle,
+                $seoDescription,
+                $canonical,
                 $settings,
                 [$breadcrumbs, $this->seoMetadata->product($product, $settings, $url)],
                 'product',
@@ -209,16 +214,79 @@ final class SiteController extends Controller
     private function fallbackProducts(): array
     {
         $products = [
-            'findik-kremasi' => ['name' => ['tr' => 'Fındık Ezmesi', 'en' => 'Hazelnut Butter', 'de' => 'Haselnusscreme'], 'description' => ['tr' => 'Özenle seçilmiş fındıklarla hazırlanan pürüzsüz, yoğun ve dengeli lezzet.', 'en' => 'A smooth, rich and balanced spread made with carefully selected hazelnuts.', 'de' => 'Eine cremige, intensive und ausgewogene Spezialität aus sorgfältig ausgewählten Haselnüssen.'], 'slug' => ['tr' => 'findik-kremasi', 'en' => 'hazelnut-butter', 'de' => 'haselnusscreme'], 'image' => 'hazelnut-butter.jpg'],
-            'antep-fistikli-kremasi' => ['name' => ['tr' => 'Antep Fıstığı Ezmesi', 'en' => 'Pistachio Butter', 'de' => 'Pistaziencreme'], 'description' => ['tr' => 'Antep fıstığının karakteristik aromasıyla rafine bir deneyim.', 'en' => 'A refined experience with the distinctive aroma of pistachios.', 'de' => 'Ein raffiniertes Erlebnis mit dem unverwechselbaren Aroma von Pistazien.'], 'slug' => ['tr' => 'antep-fistikli-kremasi', 'en' => 'pistachio-butter', 'de' => 'pistaziencreme'], 'image' => 'pistachio-butter.jpg'],
-            'badem-unu' => ['name' => ['tr' => 'Badem Ezmesi', 'en' => 'Almond Butter', 'de' => 'Mandelcreme'], 'description' => ['tr' => 'Özenle seçilmiş bademlerin yumuşak ve karakterli lezzeti.', 'en' => 'The gentle, distinctive flavour of carefully selected almonds.', 'de' => 'Der milde, charaktervolle Geschmack sorgfältig ausgewählter Mandeln.'], 'slug' => ['tr' => 'badem-ezmesi', 'en' => 'almond-butter', 'de' => 'mandelcreme'], 'image' => 'almond-butter.jpg'],
+            'findik-kremasi' => [
+                'name' => ['tr' => 'Fındık Ezmesi', 'en' => 'Hazelnut Butter', 'de' => 'Haselnusscreme'],
+                'description' => ['tr' => 'Özenle seçilmiş fındıklarla hazırlanan pürüzsüz, yoğun ve dengeli lezzet.', 'en' => 'A smooth, rich and balanced spread made with carefully selected hazelnuts.', 'de' => 'Eine cremige, intensive und ausgewogene Spezialität aus sorgfältig ausgewählten Haselnüssen.'],
+                'slug' => ['tr' => 'findik-kremasi', 'en' => 'hazelnut-butter', 'de' => 'haselnusscreme'],
+                'image' => 'hazelnut-butter.jpg',
+                'ingredients' => 'Fındık (%45), Pancar Şekeri, Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Bitkisel Yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
+                'allergen_information' => 'Fındık, Süt ve süt ürünleri, Yer Fıstığı, Badem, Antep Fıstığı.',
+                'weight_grams' => 250,
+                'primary_ingredient_percentage' => 45,
+                'nutrition_facts' => [
+                    'energy' => '544 / 2277',
+                    'fat' => '33,4',
+                    'saturated_fat' => '5,15',
+                    'trans_fat' => '5,15',
+                    'carbohydrates' => '46,8',
+                    'sugar' => '46',
+                    'fibre' => '5,05',
+                    'protein' => '11,6',
+                    'salt' => '0,122',
+                ],
+                'packaging_details' => $this->standardPackagingDetails(),
+            ],
+            'antep-fistikli-kremasi' => [
+                'name' => ['tr' => 'Antep Fıstığı Ezmesi', 'en' => 'Pistachio Butter', 'de' => 'Pistaziencreme'],
+                'description' => ['tr' => 'Antep fıstığının karakteristik aromasıyla rafine bir deneyim.', 'en' => 'A refined experience with the distinctive aroma of pistachios.', 'de' => 'Ein raffiniertes Erlebnis mit dem unverwechselbaren Aroma von Pistazien.'],
+                'slug' => ['tr' => 'antep-fistikli-kremasi', 'en' => 'pistachio-butter', 'de' => 'pistaziencreme'],
+                'image' => 'pistachio-butter.jpg',
+                'ingredients' => 'Antep Fıstığı (%42), Pancar Şekeri, Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Bitkisel yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
+                'allergen_information' => 'Antep Fıstığı, Süt ve süt ürünleri, Yer Fıstığı, Badem, Fındık.',
+                'weight_grams' => 250,
+                'primary_ingredient_percentage' => 42,
+                'nutrition_facts' => [
+                    'energy' => '560 / 2344',
+                    'fat' => '37',
+                    'saturated_fat' => '7,85',
+                    'trans_fat' => '7,85',
+                    'carbohydrates' => '40',
+                    'sugar' => '39,3',
+                    'fibre' => '5,48',
+                    'protein' => '14,1',
+                    'salt' => '0,065',
+                ],
+                'packaging_details' => $this->standardPackagingDetails(),
+            ],
+            'badem-unu' => [
+                'name' => ['tr' => 'Badem Ezmesi', 'en' => 'Almond Butter', 'de' => 'Mandelcreme'],
+                'description' => ['tr' => 'Özenle seçilmiş bademlerin yumuşak ve karakterli lezzeti.', 'en' => 'The gentle, distinctive flavour of carefully selected almonds.', 'de' => 'Der milde, charaktervolle Geschmack sorgfältig ausgewählten Mandeln.'],
+                'slug' => ['tr' => 'badem-ezmesi', 'en' => 'almond-butter', 'de' => 'mandelcreme'],
+                'image' => 'almond-butter.jpg',
+                'ingredients' => 'Badem (%45), Pancar Şekeri, Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Bitkisel Yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
+                'allergen_information' => 'Badem, Süt ve süt ürünleri, Yer Fıstığı, Antep Fıstığı, Fındık.',
+                'weight_grams' => 250,
+                'primary_ingredient_percentage' => 45,
+                'nutrition_facts' => [
+                    'energy' => '561 / 2348',
+                    'fat' => '38,2',
+                    'saturated_fat' => '6,56',
+                    'trans_fat' => '6,56',
+                    'carbohydrates' => '36',
+                    'sugar' => '34,5',
+                    'fibre' => '7,45',
+                    'protein' => '14,5',
+                    'salt' => '0,112',
+                ],
+                'packaging_details' => $this->standardPackagingDetails(),
+            ],
             'yer-fistigi-ezmesi' => [
                 'name' => ['tr' => 'Yer Fıstığı Ezmesi', 'en' => 'Peanut Butter', 'de' => 'Erdnusscreme'],
                 'description' => ['tr' => 'Yoğun fıstık tadı ve parçacıklı dokusuyla günün her anına eşlik eder.', 'en' => 'A full peanut flavour and crunchy texture for every moment of the day.', 'de' => 'Voller Erdnussgeschmack und eine knackige Textur für jeden Moment des Tages.'],
                 'slug' => ['tr' => 'yer-fistigi-ezmesi', 'en' => 'peanut-butter', 'de' => 'erdnusscreme'],
                 'image' => 'peanut-butter.jpg',
                 'ingredients' => 'Yer Fıstığı (%52), Pancar Şekeri, Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Bitkisel yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
-                'allergen_information' => 'Yer Fıstığı, Yağlı Süt Tozu, Peynir Altı Suyu Tozu. Eser miktarda Fındık, Badem, Antep Fıstığı içerebilir.',
+                'allergen_information' => 'Yer Fıstığı, Süt ve süt ürünleri, Fındık, Badem, Antep Fıstığı.',
                 'weight_grams' => 250,
                 'primary_ingredient_percentage' => 52,
                 'nutrition_facts' => [
@@ -232,38 +300,58 @@ final class SiteController extends Controller
                     'protein' => '16,2',
                     'salt' => '0,077',
                 ],
-                'packaging_details' => [
-                    'jar.net_weight' => '250 gr',
-                    'jar.gross_weight' => '400 gr',
-                    'jar.diameter' => '74 mm',
-                    'jar.height' => '85 mm',
-                    'carton.units' => '12',
-                    'carton.net_weight' => '3 kg',
-                    'carton.gross_weight' => '5,65 kg',
-                    'carton.dimensions' => '255 × 325 × 115 mm',
-                    'pallet.cartons' => '100',
-                    'pallet.net_weight' => '300 kg',
-                    'pallet.gross_weight' => '580 kg',
-                    'industrial.type' => 'EUP (Europalette)',
-                    'industrial.dimensions' => '80 cm × 120 cm',
-                    'industrial.dimensions_inches' => '31,5″ × 47,24″',
-                    'industrial.buckets_on_pallet' => '24',
-                    'industrial.net_weight' => '480 kg',
-                    'industrial.gross_weight' => '520 kg',
-                    'industrial.loaded_height' => '100 cm',
-                    'industrial.loaded_height_inches' => '39,36″',
-                    'dimensions.d1' => '326,0 mm',
-                    'dimensions.d2' => '311,0 mm',
-                    'dimensions.d3' => '286,0 mm',
-                    'dimensions.h' => '274,0 mm',
-                ],
+                'packaging_details' => $this->standardPackagingDetails(),
             ],
-            'seker-ilavesiz-yer-fistigi-ezmesi' => ['name' => ['tr' => 'Şeker İlavesiz Yer Fıstığı Ezmesi', 'en' => 'No Added Sugar Peanut Butter', 'de' => 'Erdnusscreme ohne Zuckerzusatz'], 'description' => ['tr' => 'Şeker ilavesiz formülüyle sade, güçlü ve parçacıklı lezzet.', 'en' => 'A pure, powerful and crunchy recipe with no added sugar.', 'de' => 'Ein purer, kräftiger und knackiger Genuss ohne Zuckerzusatz.'], 'slug' => ['tr' => 'seker-ilavesiz-yer-fistigi-ezmesi', 'en' => 'no-added-sugar-peanut-butter', 'de' => 'erdnusscreme-ohne-zuckerzusatz'], 'image' => 'peanut-butter.jpg'],
-            'hindistan-cevizi-ezmesi' => ['name' => ['tr' => 'Hindistan Cevizi Ezmesi', 'en' => 'Coconut Butter', 'de' => 'Kokoscreme'], 'description' => ['tr' => 'Hafif, aromatik ve tropikal bir lezzet.', 'en' => 'A light, aromatic taste with a tropical character.', 'de' => 'Ein leichter, aromatischer Genuss mit tropischem Charakter.'], 'slug' => ['tr' => 'hindistan-cevizi-ezmesi', 'en' => 'coconut-butter', 'de' => 'kokoscreme'], 'image' => 'coconut-butter.jpg'],
+            'seker-ilavesiz-yer-fistigi-ezmesi' => [
+                'name' => ['tr' => 'Şeker İlavesiz Yer Fıstığı Ezmesi', 'en' => 'No Added Sugar Peanut Butter', 'de' => 'Erdnusscreme ohne Zuckerzusatz'],
+                'description' => ['tr' => 'Şeker ilavesiz formülüyle sade, güçlü ve parçacıklı lezzet.', 'en' => 'A pure, powerful and crunchy recipe with no added sugar.', 'de' => 'Ein purer, kräftiger und knackiger Genuss ohne Zuckerzusatz.'],
+                'slug' => ['tr' => 'seker-ilavesiz-yer-fistigi-ezmesi', 'en' => 'no-added-sugar-peanut-butter', 'de' => 'erdnusscreme-ohne-zuckerzusatz'],
+                'image' => 'peanut-butter.jpg',
+                'ingredients' => 'Yer Fıstığı (%72), Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Bitkisel Yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
+                'allergen_information' => 'Yer Fıstığı, Süt ve süt ürünleri, Badem, Antep Fıstığı, Fındık.',
+                'weight_grams' => 250,
+                'primary_ingredient_percentage' => 72,
+                'nutrition_facts' => [
+                    'energy' => '570 / 2306',
+                    'fat' => '37,7',
+                    'saturated_fat' => '8,21',
+                    'trans_fat' => '8,21',
+                    'carbohydrates' => '29,5',
+                    'sugar' => '17,3',
+                    'fibre' => '7,69',
+                    'protein' => '22,9',
+                    'salt' => '0,101',
+                ],
+                'packaging_details' => $this->standardPackagingDetails(),
+            ],
+            'hindistan-cevizi-ezmesi' => [
+                'name' => ['tr' => 'Hindistan Cevizi Ezmesi', 'en' => 'Coconut Butter', 'de' => 'Kokoscreme'],
+                'description' => ['tr' => 'Hafif, aromatik ve tropikal bir lezzet.', 'en' => 'A light, aromatic taste with a tropical character.', 'de' => 'Ein leichter, aromatischer Genuss mit tropischem Charakter.'],
+                'slug' => ['tr' => 'hindistan-cevizi-ezmesi', 'en' => 'coconut-butter', 'de' => 'kokoscreme'],
+                'image' => 'coconut-butter.jpg',
+                'ingredients' => 'Hindistan Cevizi (%42), Pancar Şekeri, Yağlı Süt Tozu, Peynir Altı Suyu Tozu, Fındık, Badem, Bitkisel Yağ (Pamuk), Emülgatör (Ayçiçek Lesitini).',
+                'allergen_information' => 'Süt ve süt ürünleri, Fındık, Badem, Yer Fıstığı, Antep Fıstığı.',
+                'weight_grams' => 250,
+                'primary_ingredient_percentage' => 42,
+                'nutrition_facts' => [
+                    'energy' => '567 / 2773',
+                    'fat' => '38,8',
+                    'saturated_fat' => '28,6',
+                    'trans_fat' => '28,6',
+                    'carbohydrates' => '43,6',
+                    'sugar' => '39,3',
+                    'fibre' => '6,82',
+                    'protein' => '7,43',
+                    'salt' => '0,094',
+                ],
+                'packaging_details' => $this->standardPackagingDetails(),
+            ],
         ];
 
         return collect($products)->map(function (array $product, string $key): array {
             $locale = app()->getLocale();
+            $galleryPaths = $this->productMedia->galleryPaths($key);
+            $primaryImagePath = $galleryPaths[0] ?? 'images/nuttime/'.$product['image'];
 
             return [
                 'id' => $key,
@@ -275,10 +363,17 @@ final class SiteController extends Controller
                 'description' => $product['description'][$locale],
                 'featured' => true,
                 'accent' => '#d7b66c',
-                'image' => asset('images/nuttime/'.$product['image']),
-                'image_path' => 'images/nuttime/'.$product['image'],
+                'image' => asset($primaryImagePath),
+                'image_path' => $primaryImagePath,
                 'image_alt' => $product['name'][$locale].' - Nuttime',
-                'gallery' => [],
+                'gallery' => collect($galleryPaths)
+                    ->skip(1)
+                    ->map(fn (string $path): string => asset($path))
+                    ->all(),
+                'gallery_paths' => array_values(array_slice($galleryPaths, 1)),
+                'seo_title' => $product['seo_title'] ?? null,
+                'seo_description' => $product['seo_description'] ?? null,
+                'seo_canonical' => $product['seo_canonical'] ?? null,
                 'ingredients' => $product['ingredients'] ?? null,
                 'allergen_information' => $product['allergen_information'] ?? null,
                 'nutrition_facts' => $product['nutrition_facts'] ?? [],
@@ -288,6 +383,36 @@ final class SiteController extends Controller
                 'feature_tags' => $product['feature_tags'] ?? [],
             ];
         })->values()->all();
+    }
+
+    /** @return array<string, string> */
+    private function standardPackagingDetails(): array
+    {
+        return [
+            'jar.net_weight' => '250 gr',
+            'jar.gross_weight' => '400 gr',
+            'jar.diameter' => '74 mm',
+            'jar.height' => '85 mm',
+            'carton.units' => '12',
+            'carton.net_weight' => '3 kg',
+            'carton.gross_weight' => '5,65 kg',
+            'carton.dimensions' => '255 × 325 × 115 mm',
+            'pallet.cartons' => '100',
+            'pallet.net_weight' => '300 kg',
+            'pallet.gross_weight' => '580 kg',
+            'industrial.type' => 'EUP (Europalette)',
+            'industrial.dimensions' => '80 cm × 120 cm',
+            'industrial.dimensions_inches' => '31,5″ × 47,24″',
+            'industrial.buckets_on_pallet' => '24',
+            'industrial.net_weight' => '480 kg',
+            'industrial.gross_weight' => '520 kg',
+            'industrial.loaded_height' => '100 cm',
+            'industrial.loaded_height_inches' => '39,36″',
+            'dimensions.d1' => '326,0 mm',
+            'dimensions.d2' => '311,0 mm',
+            'dimensions.d3' => '286,0 mm',
+            'dimensions.h' => '274,0 mm',
+        ];
     }
 
     /** @return array<int, array<string, mixed>> */
