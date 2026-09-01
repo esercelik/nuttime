@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+final class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_localized_homepages_render_without_a_redirect_loop(): void
     {
-        $response = $this->get('/');
+        foreach (['tr', 'en', 'de'] as $locale) {
+            $response = $this->get(route('site.'.$locale.'.home'));
 
-        $response->assertStatus(200);
+            $response
+                ->assertOk()
+                ->assertSee('lang="'.config('nuttime.locales.'.$locale.'.html').'"', false);
+        }
     }
 }

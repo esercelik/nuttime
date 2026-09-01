@@ -8,10 +8,10 @@ final class HomeHeroTest extends TestCase
 {
     public function test_home_renders_the_fullscreen_product_slider_with_banners_afterward(): void
     {
-        $response = $this->get(route('home'));
+        $response = $this->get(route('site.tr.home'));
 
         $response->assertSee('FINDIĞIN KAVRULMUŞ ZENGİNLİĞİ')
-            ->assertSee('Ürünü İncele')
+            ->assertSee('Ürünü incele')
             ->assertSee('data-product-hero-background', false)
             ->assertSee('data-product-hero-jar', false)
             ->assertSee('data-autoplay="6500"', false)
@@ -22,9 +22,9 @@ final class HomeHeroTest extends TestCase
             ->assertSee('id="home-banners"', false)
             ->assertSee('/images/nuttime/spylt/nuttime-hindistan-cevizi-hero-background.png', false)
             ->assertSee('/images/nuttime/spylt/nuttime-antep-ingredient-elements-transparent.png', false)
-            ->assertSee(route('product', ['slug' => 'antep-fistikli-kremasi']), false)
-            ->assertSee(route('product', ['slug' => 'findik-kremasi']), false)
-            ->assertSee(route('product', ['slug' => 'yer-fistigi-ezmesi']), false)
-            ->assertSee(route('products'), false);
+            ->assertSee(route('site.tr.product', ['slug' => 'antep-fistikli-kremasi']), false)
+            ->assertSee(route('site.tr.product', ['slug' => 'findik-kremasi']), false)
+            ->assertSee(route('site.tr.product', ['slug' => 'yer-fistigi-ezmesi']), false)
+            ->assertSee(route('site.tr.products'), false);
     }
 }

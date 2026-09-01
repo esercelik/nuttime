@@ -8,17 +8,21 @@
     'fetchpriority' => 'auto',
 ])
 
+@php
+    $responsiveWidths = collect([640, 1200, $width])->unique()->filter();
+    $sourceSet = static fn (string $format): string => $responsiveWidths
+        ->filter(fn (int $candidate): bool => file_exists(public_path($src.'.'.$candidate.'.'.$format)))
+        ->map(fn (int $candidate): string => asset($src.'.'.$candidate.'.'.$format).' '.$candidate.'w')
+        ->implode(', ');
+@endphp
+
 <picture>
-    <source
-        type="image/avif"
-        srcset="{{ asset($src.'.640.avif') }} 640w, {{ asset($src.'.1200.avif') }} 1200w, {{ asset($src.'.'.$width.'.avif') }} {{ $width }}w"
-        sizes="{{ $sizes }}"
-    >
-    <source
-        type="image/webp"
-        srcset="{{ asset($src.'.640.webp') }} 640w, {{ asset($src.'.1200.webp') }} 1200w, {{ asset($src.'.'.$width.'.webp') }} {{ $width }}w"
-        sizes="{{ $sizes }}"
-    >
+    @if($avifSources = $sourceSet('avif'))
+        <source type="image/avif" srcset="{{ $avifSources }}" sizes="{{ $sizes }}">
+    @endif
+    @if($webpSources = $sourceSet('webp'))
+        <source type="image/webp" srcset="{{ $webpSources }}" sizes="{{ $sizes }}">
+    @endif
     <img
         {{ $attributes }}
         src="{{ asset($src) }}"

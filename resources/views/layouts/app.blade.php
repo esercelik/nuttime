@@ -27,7 +27,7 @@
     @endforeach
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-@php($localizedRoute = static fn (string $name, array $parameters = []): string => app(AppSupportLocalizedUrl::class)->route($name, null, $parameters))
+@php($localizedRoute = static fn (string $name, array $parameters = []): string => app(\App\Support\LocalizedUrl::class)->route($name, null, $parameters))
 @php($alternateUrls = $seo['alternates'] ?? [])
 <body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" :class="{'has-menu':menu,'is-compact':compact}">
     <header class="masthead">
@@ -45,7 +45,7 @@
                         <form method="POST" action="{{ route('locale.preference') }}">
                             @csrf
                             <input type="hidden" name="locale" value="{{ $locale }}">
-                            <input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(AppSupportLocalizedUrl::class)->route('home', $locale) }}">
+                            <input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}">
                             <button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}" lang="{{ $locale }}">{{ $configuration['label'] }}</button>
                         </form>
                     @endforeach
@@ -64,7 +64,7 @@
             </nav>
             <div class="language-picker language-picker--mobile" aria-label="{{ __('site.language.choose') }}">
                 @foreach(config('nuttime.locales') as $locale => $configuration)
-                    <form method="POST" action="{{ route('locale.preference') }}">@csrf<input type="hidden" name="locale" value="{{ $locale }}"><input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(AppSupportLocalizedUrl::class)->route('home', $locale) }}"><button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}">{{ $configuration['label'] }}</button></form>
+                    <form method="POST" action="{{ route('locale.preference') }}">@csrf<input type="hidden" name="locale" value="{{ $locale }}"><input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}"><button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}">{{ $configuration['label'] }}</button></form>
                 @endforeach
             </div>
         </div>

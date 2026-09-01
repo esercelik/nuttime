@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -28,12 +29,18 @@ class ProductForm
                 ])->columns(2),
                 Section::make('Görseller')->schema([
                     FileUpload::make('main_image')->label('Ana görsel')->image()->imageResizeMode('contain')->imageResizeTargetWidth(2000)->imageResizeUpscale(false)->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
+                    FileUpload::make('social_image')->label('Sosyal paylaşım görseli')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
                     TextInput::make('main_image_alt')->label('Ana görsel alt metni')->maxLength(160)->helperText('Boşsa ürün adı ve kategoriden otomatik oluşturulur.'),
                     FileUpload::make('additional_images')->label('Ek görseller')->image()->multiple()->imageResizeMode('contain')->imageResizeTargetWidth(2000)->imageResizeUpscale(false)->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])->disk('public')->directory('products')->maxSize(5120),
                 ])->columns(2),
-                Section::make('Yayın ve e-ticarete hazırlık')->schema([
+                Section::make('İçerik ve e-ticarete hazırlık')->schema([
                     Toggle::make('is_active')->label('Aktif')->default(true), Toggle::make('is_featured')->label('Öne çıkan'),
-                    TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0), TextInput::make('price')->numeric()->prefix('₺'),
+                    TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0), TextInput::make('weight_grams')->label('Gramaj')->numeric()->suffix('g'),
+                    TextInput::make('primary_ingredient_percentage')->label('Ana içerik oranı')->numeric()->suffix('%')->minValue(0)->maxValue(100),
+                    TagsInput::make('feature_tags')->label('Özellik etiketleri')->helperText('Örn. Şeker ilavesiz, Vegan.'),
+                    KeyValue::make('nutrition_facts')->label('Besin değerleri')->helperText('Değerleri güvenli anahtar/değer çiftleri olarak girin.'),
+                    KeyValue::make('packaging_details')->label('Ambalaj bilgileri'),
+                    TextInput::make('price')->numeric()->prefix('₺'),
                     TextInput::make('compare_price')->numeric()->prefix('₺'), TextInput::make('stock')->numeric()->integer(), Toggle::make('stock_tracking')->label('Stok takibi'),
                 ])->columns(3),
                 Section::make('SEO')->schema([
@@ -49,6 +56,8 @@ class ProductForm
                         TextInput::make('slug')->label('Dil bazlı slug')->required()->maxLength(255),
                         Textarea::make('short_description')->label('Kısa açıklama')->rows(3),
                         Textarea::make('description')->label('Açıklama')->rows(5),
+                        Textarea::make('ingredients')->label('İçindekiler')->rows(3),
+                        Textarea::make('allergen_information')->label('Alerjenler')->rows(3),
                         TextInput::make('meta_title')->label('SEO başlığı')->maxLength(60),
                         Textarea::make('meta_description')->label('SEO açıklaması')->maxLength(160),
                     ])->columns(2)->defaultItems(3)->minItems(3)->maxItems(3),

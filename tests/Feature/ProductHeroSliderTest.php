@@ -28,11 +28,11 @@ final class ProductHeroSliderTest extends TestCase
             'is_active' => false,
         ]);
 
-        $response = $this->get(route('home'));
+        $response = $this->get(route('site.tr.home'));
 
         $response->assertSee($activeProduct->name)
             ->assertSee($activeProduct->short_description)
-            ->assertSee(route('product', ['slug' => $activeProduct->slug]), false)
+            ->assertSee(route('site.tr.product', ['slug' => $activeProduct->slug]), false)
             ->assertDontSee('Pasif Ürün');
     }
 }

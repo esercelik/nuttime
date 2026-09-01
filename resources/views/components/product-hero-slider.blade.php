@@ -15,7 +15,7 @@
                         <div class="product-hero__scroll-visual" data-product-hero-scroll-visual>
                             <div class="product-hero__visual" data-product-hero-visual>
                                 <div class="product-hero__jar-float" data-product-hero-jar-float>
-                                    <img class="product-hero__jar" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="1024" height="1536" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
+                                    <img class="product-hero__jar" src="{{ $slide['product_image'] }}" alt="{{ $slide['name'] }}" width="1312" height="1199" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-jar>
                                 </div>
                             </div>
                         </div>
@@ -27,8 +27,8 @@
                             @if($index === 0)<h1><span class="product-hero__headline-line" data-product-hero-headline>{{ $slide['name'] }}</span></h1>@else<h2 class="product-hero__slide-heading"><span class="product-hero__headline-line" data-product-hero-headline>{{ $slide['name'] }}</span></h2>@endif
                             <p class="product-hero__description">{{ $slide['description'] }}</p>
                             <div class="product-hero__actions" data-product-hero-actions>
-                                <a class="button product-hero__primary-action" href="{{ $slide['url'] }}">{{ __('site.actions.view_product') }} <span>↗</span></a>
-                                <a class="product-hero__secondary-action" href="{{ app(AppSupportLocalizedUrl::class)->route('products') }}">{{ __('site.actions.all_products') }} <span>↗</span></a>
+                                <a class="button product-hero__primary-action" href="{{ $slide['url'] }}">{{ $slide['cta_label'] ?? __('site.actions.view_product') }} <span>↗</span></a>
+                                <a class="product-hero__secondary-action" href="{{ app(\App\Support\LocalizedUrl::class)->route('products') }}">{{ __('site.actions.all_products') }} <span>↗</span></a>
                             </div>
                         </div>
                     </div>
@@ -54,6 +54,6 @@
     </section>
 @else
     <section class="product-hero product-hero--fallback" aria-label="Nuttime">
-        <div class="container product-hero__copy"><div class="product-hero__copy-content"><p class="product-hero__eyebrow">NUTTIME</p><h1>{!! __('site.home.featured_title') !!}</h1><a class="button" href="{{ app(AppSupportLocalizedUrl::class)->route('products') }}">{{ __('site.actions.all_products') }} <span>↗</span></a></div></div>
+        <div class="container product-hero__copy"><div class="product-hero__copy-content"><p class="product-hero__eyebrow">NUTTIME</p><h1>{!! __('site.home.featured_title') !!}</h1><a class="button" href="{{ app(\App\Support\LocalizedUrl::class)->route('products') }}">{{ __('site.actions.all_products') }} <span>↗</span></a></div></div>
     </section>
 @endif
