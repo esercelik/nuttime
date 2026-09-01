@@ -12,7 +12,7 @@ final class SeoMetadata
      * @param  array<int, array<string, mixed>>  $schemas
      * @return array<string, mixed>
      */
-    public function page(string $title, string $description, string $canonical, array $settings, array $schemas = [], string $type = 'website', ?string $image = null): array
+    public function page(string $title, string $description, string $canonical, array $settings, array $schemas = [], string $type = 'website', ?string $image = null, array $alternates = []): array
     {
         $siteName = $this->clean(Arr::get($settings, 'site_name'), config('app.name'));
         $resolvedTitle = $this->clean($title, $siteName);
@@ -27,10 +27,11 @@ final class SeoMetadata
             'canonical' => $canonical,
             'image' => $image ?: $this->defaultImage($settings),
             'type' => $type,
-            'locale' => config('seo.locale'),
+            'locale' => config('nuttime.locales.'.app()->getLocale().'.og', config('seo.locale')),
             'robots' => config('seo.indexable') ? 'index,follow,max-image-preview:large' : 'noindex,nofollow',
             'twitter_handle' => $this->clean(Arr::get($settings, 'twitter_handle')),
             'schemas' => $schemas,
+            'alternates' => $alternates,
         ];
     }
 
@@ -83,7 +84,7 @@ final class SeoMetadata
             '@type' => 'WebSite',
             '@id' => url('/').'#website',
             'url' => url('/'),
-            'inLanguage' => 'tr-TR',
+            'inLanguage' => config('nuttime.locales.'.app()->getLocale().'.html', 'tr-TR'),
         ];
     }
 
@@ -115,7 +116,7 @@ final class SeoMetadata
         $schema = [
             '@context' => 'https://schema.org',
             '@type' => 'Product',
-            'name' => $this->clean(Arr::get($product, 'name.tr'), $this->clean(Arr::get($product, 'name'), config('app.name'))),
+            'name' => $this->clean(Arr::get($product, 'name'), config('app.name')),
             'description' => $this->clean(Arr::get($product, 'description'), ''),
             'url' => $url,
             'brand' => ['@type' => 'Brand', 'name' => $this->clean(Arr::get($settings, 'site_name'), config('app.name'))],

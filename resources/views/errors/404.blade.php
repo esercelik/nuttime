@@ -1,1 +1,1 @@
-@php($code=404) @php($heading='Sayfa bulunamadı') @php($message='Aradığınız sayfa mevcut değil veya taşınmış olabilir.') @include('errors.layout')
+@php($code=404) @php($heading=__('site.errors.404.heading')) @php($message=__('site.errors.404.message')) @include('errors.layout')

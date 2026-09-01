@@ -1,5 +1,86 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ $title ?? ($settings['seo_title'] ?? 'Nuttime') }}</title><meta name="description" content="{{ $metaDescription ?? ($settings['seo_description'] ?? 'Doğadan gelen iyi fikir.') }}"><link rel="canonical" href="{{ url()->current() }}"><meta property="og:title" content="{{ $title ?? 'Nuttime' }}"><meta property="og:description" content="{{ $metaDescription ?? ($settings['seo_description'] ?? '') }}"><meta property="og:url" content="{{ url()->current() }}"><meta property="og:type" content="website">@vite(['resources/css/app.css', 'resources/js/app.js'])</head>
-@php($localizedRoute = static fn (string $name, array $parameters = []): string => route(app()->getLocale() === 'tr' ? $name : 'localized.'.$name, app()->getLocale() === 'tr' ? $parameters : ['locale' => app()->getLocale()] + $parameters))
-<body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" :class="{'has-menu':menu,'is-compact':compact}"><header class="masthead"><div class="container masthead__inner"><a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}">nut<span>time</span><i></i></a><nav class="masthead__nav" aria-label="{{ __('site.nav.home') }}"><a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a><a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('category', ['slug' => 'nut-creams']) }}">{{ __('site.nav.categories') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a></nav><div class="masthead__actions"><a class="masthead__contact" href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} <span>↗</span></a><button class="menu-toggle" @click="menu=!menu" :aria-expanded="menu.toString()" aria-label="{{ __('site.actions.open_menu') }}"><span></span><span></span></button></div></div><div x-show="menu" x-transition.opacity class="mobile-drawer"><nav aria-label="{{ __('site.nav.home') }}"><a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a><a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('category', ['slug' => 'nut-creams']) }}">{{ __('site.nav.categories') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} ↗</a></nav><p>Doğadan gelen iyi fikir.</p></div></header><main>@yield('content')</main><footer class="site-footer"><div class="container site-footer__top"><div><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}">nut<span>time</span><i></i></a><p>{{ $settings['footer_description'] ?? 'Doğadan gelen iyi fikir. Her lokmada iyi hisset.' }}</p></div><a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a></div><div class="container site-footer__links"><div><small>{{ __('site.footer.explore') }}</small><a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a></div><div><small>{{ __('site.footer.contact') }}</small><a href="tel:{{ $settings['phone'] ?? '' }}">{{ $settings['phone'] ?? '+90 212 123 45 67' }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div><div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" rel="noopener">Instagram</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" rel="noopener">Facebook</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" rel="noopener">YouTube</a>@endif</div></div></div><div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>{{ __('site.footer.tagline') }}</span></div></footer></body></html>
+<html lang="{{ config('nuttime.locales.'.app()->getLocale().'.html', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ $seo['title'] ?? 'Nuttime' }}</title>
+    <meta name="description" content="{{ $seo['description'] ?? '' }}">
+    <meta name="robots" content="{{ $seo['robots'] ?? 'index,follow' }}">
+    <link rel="canonical" href="{{ $seo['canonical'] ?? url()->current() }}">
+    @foreach(($seo['alternates'] ?? []) as $locale => $alternate)
+        <link rel="alternate" hreflang="{{ $locale }}" href="{{ $alternate }}">
+    @endforeach
+    @if(!empty($seo['alternates']))
+        <link rel="alternate" hreflang="x-default" href="{{ $seo['alternates'][config('nuttime.default_locale')] }}">
+    @endif
+    <meta property="og:title" content="{{ $seo['title'] ?? 'Nuttime' }}">
+    <meta property="og:description" content="{{ $seo['description'] ?? '' }}">
+    <meta property="og:url" content="{{ $seo['canonical'] ?? url()->current() }}">
+    <meta property="og:type" content="{{ $seo['type'] ?? 'website' }}">
+    <meta property="og:locale" content="{{ $seo['locale'] ?? 'tr_TR' }}">
+    <meta property="og:site_name" content="{{ $settings['site_name'] ?? 'Nuttime' }}">
+    @if(!empty($seo['image']))<meta property="og:image" content="{{ $seo['image'] }}">@endif
+    <meta name="twitter:card" content="summary_large_image">
+    @if(!empty($seo['twitter_handle']))<meta name="twitter:site" content="{{ $seo['twitter_handle'] }}">@endif
+    @foreach(($seo['schemas'] ?? []) as $schema)
+        <script type="application/ld+json">@json($schema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)</script>
+    @endforeach
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+@php($localizedRoute = static fn (string $name, array $parameters = []): string => app(AppSupportLocalizedUrl::class)->route($name, null, $parameters))
+@php($alternateUrls = $seo['alternates'] ?? [])
+<body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" :class="{'has-menu':menu,'is-compact':compact}">
+    <header class="masthead">
+        <div class="container masthead__inner">
+            <a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}">nut<span>time</span><i></i></a>
+            <nav class="masthead__nav" aria-label="{{ __('site.nav.home') }}">
+                <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
+                <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
+                <a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>
+                <a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>
+            </nav>
+            <div class="masthead__actions">
+                <div class="language-picker" aria-label="{{ __('site.language.choose') }}">
+                    @foreach(config('nuttime.locales') as $locale => $configuration)
+                        <form method="POST" action="{{ route('locale.preference') }}">
+                            @csrf
+                            <input type="hidden" name="locale" value="{{ $locale }}">
+                            <input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(AppSupportLocalizedUrl::class)->route('home', $locale) }}">
+                            <button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}" lang="{{ $locale }}">{{ $configuration['label'] }}</button>
+                        </form>
+                    @endforeach
+                </div>
+                <a class="masthead__contact" href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} <span>↗</span></a>
+                <button class="menu-toggle" @click="menu=!menu" :aria-expanded="menu.toString()" aria-label="{{ __('site.actions.open_menu') }}"><span></span><span></span></button>
+            </div>
+        </div>
+        <div x-show="menu" x-transition.opacity class="mobile-drawer">
+            <nav aria-label="{{ __('site.nav.home') }}">
+                <a href="{{ $localizedRoute('home') }}">{{ __('site.nav.home') }}</a>
+                <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
+                <a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>
+                <a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>
+                <a href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} ↗</a>
+            </nav>
+            <div class="language-picker language-picker--mobile" aria-label="{{ __('site.language.choose') }}">
+                @foreach(config('nuttime.locales') as $locale => $configuration)
+                    <form method="POST" action="{{ route('locale.preference') }}">@csrf<input type="hidden" name="locale" value="{{ $locale }}"><input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(AppSupportLocalizedUrl::class)->route('home', $locale) }}"><button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}">{{ $configuration['label'] }}</button></form>
+                @endforeach
+            </div>
+        </div>
+    </header>
+    <main>@yield('content')</main>
+    <footer class="site-footer">
+        <div class="container site-footer__top">
+            <div><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}">nut<span>time</span><i></i></a><p>{{ $settings['footer_description'] ?? __('site.footer.description') }}</p></div>
+            <a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a>
+        </div>
+        <div class="container site-footer__links">
+            <div><small>{{ __('site.footer.explore') }}</small><a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a></div>
+            <div><small>{{ __('site.footer.contact') }}</small><a href="tel:{{ $settings['phone'] ?? '' }}">{{ $settings['phone'] ?? '+90 212 123 45 67' }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div>
+            <div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" rel="noopener">Instagram</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" rel="noopener">Facebook</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" rel="noopener">YouTube</a>@endif</div></div>
+        </div>
+        <div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>{{ __('site.footer.tagline') }}</span></div>
+    </footer>
+</body>
+</html>

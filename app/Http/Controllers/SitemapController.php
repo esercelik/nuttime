@@ -2,55 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Content;
 use App\Models\Category;
+use App\Models\Content;
 use App\Models\Product;
 use App\Models\SiteSetting;
+use App\Support\LocalizedUrl;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 
-class SitemapController extends Controller
+final class SitemapController extends Controller
 {
+    public function __construct(private LocalizedUrl $localizedUrl) {}
+
     public function __invoke(): Response
     {
         $lastModified = Schema::hasTable('site_settings') ? SiteSetting::current()->updated_at : now();
-        $urls = [
-            $this->url(url('/'), $lastModified, 'weekly', '1.0'),
-            $this->url(url('/urunlerimiz'), $lastModified, 'weekly', '0.9'),
-            $this->url(url('/hakkimizda'), $lastModified, 'monthly', '0.7'),
-            $this->url(url('/sertifikalarimiz'), $lastModified, 'monthly', '0.7'),
-            $this->url(url('/iletisim'), $lastModified, 'monthly', '0.7'),
-        ];
+        $urls = [];
 
-        foreach (['en', 'de'] as $locale) {
-            $urls = [...$urls, $this->url(url("/{$locale}"), $lastModified, 'weekly', '0.7'), $this->url(url("/{$locale}/products"), $lastModified, 'weekly', '0.6'), $this->url(url("/{$locale}/about-us"), $lastModified, 'monthly', '0.5'), $this->url(url("/{$locale}/certificates"), $lastModified, 'monthly', '0.5'), $this->url(url("/{$locale}/contact"), $lastModified, 'monthly', '0.5')];
+        foreach (array_keys(config('nuttime.locales')) as $locale) {
+            foreach (['home' => ['weekly', '1.0'], 'products' => ['weekly', '0.9'], 'about' => ['monthly', '0.7'], 'certificates' => ['monthly', '0.7'], 'contact' => ['monthly', '0.7'], 'contents' => ['weekly', '0.6']] as $page => [$frequency, $priority]) {
+                $urls[] = $this->url($this->localizedUrl->route($page, $locale), $lastModified, $frequency, $priority);
+            }
         }
+
         if (Schema::hasTable('products')) {
-            foreach (Product::query()->active()->orderBy('id')->get(['slug', 'updated_at']) as $product) {
-                $urls[] = $this->url(url('/urunler/'.$product->slug), $product->updated_at, 'weekly', '0.8');
-                $urls[] = $this->url(url('/en/products/'.$product->slug), $product->updated_at, 'weekly', '0.6');
-                $urls[] = $this->url(url('/de/products/'.$product->slug), $product->updated_at, 'weekly', '0.6');
-            }
-        }
-        if (Schema::hasTable('categories')) {
-            foreach (Category::query()->where('is_active', true)->orderBy('id')->get(['slug', 'updated_at']) as $category) {
-                $urls[] = $this->url(url('/kategori/'.$category->slug), $category->updated_at, 'weekly', '0.7');
-                $urls[] = $this->url(url('/en/category/'.$category->slug), $category->updated_at, 'weekly', '0.5');
-                $urls[] = $this->url(url('/de/category/'.$category->slug), $category->updated_at, 'weekly', '0.5');
-            }
-        }
-        if (Schema::hasTable('contents')) {
-            foreach (Content::query()->published()->get(['slug', 'updated_at']) as $content) {
-                $urls[] = $this->url(route('content', $content), $content->updated_at, 'monthly', '0.6');
-            }
+            Product::query()->with('translations')->active()->orderBy('id')->get()->each(function (Product $product) use (&$urls): void {
+                foreach (array_keys(config('nuttime.locales')) as $locale) {
+                    $slug = $product->translationFor($locale)?->slug ?: $product->slug;
+                    $urls[] = $this->url($this->localizedUrl->route('product', $locale, ['slug' => $slug]), $product->updated_at, 'weekly', '0.8');
+                }
+            });
         }
 
-        return response(view('sitemap', compact('urls'))->render(), 200, ['Content-Type' => 'application/xml']);
+        if (Schema::hasTable('categories')) {
+            Category::query()->with('translations')->where('is_active', true)->orderBy('id')->get()->each(function (Category $category) use (&$urls): void {
+                foreach (array_keys(config('nuttime.locales')) as $locale) {
+                    $slug = $category->translationFor($locale)?->slug ?: $category->slug;
+                    $urls[] = $this->url($this->localizedUrl->route('category', $locale, ['slug' => $slug]), $category->updated_at, 'weekly', '0.7');
+                }
+            });
+        }
+
+        if (Schema::hasTable('contents')) {
+            Content::query()->published()->get()->each(function (Content $content) use (&$urls): void {
+                $translations = collect($content->translations ?? [])->keyBy('locale');
+
+                foreach (array_keys(config('nuttime.locales')) as $locale) {
+                    $slug = $translations->get($locale)['slug'] ?? $translations->get('en')['slug'] ?? $content->slug;
+                    $urls[] = $this->url($this->localizedUrl->route('content', $locale, ['slug' => $slug]), $content->updated_at, 'monthly', '0.6');
+                }
+            });
+        }
+
+        return response(view('sitemap', compact('urls'))->render(), 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
-    /**
-     * @return array{loc: string, lastmod: string, changefreq: string, priority: string}
-     */
+    /** @return array{loc: string, lastmod: string, changefreq: string, priority: string} */
     private function url(string $location, $lastModified, string $changeFrequency, string $priority): array
     {
         return ['loc' => $location, 'lastmod' => $lastModified->toAtomString(), 'changefreq' => $changeFrequency, 'priority' => $priority];

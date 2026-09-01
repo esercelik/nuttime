@@ -8,12 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ?string $routeLocale = null): Response
     {
-        $locale = $request->route('locale') ?: 'tr';
-        if (! in_array($locale, config('nuttime.locales'), true)) {
+        $locale = $routeLocale ?: $request->route('locale') ?: config('nuttime.default_locale');
+
+        if (! array_key_exists($locale, config('nuttime.locales'))) {
             abort(404);
         }
+
         app()->setLocale($locale);
 
         return $next($request);

@@ -10,11 +10,11 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'cover_image', 'cover_image_alt', 'status', 'published_at', 'seo_title', 'seo_description', 'seo_canonical'];
+    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'cover_image', 'cover_image_alt', 'status', 'published_at', 'seo_title', 'seo_description', 'seo_canonical', 'translations'];
 
     protected function casts(): array
     {
-        return ['published_at' => 'datetime'];
+        return ['published_at' => 'datetime', 'translations' => 'array'];
     }
 
     public function scopePublished(Builder $query): Builder

@@ -23,6 +23,8 @@ class SiteSettings extends Page
 
     public $logo;
 
+    public $defaultOgImage;
+
     public function mount(): void
     {
         $this->data = SiteSetting::current()->toArray();
@@ -37,7 +39,11 @@ class SiteSettings extends Page
             'data.whatsapp' => ['nullable', 'string', 'max:40'],
             'data.seo_title' => ['nullable', 'string', 'max:160'],
             'data.seo_description' => ['nullable', 'string', 'max:320'],
+            'data.legal_name' => ['nullable', 'string', 'max:160'],
+            'data.working_hours' => ['nullable', 'string', 'max:500'],
+            'data.twitter_handle' => ['nullable', 'string', 'max:80'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'defaultOgImage' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'data.factory_name' => ['nullable', 'string', 'max:160'],
             'data.factory_address' => ['nullable', 'string', 'max:1000'],
             'data.factory_map_latitude' => ['nullable', 'numeric', 'between:-90,90'],
@@ -47,6 +53,9 @@ class SiteSettings extends Page
         ]);
         if ($this->logo) {
             $this->data['logo'] = $this->logo->store('site', 'public');
+        }
+        if ($this->defaultOgImage) {
+            $this->data['default_og_image'] = $this->defaultOgImage->store('site', 'public');
         }
         SiteSetting::current()->update($this->data);
         $this->dispatch('saved');

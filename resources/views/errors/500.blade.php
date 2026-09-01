@@ -1,1 +1,1 @@
-@php($code=500) @php($heading='Bir sorun oluştu') @php($message='Teknik ekibimiz bilgilendirildi. Lütfen kısa süre sonra tekrar deneyin.') @include('errors.layout')
+@php($code=500) @php($heading=__('site.errors.500.heading')) @php($message=__('site.errors.500.message')) @include('errors.layout')

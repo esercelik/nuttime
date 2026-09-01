@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Contents\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -32,6 +33,17 @@ class ContentForm
                     TextInput::make('seo_title')->label('SEO başlığı')->maxLength(60)->helperText('Boşsa içerik başlığı kullanılır.'),
                     Textarea::make('seo_description')->label('SEO açıklaması')->maxLength(160)->helperText('Boşsa özetten oluşturulur.'),
                     TextInput::make('seo_canonical')->label('Canonical URL')->url()->maxLength(2048),
+                ]),
+                Section::make('English ve Deutsch')->description('Eksik içerik English, ardından Türkçe değerine döner.')->schema([
+                    Repeater::make('translations')->schema([
+                        Select::make('locale')->label('Dil')->options(['en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                        TextInput::make('title')->label('Başlık')->required()->maxLength(255),
+                        TextInput::make('slug')->label('Slug')->required()->maxLength(255),
+                        Textarea::make('excerpt')->label('Özet')->rows(3),
+                        Textarea::make('body')->label('İçerik')->rows(8),
+                        TextInput::make('seo_title')->label('SEO başlığı')->maxLength(60),
+                        Textarea::make('seo_description')->label('SEO açıklaması')->maxLength(160),
+                    ])->columns(2)->defaultItems(2)->maxItems(2),
                 ]),
             ]);
     }

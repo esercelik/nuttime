@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -38,7 +40,18 @@ class ProductForm
                     TextInput::make('seo_title')->label('SEO başlığı')->maxLength(60)->helperText('Boşsa ürün adı kullanılır.'),
                     Textarea::make('seo_description')->label('SEO açıklaması')->maxLength(160)->helperText('Boşsa ürün açıklamasından oluşturulur.'),
                     TextInput::make('seo_canonical')->label('Canonical URL')->url()->maxLength(2048)->helperText('Yalnızca farklı bir asıl URL gerekiyorsa doldurun.'),
-                    Textarea::make('previous_slugs')->label('Eski sluglar')->rows(2)->helperText('Birden fazla eski slugı virgülle ayırın; 301 yönlendirmesi için kullanılır.'),
+                    TagsInput::make('previous_slugs')->label('Eski sluglar')->helperText('Her eski slug için kalıcı 301 yönlendirmesi oluşturulur.'),
+                ]),
+                Section::make('Dil bazlı içerik')->description('Eksik içerik English, ardından Türkçe değerine döner.')->schema([
+                    Repeater::make('translations')->relationship()->schema([
+                        Select::make('locale')->label('Dil')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                        TextInput::make('name')->label('Ürün adı')->required()->maxLength(255),
+                        TextInput::make('slug')->label('Dil bazlı slug')->required()->maxLength(255),
+                        Textarea::make('short_description')->label('Kısa açıklama')->rows(3),
+                        Textarea::make('description')->label('Açıklama')->rows(5),
+                        TextInput::make('meta_title')->label('SEO başlığı')->maxLength(60),
+                        Textarea::make('meta_description')->label('SEO açıklaması')->maxLength(160),
+                    ])->columns(2)->defaultItems(3)->minItems(3)->maxItems(3),
                 ]),
             ]);
     }
