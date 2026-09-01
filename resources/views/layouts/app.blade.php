@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ config('nuttime.locales.'.app()->getLocale().'.html', app()->getLocale()) }}">
+<html lang="{{ config('nuttime.locales.'.app()->getLocale().'.html', app()->getLocale()) }}" dir="{{ config('nuttime.locales.'.app()->getLocale().'.direction', 'ltr') }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -29,10 +29,12 @@
 </head>
 @php($localizedRoute = static fn (string $name, array $parameters = []): string => app(\App\Support\LocalizedUrl::class)->route($name, null, $parameters))
 @php($alternateUrls = $seo['alternates'] ?? [])
+@php($currentLocale = app()->getLocale())
+@php($currentLocaleConfiguration = config('nuttime.locales.'.$currentLocale))
 @php($managedHeaderNavigation = app(\App\Support\CmsContentRepository::class)->menu('header-primary', app()->getLocale()))
 @php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
 @php($managedLegalNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-legal', app()->getLocale()))
-<body x-data="{menu:false,compact:false}" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false" :class="{'has-menu':menu,'is-compact':compact}">
+<body x-data="{menu:false,language:false,compact:false}" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false; language=false" :class="{'has-menu':menu,'is-compact':compact}">
     <a class="skip-link" href="#main-content">İçeriğe geç</a>
     <header class="masthead">
         <div class="container masthead__inner">
@@ -48,15 +50,20 @@
                 @endif
             </nav>
             <div class="masthead__actions">
-                <div class="language-picker" aria-label="{{ __('site.language.choose') }}">
-                    @foreach(config('nuttime.locales') as $locale => $configuration)
-                        <form method="POST" action="{{ route('locale.preference') }}">
-                            @csrf
-                            <input type="hidden" name="locale" value="{{ $locale }}">
-                            <input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}">
-                            <button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}" lang="{{ $locale }}">{{ $configuration['label'] }}</button>
-                        </form>
-                    @endforeach
+                <div class="language-picker language-picker--desktop" aria-label="{{ __('site.language.choose') }}" @click.outside="language=false">
+                    <button type="button" class="language-picker__trigger" @click="language=!language" :aria-expanded="language.toString()" aria-haspopup="listbox">
+                        <span aria-hidden="true">{{ $currentLocaleConfiguration['flag'] }}</span><span>{{ $currentLocaleConfiguration['short'] }}</span><i aria-hidden="true">⌄</i>
+                    </button>
+                    <div x-cloak x-show="language" x-transition.origin.top.right class="language-picker__menu" role="listbox" aria-label="{{ __('site.language.choose') }}">
+                        @foreach(config('nuttime.locales') as $locale => $configuration)
+                            <form method="POST" action="{{ route('locale.preference') }}">
+                                @csrf
+                                <input type="hidden" name="locale" value="{{ $locale }}">
+                                <input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}">
+                                <button type="submit" class="language-picker__option {{ $currentLocale === $locale ? 'is-active' : '' }}" lang="{{ $locale }}" role="option" aria-selected="{{ $currentLocale === $locale ? 'true' : 'false' }}"><span aria-hidden="true">{{ $configuration['flag'] }}</span><span>{{ $configuration['label'] }}</span></button>
+                            </form>
+                        @endforeach
+                    </div>
                 </div>
                 <a class="masthead__contact" href="{{ $localizedRoute('contact') }}">{{ __('site.nav.contact') }} <span>↗</span></a>
                 <button class="menu-toggle" @click="menu=!menu" :aria-expanded="menu.toString()" aria-label="{{ __('site.actions.open_menu') }}"><span></span><span></span></button>
@@ -75,9 +82,12 @@
                 @endif
             </nav>
             <div class="language-picker language-picker--mobile" aria-label="{{ __('site.language.choose') }}">
-                @foreach(config('nuttime.locales') as $locale => $configuration)
-                    <form method="POST" action="{{ route('locale.preference') }}">@csrf<input type="hidden" name="locale" value="{{ $locale }}"><input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}"><button type="submit" class="{{ app()->getLocale() === $locale ? 'is-active' : '' }}">{{ $configuration['label'] }}</button></form>
-                @endforeach
+                <p>{{ __('site.language.choose') }}</p>
+                <div class="language-picker__list">
+                    @foreach(config('nuttime.locales') as $locale => $configuration)
+                        <form method="POST" action="{{ route('locale.preference') }}">@csrf<input type="hidden" name="locale" value="{{ $locale }}"><input type="hidden" name="redirect_to" value="{{ $alternateUrls[$locale] ?? app(\App\Support\LocalizedUrl::class)->route('home', $locale) }}"><button type="submit" class="language-picker__option {{ $currentLocale === $locale ? 'is-active' : '' }}" lang="{{ $locale }}"><span aria-hidden="true">{{ $configuration['flag'] }}</span><span>{{ $configuration['label'] }}</span></button></form>
+                    @endforeach
+                </div>
             </div>
         </div>
     </header>

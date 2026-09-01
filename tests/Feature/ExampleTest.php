@@ -8,12 +8,13 @@ final class ExampleTest extends TestCase
 {
     public function test_localized_homepages_render_without_a_redirect_loop(): void
     {
-        foreach (['tr', 'en', 'de'] as $locale) {
+        foreach (array_keys(config('nuttime.locales')) as $locale) {
             $response = $this->get(route('site.'.$locale.'.home'));
 
             $response
                 ->assertOk()
-                ->assertSee('lang="'.config('nuttime.locales.'.$locale.'.html').'"', false);
+                ->assertSee('lang="'.config('nuttime.locales.'.$locale.'.html').'"', false)
+                ->assertSee('dir="'.config('nuttime.locales.'.$locale.'.direction').'"', false);
         }
     }
 }

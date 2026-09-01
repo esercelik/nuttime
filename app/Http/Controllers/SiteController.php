@@ -350,22 +350,26 @@ final class SiteController extends Controller
 
         return collect($products)->map(function (array $product, string $key): array {
             $locale = app()->getLocale();
+            $localizedProductLocale = $this->fallbackProductLocale($product['slug'], $locale);
+            $slugs = collect(array_keys(config('nuttime.locales')))
+                ->mapWithKeys(fn (string $localizedLocale): array => [$localizedLocale => $product['slug'][$this->fallbackProductLocale($product['slug'], $localizedLocale)]])
+                ->all();
             $galleryPaths = $this->productMedia->galleryPaths($key);
             $primaryImagePath = $galleryPaths[0] ?? 'images/nuttime/'.$product['image'];
 
             return [
                 'id' => $key,
-                'slug' => $product['slug'][$locale],
-                'slugs' => $product['slug'],
-                'name' => $product['name'][$locale],
+                'slug' => $product['slug'][$localizedProductLocale],
+                'slugs' => $slugs,
+                'name' => $product['name'][$localizedProductLocale],
                 'category' => __('site.catalog.default_category'),
                 'category_slug' => null,
-                'description' => $product['description'][$locale],
+                'description' => $product['description'][$localizedProductLocale],
                 'featured' => true,
                 'accent' => '#d7b66c',
                 'image' => asset($primaryImagePath),
                 'image_path' => $primaryImagePath,
-                'image_alt' => $product['name'][$locale].' - Nuttime',
+                'image_alt' => $product['name'][$localizedProductLocale].' - Nuttime',
                 'gallery' => collect($galleryPaths)
                     ->skip(1)
                     ->map(fn (string $path): string => asset($path))
@@ -383,6 +387,20 @@ final class SiteController extends Controller
                 'feature_tags' => $product['feature_tags'] ?? [],
             ];
         })->values()->all();
+    }
+
+    /**
+     * @param  array<string, string>  $localizedValues
+     */
+    private function fallbackProductLocale(array $localizedValues, string $locale): string
+    {
+        foreach (array_unique([$locale, config('nuttime.fallback_locale'), config('nuttime.default_locale')]) as $fallbackLocale) {
+            if (filled($localizedValues[$fallbackLocale] ?? null)) {
+                return $fallbackLocale;
+            }
+        }
+
+        return (string) array_key_first($localizedValues);
     }
 
     /** @return array<string, string> */

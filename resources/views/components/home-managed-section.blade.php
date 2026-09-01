@@ -34,7 +34,7 @@
 
     @case('certificates')
         @php($managedCertificates = collect($certificates)->filter(fn (array $certificate): bool => !empty($certificate['image'])))
-        @if($managedCertificates->isNotEmpty())<section class="quality-rail home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" /><div class="quality-rail__items">@foreach($managedCertificates as $certificate)<article><img src="{{ $certificate['image'] }}" alt="{{ $certificate['name'] }}" width="260" height="160" loading="lazy" decoding="async"><div><h3>{{ $certificate['name'] }}</h3><p>{{ $certificate['description'] }}</p></div></article>@endforeach</div></div></section>@endif
+        @if($managedCertificates->isNotEmpty())<section class="quality-rail home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" /><div class="quality-rail__items">@foreach($managedCertificates as $certificate)<article><x-certificate-preview :src="$certificate['image']" :alt="$certificate['name']" width="260" height="160" /><div><h3>{{ $certificate['name'] }}</h3><p>{{ $certificate['description'] }}</p></div></article>@endforeach</div></div></section>@endif
         @break
 
     @case('factory')

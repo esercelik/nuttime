@@ -25,7 +25,7 @@ final class LocalizationInfrastructureTest extends TestCase
         $response->assertRedirect(route('site.de.home'));
     }
 
-    public function test_platform_country_header_is_used_after_an_unsupported_browser_language(): void
+    public function test_supported_browser_language_takes_priority_over_platform_country_header(): void
     {
         $response = $this
             ->withHeaders([
@@ -34,28 +34,28 @@ final class LocalizationInfrastructureTest extends TestCase
             ])
             ->get('/');
 
-        $response->assertRedirect(route('site.de.home'));
+        $response->assertRedirect(route('site.es.home'));
     }
 
-    public function test_unsupported_browser_language_without_country_falls_back_to_turkish(): void
+    public function test_supported_browser_language_redirects_to_its_localized_homepage(): void
     {
         $response = $this
             ->withHeaders(['Accept-Language' => 'es-ES,es;q=0.9'])
             ->get('/');
 
-        $response->assertRedirect(route('site.tr.home'));
+        $response->assertRedirect(route('site.es.home'));
     }
 
     public function test_manual_language_selection_sets_the_preference_cookie_and_keeps_the_target_page(): void
     {
         $response = $this->post(route('locale.preference'), [
-            'locale' => 'de',
-            'redirect_to' => route('site.de.products'),
+            'locale' => 'fr',
+            'redirect_to' => route('site.fr.products'),
         ]);
 
         $response
-            ->assertRedirect(route('site.de.products'))
-            ->assertCookie(config('nuttime.preference_cookie'), 'de')
+            ->assertRedirect(route('site.fr.products'))
+            ->assertCookie(config('nuttime.preference_cookie'), 'fr')
             ->assertCookieNotExpired(config('nuttime.preference_cookie'));
     }
 }
