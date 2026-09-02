@@ -6,8 +6,6 @@
 
     <section class="about-editorial">
         <div class="container">
-            <div class="about-editorial__lead"><p>{{ __('site.static.about_lead') }}</p></div>
-
             <article class="about-editorial__copy about-editorial__copy--who">
                 <p class="kicker">{{ __('site.static.who_kicker') }}</p>
                 <h2>{{ __('site.static.who_title') }}</h2>

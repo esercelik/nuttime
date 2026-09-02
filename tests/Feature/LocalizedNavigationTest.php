@@ -23,6 +23,15 @@ final class LocalizedNavigationTest extends TestCase
             ->assertSee('Português');
     }
 
+    public function test_footer_renders_the_nuttime_instagram_link_and_studio_credit(): void
+    {
+        $response = $this->get(route('site.tr.home'));
+
+        $response
+            ->assertSee('href="https://www.instagram.com/nuttimetr/" target="_blank" rel="noopener noreferrer"', false)
+            ->assertSee('Site by <strong>Çelik Studio</strong>', false);
+    }
+
     public function test_new_locales_keep_product_pages_available_with_the_existing_content_fallback(): void
     {
         foreach (['fr', 'es', 'it', 'ru', 'ar', 'zh', 'pt'] as $locale) {

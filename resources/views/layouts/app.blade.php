@@ -31,6 +31,7 @@
 @php($alternateUrls = $seo['alternates'] ?? [])
 @php($currentLocale = app()->getLocale())
 @php($currentLocaleConfiguration = config('nuttime.locales.'.$currentLocale))
+@php($instagramUrl = filled(data_get($settings, 'instagram')) ? data_get($settings, 'instagram') : 'https://www.instagram.com/nuttimetr/')
 @php($managedHeaderNavigation = app(\App\Support\CmsContentRepository::class)->menu('header-primary', app()->getLocale()))
 @php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
 @php($managedLegalNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-legal', app()->getLocale()))
@@ -100,9 +101,9 @@
         <div class="container site-footer__links">
             <div><small>{{ __('site.footer.explore') }}</small>@if(count($managedFooterNavigation))@foreach($managedFooterNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else<a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a><a href="{{ $localizedRoute('certificates') }}">{{ __('site.nav.certificates') }}</a>@endif</div>
             <div><small>{{ __('site.footer.contact') }}</small><a href="tel:{{ $settings['phone'] ?? '' }}">{{ $settings['phone'] ?? '+90 212 123 45 67' }}</a><a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div>
-            <div><small>{{ __('site.footer.social') }}</small><div class="social-links">@if(!empty($settings['instagram']))<a href="{{ $settings['instagram'] }}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>@endif @if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" target="_blank" rel="noopener noreferrer">Facebook ↗</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>@endif</div></div>
+            <div><small>{{ __('site.footer.social') }}</small><div class="social-links"><a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>@if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" target="_blank" rel="noopener noreferrer">Facebook ↗</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>@endif</div></div>
         </div>
-        <div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>@if(count($managedLegalNavigation))@foreach($managedLegalNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else{{ __('site.footer.tagline') }}@endif</span></div>
+        <div class="container site-footer__bottom"><span>© {{ date('Y') }} Nuttime</span><span>@if(count($managedLegalNavigation))@foreach($managedLegalNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else{{ __('site.footer.tagline') }}@endif</span><span class="site-footer__credit">Site by <strong>Çelik Studio</strong></span></div>
     </footer>
 </body>
 </html>
