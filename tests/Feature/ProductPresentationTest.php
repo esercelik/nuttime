@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Support\InitialCatalogImporter;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
@@ -41,6 +42,8 @@ final class ProductPresentationTest extends TestCase
 
     public function test_peanut_butter_fallback_renders_the_structured_source_data(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $this->get(route('site.tr.product', ['slug' => 'yer-fistigi-ezmesi']))
             ->assertOk()
             ->assertSee('Yer Fıstığı (%52), Pancar Şekeri')
@@ -61,6 +64,8 @@ final class ProductPresentationTest extends TestCase
 
     public function test_pistachio_butter_fallback_renders_the_structured_source_data(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $this->get(route('site.tr.product', ['slug' => 'antep-fistikli-kremasi']))
             ->assertOk()
             ->assertSee('Antep Fıstığı (%42), Pancar Şekeri')
@@ -91,6 +96,8 @@ final class ProductPresentationTest extends TestCase
 
     public function test_remaining_product_fallbacks_render_their_source_specific_details(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $products = [
             ['slug' => 'findik-kremasi', 'ingredients' => 'Fındık (%45), Pancar Şekeri', 'energy' => '544 / 2277'],
             ['slug' => 'badem-ezmesi', 'ingredients' => 'Badem (%45), Pancar Şekeri', 'energy' => '561 / 2348'],
@@ -137,6 +144,8 @@ final class ProductPresentationTest extends TestCase
 
     public function test_all_fallback_product_detail_routes_render_in_turkish_and_english(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $products = [
             ['tr' => 'findik-kremasi', 'en' => 'hazelnut-butter'],
             ['tr' => 'antep-fistikli-kremasi', 'en' => 'pistachio-butter'],

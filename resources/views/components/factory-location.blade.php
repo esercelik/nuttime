@@ -7,13 +7,13 @@
     <div class="container factory-grid">
         <div class="factory-copy">
             <p class="kicker">{{ __('site.factory.kicker') }}</p>
-            <h2>{{ $factory['name'] ?: __('site.factory.fallback_name') }}</h2>
+            <h2><x-safe-rich-text :value="$factory['name'] ?: __('site.factory.fallback_name')" /></h2>
 
             @if($isContactVariant)
                 <dl class="factory-details">
                     <div>
                         <dt>{{ __('site.factory.address_label') }}</dt>
-                        <dd>{{ $factory['address'] }}</dd>
+                        <dd><x-safe-rich-text :value="$factory['address']" /></dd>
                     </div>
                     @if(filled($settings['phone'] ?? null))
                         <div>
@@ -29,7 +29,7 @@
                     @endif
                 </dl>
             @else
-                <p>{{ $factory['address'] }}</p>
+                <p><x-safe-rich-text :value="$factory['address']" /></p>
             @endif
 
             @if($factory['url'])
@@ -43,7 +43,7 @@
             @else
                 <div class="map-fallback">
                     <span aria-hidden="true">⌖</span>
-                    <p>{!! __('site.factory.map_copy') !!}</p>
+                    <p><x-safe-rich-text :value="__('site.factory.map_copy')" /></p>
                     @if($factory['url'])
                         <a class="arrow-link" href="{{ $factory['url'] }}" target="_blank" rel="noopener noreferrer">{{ __('site.actions.view_map') }} <span>↗</span></a>
                     @endif

@@ -63,6 +63,7 @@ final class CmsContentRepository
                 $translation = $item->translationFor($locale);
                 $product = $item->product ? $this->localizedContent->product($item->product, $locale) : null;
                 $slug = $product['slug'] ?? null;
+                $fallbackMedia = $this->productHeroMedia($item->product?->slug, $product['image'] ?? '');
 
                 return [
                     'name' => $translation?->title ?: $product['name'] ?? '',
@@ -70,11 +71,11 @@ final class CmsContentRepository
                     'description' => $translation?->description ?: $product['description'] ?? '',
                     'url' => $translation?->cta_url ?: ($slug ? $this->localizedUrl->route('product', $locale, ['slug' => $slug]) : $this->localizedUrl->route('products', $locale)),
                     'cta_label' => $translation?->cta_label,
-                    'background_image' => $this->assetUrl($item->background_image) ?: $product['image'] ?? '',
+                    'background_image' => $this->assetUrl($item->background_image) ?: $fallbackMedia['background'],
                     'mobile_background_image' => $this->assetUrl($item->mobile_background_image),
-                    'ingredient_image' => $this->assetUrl($item->decoration_image) ?: $product['image'] ?? '',
+                    'ingredient_image' => $this->assetUrl($item->decoration_image) ?: $fallbackMedia['ingredient'],
                     'mobile_ingredient_image' => $this->assetUrl($item->mobile_decoration_image),
-                    'product_image' => $this->assetUrl($item->product_image) ?: $product['image'] ?? '',
+                    'product_image' => $this->assetUrl($item->product_image) ?: $fallbackMedia['jar'],
                     'background_color' => $item->background_color, 'text_color' => $item->text_color, 'accent_color' => $item->accent_color,
                 ];
             })->all();
@@ -215,5 +216,31 @@ final class CmsContentRepository
         }
 
         return filter_var($path, FILTER_VALIDATE_URL) ? $path : asset('storage/'.$path);
+    }
+
+    /** @return array{background: string, ingredient: string, jar: string} */
+    private function productHeroMedia(?string $productSlug, string $fallbackImage): array
+    {
+        $asset = match ($productSlug) {
+            'yer-fistigi-ezmesi' => 'yer-fistigi',
+            'findik-kremasi' => 'findik',
+            'antep-fistikli-kremasi' => 'antep',
+            'badem-ezmesi', 'badem-unu' => 'badem',
+            'seker-ilavesiz-yer-fistigi-ezmesi' => 'seker-ilavesiz-yer-fistigi',
+            'hindistan-cevizi-ezmesi' => 'hindistan-cevizi',
+            default => null,
+        };
+
+        if ($asset === null) {
+            return ['background' => $fallbackImage, 'ingredient' => $fallbackImage, 'jar' => $fallbackImage];
+        }
+
+        $path = 'images/nuttime/spylt/nuttime-'.$asset;
+
+        return [
+            'background' => asset($path.'-hero-background.png'),
+            'ingredient' => asset($path.'-ingredient-elements-transparent.png'),
+            'jar' => asset($path.'-jar-transparent.png'),
+        ];
     }
 }

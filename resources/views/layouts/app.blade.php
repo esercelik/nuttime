@@ -95,7 +95,7 @@
     <main id="main-content">@yield('content')</main>
     <footer class="site-footer">
         <div class="container site-footer__top">
-            <div class="site-footer__brand"><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}"><span class="wordmark__mark">n</span>nut<span>time</span><i></i></a><p>{{ $settings['footer_description'] ?? __('site.footer.description') }}</p></div>
+            <div class="site-footer__brand"><a class="wordmark wordmark--light" href="{{ $localizedRoute('home') }}"><span class="wordmark__mark">n</span>nut<span>time</span><i></i></a><p><x-safe-rich-text :value="$settings['footer_description'] ?? __('site.footer.description')" /></p></div>
             <a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a>
         </div>
         <div class="container site-footer__links">

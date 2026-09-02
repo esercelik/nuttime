@@ -72,12 +72,12 @@
         </div>
 
         <div class="product-stage__copy">
-            <p class="kicker">{{ $product['category'] }}</p>
-            <h1>{{ $product['name'] }}</h1>
+            <p class="kicker"><x-safe-rich-text :value="$product['category']" /></p>
+            <h1><x-safe-rich-text :value="$product['name']" /></h1>
             @if($featureTags->isNotEmpty())
                 <ul class="product-stage__tags" aria-label="{{ $product['name'] }}"><li>{{ $featureTags->implode(' · ') }}</li></ul>
             @endif
-            <p class="product-stage__lead">{{ $product['description'] }}</p>
+            <p class="product-stage__lead"><x-safe-rich-text :value="$product['description']" /></p>
             @if($technicalDetails->isNotEmpty())
                 <dl class="product-stage__facts">@foreach($technicalDetails as $label => $value)<div><dt>{{ $label }}</dt><dd>{{ $value }}</dd></div>@endforeach</dl>
             @endif

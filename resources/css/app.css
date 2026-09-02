@@ -945,6 +945,19 @@ body:has(.product-hero).is-compact .masthead {
   max-width:520px;
 }
 
+.about-editorial__content {
+  display:grid;
+  grid-column:1 / -1;
+  width:min(100%, 820px);
+  gap:clamp(64px, 8vw, 96px);
+  margin-inline:auto;
+}
+
+.about-editorial__content .about-editorial__copy {
+  grid-column:auto;
+  max-width:100%;
+}
+
 .about-editorial__prose p {
   margin:0;
 }

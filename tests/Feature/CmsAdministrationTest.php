@@ -47,6 +47,20 @@ final class CmsAdministrationTest extends TestCase
             ->assertDontSee('data-product-hero-progress', false);
     }
 
+    public function test_empty_cms_slider_media_preserves_the_existing_layered_product_hero_assets(): void
+    {
+        $product = Product::factory()->create(['slug' => 'findik-kremasi', 'name' => 'Fındık Ezmesi']);
+        $slider = Slider::query()->create(['key' => 'home', 'name' => 'Yönetilen slider', 'status' => 'published', 'is_active' => true]);
+        $slider->items()->create(['product_id' => $product->id, 'status' => 'published', 'is_active' => true, 'sort_order' => 1]);
+        app(CmsContentRepository::class)->forgetHomeSlider();
+
+        $slide = app(CmsContentRepository::class)->homeSlider('tr')[0];
+
+        $this->assertStringContainsString('nuttime-findik-hero-background.png', $slide['background_image']);
+        $this->assertStringContainsString('nuttime-findik-ingredient-elements-transparent.png', $slide['ingredient_image']);
+        $this->assertStringContainsString('nuttime-findik-jar-transparent.png', $slide['product_image']);
+    }
+
     public function test_published_home_sections_render_in_order_while_drafts_are_ignored(): void
     {
         $second = $this->createSection('second', 20, 'İkinci yönetilen bölüm');
@@ -62,6 +76,34 @@ final class CmsAdministrationTest extends TestCase
             ->assertDontSee('Taslak bölüm')
             ->assertDontSee('id="home-banners"', false);
         $this->assertLessThan(strpos($response->getContent(), $second->translationFor('tr')->title), strpos($response->getContent(), $first->translationFor('tr')->title));
+    }
+
+    public function test_managed_section_text_renders_only_allowed_formatting_in_every_locale(): void
+    {
+        $section = PageSection::query()->create([
+            'page_key' => 'home',
+            'key' => 'rich-text',
+            'type' => 'story',
+            'status' => 'published',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        foreach (array_keys(config('nuttime.locales')) as $locale) {
+            $section->translations()->create([
+                'locale' => $locale,
+                'title' => 'Good<br><em onclick="alert(2)">'.$locale.'</em><script>alert(1)</script>',
+            ]);
+        }
+
+        app(CmsContentRepository::class)->forgetHomeSections();
+
+        foreach (array_keys(config('nuttime.locales')) as $locale) {
+            $this->get(route('site.'.$locale.'.home'))
+                ->assertSee('Good<br><em>'.$locale.'</em>alert(1)', false)
+                ->assertDontSee('<script>alert(1)</script>', false)
+                ->assertDontSee('onclick=', false);
+        }
     }
 
     public function test_menus_render_translations_nested_items_and_ignore_invalid_routes(): void

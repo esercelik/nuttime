@@ -51,7 +51,7 @@ class ProductForm
                 ]),
                 Section::make('Dil bazlı içerik')->description('Eksik içerik English, ardından Türkçe değerine döner.')->schema([
                     Repeater::make('translations')->relationship()->schema([
-                        Select::make('locale')->label('Dil')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                        Select::make('locale')->label('Dil')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                         TextInput::make('name')->label('Ürün adı')->required()->maxLength(255),
                         TextInput::make('slug')->label('Dil bazlı slug')->required()->maxLength(255),
                         Textarea::make('short_description')->label('Kısa açıklama')->rows(3),
@@ -60,7 +60,7 @@ class ProductForm
                         Textarea::make('allergen_information')->label('Alerjenler')->rows(3),
                         TextInput::make('meta_title')->label('SEO başlığı')->maxLength(60),
                         Textarea::make('meta_description')->label('SEO açıklaması')->maxLength(160),
-                    ])->columns(2)->defaultItems(3)->minItems(3)->maxItems(3),
+                    ])->columns(2)->defaultItems(count(config('nuttime.locales')))->minItems(count(config('nuttime.locales')))->maxItems(count(config('nuttime.locales'))),
                 ]),
             ]);
     }
