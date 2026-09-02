@@ -92,6 +92,4 @@
 
 <x-product-information :product="$product" />
 <x-product-packaging :product="$product" />
-
-@if(count($related))<section class="related-selection"><div class="container"><x-section-heading :kicker="__('site.product.related_kicker')" :title="__('site.product.related_title')" rich-title /><div class="related-selection__grid">@foreach($related as $index => $item)<x-product-card :product="$item" :index="$index" :variant="$index === 0 ? 'hero' : 'default'" />@endforeach</div></div></section>@endif
 @endsection

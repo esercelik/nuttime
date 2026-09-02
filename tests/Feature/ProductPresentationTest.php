@@ -77,6 +77,10 @@ final class ProductPresentationTest extends TestCase
             ->assertSee('images/nuttime/products/pistachio/jar.jpg', false)
             ->assertSee('images/nuttime/products/pistachio/spoon.jpg', false);
 
+        $this->get(route('site.tr.product', ['slug' => 'antep-fistikli-kremasi']))
+            ->assertDontSee('BUNLARI DA KEŞFEDİN')
+            ->assertDontSee('Seçkiden');
+
         $this->get(route('site.en.product', ['slug' => 'pistachio-butter']))
             ->assertOk()
             ->assertSee('Pistachio Butter')

@@ -7,7 +7,6 @@
     <section class="about-editorial">
         <div class="container">
             <div class="about-editorial__lead"><p>{{ __('site.static.about_lead') }}</p></div>
-            <div class="about-editorial__media"><x-optimized-image src="images/nuttime/brand-moment.jpg" alt="Nuttime" width="1400" height="900" /></div>
 
             <article class="about-editorial__copy about-editorial__copy--who">
                 <p class="kicker">{{ __('site.static.who_kicker') }}</p>

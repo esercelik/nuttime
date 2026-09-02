@@ -87,7 +87,6 @@ final class SiteController extends Controller
 
         return view('products.show', [
             'product' => $product,
-            'related' => collect($this->catalog())->reject(fn (array $item): bool => $item['slug'] === $product['slug'])->take(2)->all(),
             'settings' => $settings,
             'breadcrumbs' => $breadcrumbs['itemListElement'],
             'seo' => $this->seoMetadata->page(
