@@ -39,13 +39,17 @@ final class LocalizedNavigationTest extends TestCase
 
     public function test_new_locales_keep_product_pages_available_with_the_existing_content_fallback(): void
     {
+        app(InitialCatalogImporter::class)->import();
+        $product = Product::query()->with('translations')->where('slug', 'findik-kremasi')->firstOrFail();
+
         foreach (['fr', 'es', 'it', 'ru', 'ar', 'zh', 'pt'] as $locale) {
-            $response = $this->get(route('site.'.$locale.'.product', ['slug' => 'hazelnut-butter']));
+            $slug = $product->translationFor($locale)?->slug ?: $product->slug;
+            $response = $this->get(route('site.'.$locale.'.product', ['slug' => $slug]));
 
             $response
                 ->assertOk()
                 ->assertSee('hreflang="'.$locale.'"', false)
-                ->assertSee(route('site.fr.product', ['slug' => 'hazelnut-butter']), false);
+                ->assertSee(route('site.fr.product', ['slug' => $product->translationFor('fr')?->slug ?: $product->slug]), false);
         }
     }
 
@@ -63,6 +67,8 @@ final class LocalizedNavigationTest extends TestCase
 
     public function test_arabic_product_page_sets_rtl_document_direction(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $this->get(route('site.ar.product', ['slug' => 'hazelnut-butter']))
             ->assertSee('<html lang="ar" dir="rtl">', false)
             ->assertSee('العربية');

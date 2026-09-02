@@ -10,7 +10,6 @@ use App\Models\SiteSetting;
 use App\Support\CmsContentRepository;
 use App\Support\LocalizedContent;
 use App\Support\LocalizedUrl;
-use App\Support\NuttimeProductMedia;
 use App\Support\SeoMetadata;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +23,6 @@ final class SiteController extends Controller
         private LocalizedContent $localizedContent,
         private LocalizedUrl $localizedUrl,
         private CmsContentRepository $cmsContent,
-        private NuttimeProductMedia $productMedia,
     ) {}
 
     public function home(): View
@@ -216,12 +214,15 @@ final class SiteController extends Controller
         return [];
     }
 
-
     /** @return array<int, array<string, mixed>> */
     private function heroSlides(array $products): array
     {
         return collect($products)->map(function (array $product): array {
-            $asset = match ($product['id'] ?? '') {
+            $heroKey = match ($product['source_slug'] ?? '') {
+                'badem-ezmesi' => 'badem-unu',
+                default => $product['source_slug'] ?? null,
+            };
+            $asset = match ($heroKey) {
                 'yer-fistigi-ezmesi' => 'yer-fistigi',
                 'findik-kremasi' => 'findik',
                 'antep-fistikli-kremasi' => 'antep',
@@ -232,7 +233,7 @@ final class SiteController extends Controller
             };
             $path = $asset ? 'images/nuttime/spylt/nuttime-'.$asset : null;
 
-            return ['slug' => $product['slug'], 'name' => __('site.hero.'.($product['id'] ?? '').'.title', ['product' => $product['name']]), 'category' => __('site.hero.'.($product['id'] ?? '').'.eyebrow', ['product' => $product['name']]), 'description' => $product['description'], 'url' => $this->localizedUrl->route('product', null, ['slug' => $product['slug']]), 'background_image' => $path ? asset($path.'-hero-background.png') : $product['image'], 'ingredient_image' => $path ? asset($path.'-ingredient-elements-transparent.png') : $product['image'], 'product_image' => $path ? asset($path.'-jar-transparent.png') : $product['image']];
+            return ['slug' => $product['slug'], 'name' => __('site.hero.'.$heroKey.'.title', ['product' => $product['name']]), 'category' => __('site.hero.'.$heroKey.'.eyebrow', ['product' => $product['name']]), 'description' => $product['description'], 'url' => $this->localizedUrl->route('product', null, ['slug' => $product['slug']]), 'background_image' => $path ? asset($path.'-hero-background.png') : $product['image'], 'ingredient_image' => $path ? asset($path.'-ingredient-elements-transparent.png') : $product['image'], 'product_image' => $path ? asset($path.'-jar-transparent.png') : $product['image']];
         })->all();
     }
 

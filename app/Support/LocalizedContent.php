@@ -18,6 +18,7 @@ final class LocalizedContent
 
         return [
             'id' => $product->id,
+            'source_slug' => $product->slug,
             'slug' => $translation?->slug ?: $product->slug,
             'slugs' => $this->productSlugs($product),
             'name' => $translation?->name ?: $product->name,

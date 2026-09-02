@@ -2,12 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Support\InitialCatalogImporter;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 final class HomeHeroTest extends TestCase
 {
+    use LazilyRefreshDatabase;
+
     public function test_home_renders_the_fullscreen_product_slider_with_banners_afterward(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $response = $this->get(route('site.tr.home'));
 
         $response->assertSee('FINDIĞIN KAVRULMUŞ ZENGİNLİĞİ')
@@ -28,12 +34,12 @@ final class HomeHeroTest extends TestCase
             ->assertSee(route('site.tr.products'), false);
     }
 
-    public function test_featured_product_cards_keep_their_localized_product_links(): void
+    public function test_product_slider_keeps_localized_product_links(): void
     {
+        app(InitialCatalogImporter::class)->import();
+
         $this->get(route('site.en.home'))
-            ->assertSee('feature-showcase__grid', false)
-            ->assertSee('catalog-card--hero', false)
-            ->assertSee('catalog-card--mini', false)
+            ->assertSee('data-product-hero', false)
             ->assertSee(route('site.en.product', ['slug' => 'hazelnut-butter']), false)
             ->assertSee(route('site.en.product', ['slug' => 'pistachio-butter']), false)
             ->assertSee(route('site.en.product', ['slug' => 'almond-butter']), false);

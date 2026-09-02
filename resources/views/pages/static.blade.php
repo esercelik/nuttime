@@ -29,30 +29,6 @@
                 </article>
             </div>
 
-            <section class="about-editorial__contact" aria-labelledby="company-information-title">
-                <div>
-                    <p class="kicker">{{ __('site.static.company_kicker') }}</p>
-                    <h2 id="company-information-title">{{ __('site.static.company_title') }}</h2>
-                </div>
-                <dl>
-                    <div>
-                        <dt>{{ __('site.static.phone_label') }}</dt>
-                        <dd>
-                            <a href="tel:+905351006030">+90 535 100 60 30</a>
-                            <a href="tel:+902642735943">+90 264 273 59 43</a>
-                            <a href="tel:+905353024579">+90 535 302 45 79</a>
-                        </dd>
-                    </div>
-                    <div>
-                        <dt>{{ __('site.static.location_label') }}</dt>
-                        <dd>Söğütlü / SAKARYA</dd>
-                    </div>
-                    <div>
-                        <dt>{{ __('site.static.address_label') }}</dt>
-                        <dd>Sakarya 3. Organize Sanayi Bölgesi<br>Soğucak OSB Mah. No:81<br>Söğütlü / Sakarya / TÜRKİYE</dd>
-                    </div>
-                </dl>
-            </section>
         </div>
     </section>
 

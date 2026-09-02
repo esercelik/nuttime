@@ -29,7 +29,7 @@ final class ProductDataFlowTest extends TestCase
 
         $this->assertSame(Product::class, ProductResource::getModel());
 
-        $this->get(route('site.tr.home'))->assertOk()->assertSee('Admin veri akışı ürünü');
+        $this->get(route('site.tr.home'))->assertOk()->assertSee('İlk admin açıklaması.');
         $this->get(route('site.tr.products'))->assertOk()->assertSee('İlk admin açıklaması.');
         $this->get(route('site.tr.product', ['slug' => 'admin-veri-akisi-urunu']))->assertOk()->assertSee('İlk admin açıklaması.');
 
