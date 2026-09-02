@@ -36,18 +36,31 @@ final class CmsInitialContentSeeder
         $created = 0;
 
         foreach ($definitions as $key => $definition) {
-            if (Menu::query()->where('key', $key)->exists()) {
-                continue;
-            }
+            $menu = Menu::query()->firstOrCreate(
+                ['key' => $key],
+                ['name' => $definition['name'], 'location' => $definition['location'], 'is_active' => true],
+            );
+            $created += $menu->wasRecentlyCreated ? 1 : 0;
 
-            $menu = Menu::query()->create(['key' => $key, 'name' => $definition['name'], 'location' => $definition['location'], 'is_active' => true]);
             foreach ($definition['items'] as $index => $routeName) {
-                $item = $menu->items()->create(['link_type' => 'internal', 'route_name' => $routeName, 'is_active' => true, 'sort_order' => $index]);
+                $item = $menu->items()->firstOrCreate(
+                    ['link_type' => 'internal', 'route_name' => $routeName],
+                    ['is_active' => true, 'sort_order' => $index],
+                );
                 foreach (array_keys(config('nuttime.locales')) as $locale) {
-                    $item->translations()->create(['locale' => $locale, 'label' => __('site.nav.'.$routeName, [], $locale)]);
+                    $translation = $item->translations()->firstOrCreate(
+                        ['locale' => $locale],
+                        ['label' => __('site.nav.'.$routeName, [], $locale)],
+                    );
+
+                    if (in_array($translation->label, [
+                        __('site.nav.'.$routeName, [], config('nuttime.default_locale')),
+                        __('site.nav.'.$routeName, [], 'en'),
+                    ], true)) {
+                        $translation->update(['label' => __('site.nav.'.$routeName, [], $locale)]);
+                    }
                 }
             }
-            $created++;
         }
 
         return $created;
@@ -55,10 +68,6 @@ final class CmsInitialContentSeeder
 
     private function seedHomeSections(): int
     {
-        if (PageSection::query()->where('page_key', 'home')->exists()) {
-            return 0;
-        }
-
         $definitions = [
             ['key' => 'intro', 'type' => 'intro', 'translation' => ['eyebrow' => 'NUTTIME', 'title' => 'site.home.intro']],
             ['key' => 'featured_products', 'type' => 'featured_products', 'translation' => ['eyebrow' => 'site.home.featured_kicker', 'title' => 'site.home.featured_title']],
@@ -70,20 +79,42 @@ final class CmsInitialContentSeeder
             ['key' => 'cta', 'type' => 'cta', 'translation' => ['eyebrow' => 'site.final_cta.kicker', 'title' => 'site.final_cta.title']],
         ];
 
+        $created = 0;
+
         foreach ($definitions as $order => $definition) {
-            $section = PageSection::query()->create(['page_key' => 'home', 'key' => $definition['key'], 'type' => $definition['type'], 'status' => 'published', 'is_active' => true, 'sort_order' => $order, 'settings' => $definition['settings'] ?? []]);
+            $section = PageSection::query()->firstOrCreate(
+                ['page_key' => 'home', 'key' => $definition['key']],
+                ['type' => $definition['type'], 'status' => 'published', 'is_active' => true, 'sort_order' => $order, 'settings' => $definition['settings'] ?? []],
+            );
+            $created += $section->wasRecentlyCreated ? 1 : 0;
+
             foreach (array_keys(config('nuttime.locales')) as $locale) {
                 $translation = $definition['translation'];
-                $section->translations()->create([
-                    'locale' => $locale,
-                    'eyebrow' => str_starts_with($translation['eyebrow'] ?? '', 'site.') ? __($translation['eyebrow'], [], $locale) : ($translation['eyebrow'] ?? null),
-                    'title' => str_starts_with($translation['title'] ?? '', 'site.') ? __($translation['title'], [], $locale) : ($translation['title'] ?? null),
-                    'description' => str_starts_with($translation['description'] ?? '', 'site.') ? __($translation['description'], [], $locale) : ($translation['description'] ?? null),
-                ]);
+                $localizedValues = $this->sectionTranslationValues($translation, $locale);
+                $turkishValues = $this->sectionTranslationValues($translation, config('nuttime.default_locale'));
+                $sectionTranslation = $section->translations()->firstOrCreate(['locale' => $locale], $localizedValues);
+
+                $englishValues = $this->sectionTranslationValues($translation, 'en');
+                foreach ($localizedValues as $field => $value) {
+                    if (in_array($sectionTranslation->{$field}, [$turkishValues[$field], $englishValues[$field]], true)) {
+                        $sectionTranslation->{$field} = $value;
+                    }
+                }
+                $sectionTranslation->save();
             }
         }
 
-        return count($definitions);
+        return $created;
+    }
+
+    /** @param array<string, string> $translation @return array<string, string|null> */
+    private function sectionTranslationValues(array $translation, string $locale): array
+    {
+        return [
+            'eyebrow' => str_starts_with($translation['eyebrow'] ?? '', 'site.') ? __($translation['eyebrow'], [], $locale) : ($translation['eyebrow'] ?? null),
+            'title' => str_starts_with($translation['title'] ?? '', 'site.') ? __($translation['title'], [], $locale) : ($translation['title'] ?? null),
+            'description' => str_starts_with($translation['description'] ?? '', 'site.') ? __($translation['description'], [], $locale) : ($translation['description'] ?? null),
+        ];
     }
 
     private function seedHomeSlider(): int

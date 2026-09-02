@@ -17,6 +17,7 @@ class SetLocale
         }
 
         app()->setLocale($locale);
+        app()->setFallbackLocale(config('nuttime.fallback_locale'));
 
         return $next($request);
     }

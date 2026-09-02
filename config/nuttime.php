@@ -14,7 +14,7 @@ return [
         'pt' => ['label' => 'Português', 'short' => 'PT', 'flag' => '🇵🇹', 'html' => 'pt-PT', 'og' => 'pt_PT', 'direction' => 'ltr', 'paths' => ['products' => 'produtos', 'product' => 'produtos/{slug}', 'category' => 'categorias/{slug}', 'about' => 'sobre-nos', 'certificates' => 'certificados', 'contact' => 'contacto', 'contents' => 'historias', 'content' => 'historias/{slug}']],
     ],
     'default_locale' => 'tr',
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'tr',
     'preference_cookie' => 'nuttime_locale',
     'country_headers' => ['CF-IPCountry', 'X-Vercel-IP-Country', 'X-Country-Code'],
     'timezone' => 'Europe/Istanbul',

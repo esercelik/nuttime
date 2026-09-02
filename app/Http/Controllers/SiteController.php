@@ -184,9 +184,13 @@ final class SiteController extends Controller
             $products = Product::query()->with(['category.translations', 'translations'])->active()->orderBy('sort_order')->get();
 
             if ($products->isNotEmpty()) {
-                return $products->map(fn (Product $product): array => $this->localizedContent->product($product) + [
-                    'image' => $product->main_image ? asset('storage/'.$product->main_image) : $this->fallbackProductImage($product->name, $product->category?->name),
-                ])->all();
+                return $products->map(function (Product $product): array {
+                    $localizedProduct = $this->localizedContent->product($product);
+
+                    return array_replace($localizedProduct, [
+                        'image' => $localizedProduct['image'] ?: $this->fallbackProductImage($product->name, $product->category?->name),
+                    ]);
+                })->all();
             }
         }
 
@@ -350,15 +354,16 @@ final class SiteController extends Controller
         return collect($products)->map(function (array $product, string $key): array {
             $locale = app()->getLocale();
             $localizedProductLocale = $this->fallbackProductLocale($product['slug'], $locale);
+            $localizedProductSlugLocale = $this->fallbackProductSlugLocale($product['slug'], $locale);
             $slugs = collect(array_keys(config('nuttime.locales')))
-                ->mapWithKeys(fn (string $localizedLocale): array => [$localizedLocale => $product['slug'][$this->fallbackProductLocale($product['slug'], $localizedLocale)]])
+                ->mapWithKeys(fn (string $localizedLocale): array => [$localizedLocale => $product['slug'][$this->fallbackProductSlugLocale($product['slug'], $localizedLocale)]])
                 ->all();
             $galleryPaths = $this->productMedia->galleryPaths($key);
             $primaryImagePath = $galleryPaths[0] ?? 'images/nuttime/'.$product['image'];
 
             return [
                 'id' => $key,
-                'slug' => $product['slug'][$localizedProductLocale],
+                'slug' => $product['slug'][$localizedProductSlugLocale],
                 'slugs' => $slugs,
                 'name' => $product['name'][$localizedProductLocale],
                 'category' => __('site.catalog.default_category'),
@@ -394,6 +399,18 @@ final class SiteController extends Controller
     private function fallbackProductLocale(array $localizedValues, string $locale): string
     {
         foreach (array_unique([$locale, config('nuttime.fallback_locale'), config('nuttime.default_locale')]) as $fallbackLocale) {
+            if (filled($localizedValues[$fallbackLocale] ?? null)) {
+                return $fallbackLocale;
+            }
+        }
+
+        return (string) array_key_first($localizedValues);
+    }
+
+    /** @param array<string, string> $localizedValues */
+    private function fallbackProductSlugLocale(array $localizedValues, string $locale): string
+    {
+        foreach (array_unique([$locale, 'en', config('nuttime.fallback_locale'), config('nuttime.default_locale')]) as $fallbackLocale) {
             if (filled($localizedValues[$fallbackLocale] ?? null)) {
                 return $fallbackLocale;
             }

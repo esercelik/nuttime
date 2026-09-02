@@ -36,7 +36,7 @@
 @php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
 @php($managedLegalNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-legal', app()->getLocale()))
 <body x-data="{menu:false,language:false,compact:false}" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false; language=false" :class="{'has-menu':menu,'is-compact':compact}">
-    <a class="skip-link" href="#main-content">İçeriğe geç</a>
+    <a class="skip-link" href="#main-content">{{ __('site.actions.skip_to_content') }}</a>
     <header class="masthead">
         <div class="container masthead__inner">
             <a class="wordmark" href="{{ $localizedRoute('home') }}" aria-label="Nuttime {{ __('site.nav.home') }}"><span class="wordmark__mark">n</span>nut<span>time</span><i></i></a>

@@ -41,11 +41,11 @@ final class LocalizedContent
             'packaging_details' => $product->packaging_details ?? [],
             'featured' => $product->is_featured,
             'accent' => '#d7b66c',
-            'image' => $product->main_image ? asset('storage/'.$product->main_image) : null,
-            'image_path' => $product->main_image ? 'storage/'.$product->main_image : null,
+            'image' => $this->mediaUrl($product->main_image),
+            'image_path' => $product->main_image ? $this->mediaPath($product->main_image) : null,
             'image_alt' => $product->main_image_alt ?: trim(($translation?->name ?: $product->name).' - '.($category?->name ?: $product->category?->name ?: 'Nuttime')),
-            'gallery' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => asset('storage/'.$image))->values()->all(),
-            'gallery_paths' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => 'storage/'.$image)->values()->all(),
+            'gallery' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => $this->mediaUrl($image))->values()->all(),
+            'gallery_paths' => collect($product->additional_images ?? [])->filter()->map(fn (string $image): string => $this->mediaPath($image))->values()->all(),
         ];
     }
 
@@ -85,5 +85,15 @@ final class LocalizedContent
         return collect(array_keys(config('nuttime.locales')))->mapWithKeys(function (string $locale) use ($category): array {
             return [$locale => $category->translationFor($locale)?->slug ?: $category->slug];
         })->all();
+    }
+
+    private function mediaUrl(?string $path): ?string
+    {
+        return filled($path) ? asset($this->mediaPath($path)) : null;
+    }
+
+    private function mediaPath(string $path): string
+    {
+        return str_starts_with($path, 'images/') ? $path : 'storage/'.$path;
     }
 }
