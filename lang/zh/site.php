@@ -3,6 +3,7 @@
 $site = require __DIR__.'/../en/site.php';
 
 return array_replace_recursive($site, [
+    'ui' => ['previous' => '上一张', 'next' => '下一张', 'show_slide' => '显示 :name'],
     'language' => ['label' => '语言', 'choose' => '选择语言'],
     'nav' => ['home' => '首页', 'products' => '产品', 'categories' => '分类', 'about' => '关于我们', 'certificates' => '认证', 'contact' => '联系我们', 'contents' => '故事'],
     'footer' => ['explore' => '探索', 'contact' => '联系我们', 'social' => '社交媒体', 'reach_us' => '联系我们', 'tagline' => '分享美好。', 'description' => '来自自然的美好想法。每一口都感受美好。'],

@@ -36,7 +36,6 @@ final class SiteController extends Controller
             'heroSliderSettings' => $this->cmsContent->homeSliderSettings(),
             'homeSections' => $this->cmsContent->homeSections(app()->getLocale()),
             'categories' => $this->categories(),
-            'certificates' => $this->certificates(),
             'factory' => $this->factoryLocation($settings),
             'settings' => $settings,
             'seo' => $this->seo('meta.home', $this->localizedUrl->route('home'), $settings, [
@@ -85,6 +84,7 @@ final class SiteController extends Controller
 
         return view('products.show', [
             'product' => $product,
+            'certificates' => $this->certificates(),
             'settings' => $settings,
             'breadcrumbs' => $breadcrumbs['itemListElement'],
             'seo' => $this->seoMetadata->page(

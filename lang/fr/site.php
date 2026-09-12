@@ -3,6 +3,7 @@
 $site = require __DIR__.'/../en/site.php';
 
 return array_replace_recursive($site, [
+    'ui' => ['previous' => 'Diapositive précédente', 'next' => 'Diapositive suivante', 'show_slide' => 'Afficher :name'],
     'language' => ['label' => 'Langue', 'choose' => 'Choisir une langue'],
     'nav' => ['home' => 'Accueil', 'products' => 'Produits', 'categories' => 'Catégories', 'about' => 'À propos', 'certificates' => 'Certificats', 'contact' => 'Contact', 'contents' => 'Articles'],
     'footer' => ['explore' => 'Découvrir', 'contact' => 'Contact', 'social' => 'Réseaux sociaux', 'reach_us' => 'Nous contacter', 'tagline' => 'Partagez ce qui est bon.', 'description' => 'Une belle idée venue de la nature. Se sentir bien à chaque bouchée.'],

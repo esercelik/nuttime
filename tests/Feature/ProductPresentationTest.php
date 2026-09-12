@@ -59,7 +59,7 @@ final class ProductPresentationTest extends TestCase
             ->assertSee('images/nuttime/products/peanut/lifestyle.jpg', false)
             ->assertSee('count: 5', false)
             ->assertSee('product-stage__gallery-controls', false)
-            ->assertSee('role="tablist"', false);
+            ->assertSee('role="group"', false);
     }
 
     public function test_pistachio_butter_fallback_renders_the_structured_source_data(): void
@@ -159,5 +159,14 @@ final class ProductPresentationTest extends TestCase
             $this->get(route('site.tr.product', ['slug' => $product['tr']]))->assertOk();
             $this->get(route('site.en.product', ['slug' => $product['en']]))->assertOk();
         }
+    }
+
+    public function test_whole_ingredient_percentage_keeps_its_trailing_zeroes(): void
+    {
+        $product = Product::factory()->create(['primary_ingredient_percentage' => 100, 'weight_grams' => 250]);
+
+        $this->get(route('site.tr.product', ['slug' => $product->slug]))->assertOk()
+            ->assertSee('100%')
+            ->assertSee('Net ağırlık');
     }
 }

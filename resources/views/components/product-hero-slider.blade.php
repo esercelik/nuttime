@@ -3,7 +3,7 @@
 @php($settings = array_merge(['autoplay_ms' => 6500, 'loop' => true, 'show_arrows' => true, 'show_counter' => true, 'show_progress' => true, 'swipe' => true], $settings))
 
 @if(count($slides))
-    <section class="product-hero" aria-label="{{ __('site.home.featured_title') }}" aria-roledescription="carousel" tabindex="0" data-product-hero data-autoplay="{{ $settings['autoplay_ms'] }}" data-loop="{{ $settings['loop'] ? 'true' : 'false' }}" data-swipe="{{ $settings['swipe'] ? 'true' : 'false' }}">
+    <section class="product-hero" aria-label="{{ strip_tags(str_replace('<br>', ' ', __('site.home.featured_title'))) }}" aria-roledescription="carousel" tabindex="0" data-product-hero data-autoplay="{{ $settings['autoplay_ms'] }}" data-loop="{{ $settings['loop'] ? 'true' : 'false' }}" data-swipe="{{ $settings['swipe'] ? 'true' : 'false' }}">
         <div class="product-hero__slides">
             @foreach($slides as $index => $slide)
                 <article class="product-hero__slide {{ $index === 0 ? 'is-active' : '' }}" aria-roledescription="slide" aria-label="{{ $index + 1 }} / {{ count($slides) }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}" @if($index !== 0) hidden @endif data-product-hero-slide>
@@ -40,19 +40,19 @@
 
         @if(count($slides) > 1)
             <div class="product-hero__controls" aria-label="{{ __('site.actions.all_products') }}">
-                @if($settings['show_arrows'])<button type="button" aria-label="{{ __('site.actions.scroll_down') }}" data-product-hero-previous>←</button>@endif
+                @if($settings['show_arrows'])<button type="button" aria-label="{{ __('site.ui.previous') }}" data-product-hero-previous>←</button>@endif
                 <div class="product-hero__pagination" aria-label="{{ __('site.actions.all_products') }}">
                     @foreach($slides as $index => $slide)
-                        <button type="button" class="{{ $index === 0 ? 'is-active' : '' }}" aria-label="{{ $slide['name'] }} slaydını göster" aria-current="{{ $index === 0 ? 'true' : 'false' }}" data-product-hero-pagination="{{ $index }}"></button>
+                        <button type="button" class="{{ $index === 0 ? 'is-active' : '' }}" aria-label="{{ __('site.ui.show_slide', ['name' => strip_tags($slide['name'])]) }}" aria-current="{{ $index === 0 ? 'true' : 'false' }}" data-product-hero-pagination="{{ $index }}"></button>
                     @endforeach
                 </div>
                 @if($settings['show_counter'])<span class="product-hero__counter" aria-live="off"><b data-product-hero-current>01</b> / {{ str_pad((string) count($slides), 2, '0', STR_PAD_LEFT) }}</span>@endif
                 @if($settings['show_progress'])<span class="product-hero__progress" aria-hidden="true"><span data-product-hero-progress></span></span>@endif
-                @if($settings['show_arrows'])<button type="button" aria-label="{{ __('site.actions.all_products') }}" data-product-hero-next>→</button>@endif
+                @if($settings['show_arrows'])<button type="button" aria-label="{{ __('site.ui.next') }}" data-product-hero-next>→</button>@endif
             </div>
         @endif
 
-        <a class="product-hero__scroll-hint" href="#home-banners"><span></span>{{ __('site.actions.scroll_down') }}</a>
+        <a class="product-hero__scroll-hint" href="#home-content"><span></span>{{ __('site.actions.scroll_down') }}</a>
     </section>
 @else
     <section class="product-hero product-hero--fallback" aria-label="Nuttime">

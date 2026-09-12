@@ -20,6 +20,7 @@
 
     @case('featured_products')
         @php($featuredProducts = collect($products)->filter(fn (array $product): bool => $product['featured'] ?? false)->take($section['settings']['limit'] ?? 3))
+        @php($featuredProducts = $featuredProducts->isNotEmpty() ? $featuredProducts : collect($products)->take($section['settings']['limit'] ?? 3))
         @if($featuredProducts->isNotEmpty())<section class="feature-showcase home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" :href="$buttonUrl" :link-text="$section['button_label']" rich-title /><div class="feature-showcase__grid">@foreach($featuredProducts as $key => $product)<x-product-card :product="$product" :index="$key" :variant="$key === 0 ? 'hero' : 'mini'" />@endforeach</div></div></section>@endif
         @break
 
@@ -29,12 +30,7 @@
         @break
 
     @case('story')
-        <section class="brand-story">@if($section['desktop_image'])<div class="brand-story__image"><img src="{{ $section['desktop_image'] }}" alt="{{ $section['title'] ?? '' }}" width="1707" height="2560" loading="lazy" decoding="async"></div>@endif<div class="brand-story__copy"><p class="kicker"><x-safe-rich-text :value="$section['eyebrow']" /></p><h2><x-safe-rich-text :value="$section['title']" /></h2><p><x-safe-rich-text :value="$section['description']" /></p>@if($buttonUrl)<a class="arrow-link arrow-link--light" href="{{ $buttonUrl }}"><x-safe-rich-text :value="$section['button_label'] ?: __('site.actions.learn_more')" /> <span>↗</span></a>@endif</div></section>
-        @break
-
-    @case('certificates')
-        @php($managedCertificates = collect($certificates)->filter(fn (array $certificate): bool => !empty($certificate['image'])))
-        @if($managedCertificates->isNotEmpty())<section class="quality-rail home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" rich-title /><div class="quality-rail__items">@foreach($managedCertificates as $certificate)<article><x-certificate-preview :src="$certificate['image']" :alt="$certificate['name']" width="260" height="160" /><div><h3><x-safe-rich-text :value="$certificate['name']" /></h3><p><x-safe-rich-text :value="$certificate['description']" /></p></div></article>@endforeach</div></div></section>@endif
+        <section class="brand-story">@if($section['desktop_image'])<div class="brand-story__image"><img src="{{ $section['desktop_image'] }}" alt="{{ $section['title'] ?? '' }}" width="1707" height="2560" loading="lazy" decoding="async"></div>@else<div class="brand-story__image"><x-optimized-image src="images/nuttime/brand-story.jpg" alt="Nuttime" width="1707" height="2560" sizes="(max-width: 900px) 100vw, 57vw" /></div>@endif<div class="brand-story__copy"><p class="kicker"><x-safe-rich-text :value="$section['eyebrow']" /></p><h2><x-safe-rich-text :value="$section['title']" /></h2><p><x-safe-rich-text :value="$section['description']" /></p>@if($buttonUrl)<a class="arrow-link arrow-link--light" href="{{ $buttonUrl }}"><x-safe-rich-text :value="$section['button_label'] ?: __('site.actions.learn_more')" /> <span>↗</span></a>@endif</div></section>
         @break
 
     @case('factory')
@@ -48,6 +44,9 @@
         @break
 
     @case('cta')
+        <x-final-cta :section="$section" :button-url="$buttonUrl" />
+        @break
+
     @case('custom')
         <section class="closing-cta"><div class="container closing-cta__inner"><div><p class="kicker"><x-safe-rich-text :value="$section['eyebrow']" /></p><h2><x-safe-rich-text :value="$section['title']" /></h2>@if($section['description'])<p><x-safe-rich-text :value="$section['description']" /></p>@endif</div>@if($buttonUrl)<a class="button button--dark" href="{{ $buttonUrl }}"><x-safe-rich-text :value="$section['button_label'] ?: __('site.actions.learn_more')" /> <span>↗</span></a>@endif</div></section>
         @break

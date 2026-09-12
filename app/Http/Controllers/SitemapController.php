@@ -20,7 +20,7 @@ final class SitemapController extends Controller
         $urls = [];
 
         foreach (array_keys(config('nuttime.locales')) as $locale) {
-            foreach (['home' => ['weekly', '1.0'], 'products' => ['weekly', '0.9'], 'about' => ['monthly', '0.7'], 'certificates' => ['monthly', '0.7'], 'contact' => ['monthly', '0.7'], 'contents' => ['weekly', '0.6']] as $page => [$frequency, $priority]) {
+            foreach (['home' => ['weekly', '1.0'], 'products' => ['weekly', '0.9'], 'about' => ['monthly', '0.7'], 'contact' => ['monthly', '0.7'], 'contents' => ['weekly', '0.6']] as $page => [$frequency, $priority]) {
                 $urls[] = $this->url($this->localizedUrl->route($page, $locale), $lastModified, $frequency, $priority);
             }
         }

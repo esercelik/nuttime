@@ -18,7 +18,7 @@
                         <p><x-safe-rich-text :value="$ingredients" /></p>
                     @endif
                     @if(filled($allergenInformation))
-                        <p class="product-information__allergens"><strong>{{ __('site.product.allergens') }}</strong><x-safe-rich-text :value="$allergenInformation" /></p>
+                        <aside class="product-information__allergens"><strong>{{ __('site.product.allergens') }}</strong><x-safe-rich-text :value="$allergenInformation" /></aside>
                     @endif
                 </article>
             @endif

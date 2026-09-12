@@ -74,7 +74,7 @@ final class CmsAdministrationTest extends TestCase
             ->assertSee('İlk yönetilen bölüm')
             ->assertSee('İkinci yönetilen bölüm')
             ->assertDontSee('Taslak bölüm')
-            ->assertDontSee('id="home-banners"', false);
+            ->assertSee('id="home-banners"', false);
         $this->assertLessThan(strpos($response->getContent(), $second->translationFor('tr')->title), strpos($response->getContent(), $first->translationFor('tr')->title));
     }
 

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\PageSection;
+use App\Support\CmsInitialContentSeeder;
 use App\Support\InitialCatalogImporter;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -43,5 +45,36 @@ final class HomeHeroTest extends TestCase
             ->assertSee(route('site.en.product', ['slug' => 'hazelnut-butter']), false)
             ->assertSee(route('site.en.product', ['slug' => 'pistachio-butter']), false)
             ->assertSee(route('site.en.product', ['slug' => 'almond-butter']), false);
+    }
+
+    public function test_seeded_cms_sections_keep_home_photography_when_media_is_empty(): void
+    {
+        app(InitialCatalogImporter::class)->import();
+        app(CmsInitialContentSeeder::class)->seed();
+
+        $this->get(route('site.en.home'))->assertOk()
+            ->assertSee('images/nuttime/collection-banner.jpg', false)
+            ->assertSee('images/nuttime/spread-banner.jpg', false)
+            ->assertSee('images/nuttime/brand-story.jpg', false)
+            ->assertSee('catalog-card__media--cutout', false)
+            ->assertSee('Good products,')
+            ->assertSee('id="home-banners"', false)
+            ->assertDontSee('class="quality-rail', false);
+    }
+
+    public function test_home_sections_keep_custom_cms_images_and_copy(): void
+    {
+        foreach (['story', 'cta'] as $type) {
+            $section = PageSection::query()->create(['page_key' => 'home', 'key' => $type, 'type' => $type, 'status' => 'published', 'is_active' => true, 'desktop_image' => 'media/'.$type.'.jpg']);
+            $section->translations()->create(['locale' => 'en', 'title' => 'Custom '.$type, 'button_label' => 'Read '.$type, 'button_url' => '/en/contact']);
+        }
+
+        $this->get(route('site.en.home'))->assertOk()
+            ->assertSee('/storage/media/story.jpg', false)
+            ->assertSee('/storage/media/cta.jpg', false)
+            ->assertSee('Custom story')
+            ->assertSee('Custom cta')
+            ->assertSee('Read cta')
+            ->assertDontSee('images/nuttime/brand-story.jpg', false);
     }
 }

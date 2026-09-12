@@ -15,7 +15,7 @@
         ->values();
 @endphp
 @php($featureTags = collect($product['feature_tags'] ?? [])->filter()->values())
-@php($technicalDetails = collect([__('site.product.detail_label') => $product['weight_grams'] ? $product['weight_grams'].' g' : null, 'SKU' => $product['sku'] ?? null, '%' => $product['primary_ingredient_percentage'] ? rtrim(rtrim((string) $product['primary_ingredient_percentage'], '0'), '.').'%' : null])->filter())
+@php($technicalDetails = collect([__('site.product.packaging_fields.net_weight') => $product['weight_grams'] ? $product['weight_grams'].' g' : null, 'SKU' => $product['sku'] ?? null, '%' => $product['primary_ingredient_percentage'] ? rtrim(rtrim(number_format((float) $product['primary_ingredient_percentage'], 2, '.', ''), '0'), '.').'%' : null])->filter())
 
 <nav class="container breadcrumb" aria-label="{{ __('site.product.breadcrumbs') }}">@foreach($breadcrumbs as $item)<a href="{{ $item['item'] }}">{{ $item['name'] }}</a>@if(! $loop->last)<span aria-hidden="true">/</span>@endif @endforeach</nav>
 
@@ -57,9 +57,9 @@
                     <span aria-live="polite"><span x-text="String(active + 1).padStart(2, '0')"></span> / {{ str_pad((string) $galleryItems->count(), 2, '0', STR_PAD_LEFT) }}</span>
                     <button type="button" x-on:click="next()" aria-label="{{ __('site.product.image', ['number' => '→']) }}">→</button>
                 </div>
-                <div class="product-stage__thumbs" role="tablist" aria-label="{{ $product['name'] }}">
+                <div class="product-stage__thumbs" role="group" aria-label="{{ $product['name'] }}">
                     @foreach($galleryItems as $index => $image)
-                        <button type="button" class="product-stage__thumbnail" x-on:click="active = {{ $index }}" :class="{ 'is-active': active === {{ $index }} }" :aria-selected="active === {{ $index }}" aria-label="{{ __('site.product.image', ['number' => $index + 1]) }}">
+                        <button type="button" class="product-stage__thumbnail" x-on:click="active = {{ $index }}" :class="{ 'is-active': active === {{ $index }} }" :aria-pressed="active === {{ $index }}" aria-label="{{ __('site.product.image', ['number' => $index + 1]) }}">
                             @if(filled($image['path']))
                                 <x-optimized-image :src="$image['path']" alt="" width="1707" height="2560" sizes="80px" />
                             @else
@@ -92,4 +92,32 @@
 
 <x-product-information :product="$product" />
 <x-product-packaging :product="$product" />
+@if(count($certificates))
+    <section class="product-certificates">
+        <div class="container">
+            <header class="product-certificates__header">
+                <p class="kicker">{{ __('site.home.quality_kicker') }}</p>
+                <h2>{{ __('site.nav.certificates') }}</h2>
+            </header>
+            <div class="product-certificates__grid">
+                @foreach($certificates as $certificate)
+                    <article class="product-certificates__card">
+                        @if($certificate['image'])
+                            <x-certificate-preview :src="$certificate['image']" :alt="$certificate['name']" width="260" height="180" />
+                        @endif
+                        <div>
+                            <h3><x-safe-rich-text :value="$certificate['name']" /></h3>
+                            @if($certificate['description'])
+                                <p><x-safe-rich-text :value="$certificate['description']" /></p>
+                            @endif
+                        </div>
+                        @if($certificate['document'])
+                            <a class="arrow-link" href="{{ $certificate['document'] }}" target="_blank" rel="noopener noreferrer">{{ __('site.actions.open_document') }} <span>↗</span></a>
+                        @endif
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endif
 @endsection

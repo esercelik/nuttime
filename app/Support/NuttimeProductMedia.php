@@ -4,6 +4,21 @@ namespace App\Support;
 
 final class NuttimeProductMedia
 {
+    public function cardImagePath(string $sourceSlug): ?string
+    {
+        $asset = match ($sourceSlug) {
+            'findik-kremasi' => 'findik',
+            'antep-fistikli-kremasi' => 'antep',
+            'badem-ezmesi', 'badem-unu' => 'badem',
+            'yer-fistigi-ezmesi' => 'yer-fistigi',
+            'seker-ilavesiz-yer-fistigi-ezmesi' => 'seker-ilavesiz-yer-fistigi',
+            'hindistan-cevizi-ezmesi' => 'hindistan-cevizi',
+            default => null,
+        };
+
+        return $asset ? 'images/nuttime/spylt/nuttime-'.$asset.'-jar-transparent.png' : null;
+    }
+
     /**
      * @return array<int, array{source: string, destination: string}>
      */

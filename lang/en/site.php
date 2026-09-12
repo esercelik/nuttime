@@ -3,6 +3,7 @@
 $site = require __DIR__.'/../tr/site.php';
 
 return array_replace_recursive($site, [
+    'ui' => ['previous' => 'Previous slide', 'next' => 'Next slide', 'show_slide' => 'Show :name slide'],
     'language' => ['label' => 'Language', 'choose' => 'Choose language'],
     'nav' => ['home' => 'Home', 'products' => 'Products', 'categories' => 'Categories', 'about' => 'About us', 'certificates' => 'Certificates', 'contact' => 'Contact', 'contents' => 'Stories'],
     'footer' => ['explore' => 'Explore', 'contact' => 'Contact', 'social' => 'Social', 'reach_us' => 'Get in touch', 'tagline' => 'Share what is good.', 'description' => 'A good idea from nature. Feel good in every bite.'],

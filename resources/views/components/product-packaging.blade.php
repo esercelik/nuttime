@@ -26,7 +26,10 @@
             <div class="product-packaging__groups">
                 @foreach($groups as $group => $items)
                     <article class="product-packaging__group product-packaging__group--{{ $group }}">
-                        <h3>{{ $groupLabels[$group] ?? $group }}</h3>
+                        <header class="product-packaging__group-heading">
+                            <span aria-hidden="true">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <h3>{{ $groupLabels[$group] ?? $group }}</h3>
+                        </header>
                         <dl>
                             @foreach($items as $item)
                                 <div>

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ui' => ['previous' => 'Önceki slayt', 'next' => 'Sonraki slayt', 'show_slide' => ':name slaydını göster'],
     'language' => ['label' => 'Dil', 'choose' => 'Dil seçin'],
     'nav' => ['home' => 'Ana sayfa', 'products' => 'Ürünler', 'categories' => 'Kategoriler', 'about' => 'Hakkımızda', 'certificates' => 'Sertifikalar', 'contact' => 'İletişim', 'contents' => 'İçerikler'],
     'footer' => ['explore' => 'Keşfet', 'contact' => 'İletişim', 'social' => 'Sosyal', 'reach_us' => 'Bize ulaşın', 'tagline' => 'İyi olanı paylaş.', 'description' => 'Doğadan gelen iyi fikir. Her lokmada iyi hisset.'],

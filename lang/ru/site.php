@@ -3,6 +3,7 @@
 $site = require __DIR__.'/../en/site.php';
 
 return array_replace_recursive($site, [
+    'ui' => ['previous' => 'Предыдущий слайд', 'next' => 'Следующий слайд', 'show_slide' => 'Показать :name'],
     'language' => ['label' => 'Язык', 'choose' => 'Выберите язык'],
     'nav' => ['home' => 'Главная', 'products' => 'Продукты', 'categories' => 'Категории', 'about' => 'О нас', 'certificates' => 'Сертификаты', 'contact' => 'Контакты', 'contents' => 'Истории'],
     'footer' => ['explore' => 'Открыть', 'contact' => 'Контакты', 'social' => 'Социальные сети', 'reach_us' => 'Связаться с нами', 'tagline' => 'Делитесь хорошим.', 'description' => 'Хорошая идея от природы. Хорошее ощущение в каждом вкусе.'],

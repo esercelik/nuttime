@@ -5,7 +5,7 @@
         <img src="{{ $src }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}" loading="lazy" decoding="async">
     </button>
 
-    <div x-cloak x-show="open" x-transition.opacity class="certificate-lightbox" role="dialog" aria-modal="true" aria-label="{{ $alt }}" @click.self="open = false; document.body.classList.remove('has-lightbox'); $nextTick(() => opener?.focus())">
+    <div x-cloak x-show="open" x-transition.opacity class="certificate-lightbox" role="dialog" aria-modal="true" @keydown.tab.prevent="$refs.close.focus()" aria-label="{{ $alt }}" @click.self="open = false; document.body.classList.remove('has-lightbox'); $nextTick(() => opener?.focus())">
         <div class="certificate-lightbox__content">
             <button type="button" class="certificate-lightbox__close" x-ref="close" @click="open = false; document.body.classList.remove('has-lightbox'); $nextTick(() => opener?.focus())" aria-label="{{ __('site.actions.close') }}">×</button>
             <img src="{{ $src }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}">

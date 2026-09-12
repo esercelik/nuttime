@@ -3,6 +3,7 @@
 $site = require __DIR__.'/../en/site.php';
 
 return array_replace_recursive($site, [
+    'ui' => ['previous' => 'الشريحة السابقة', 'next' => 'الشريحة التالية', 'show_slide' => 'عرض :name'],
     'language' => ['label' => 'اللغة', 'choose' => 'اختر اللغة'],
     'nav' => ['home' => 'الرئيسية', 'products' => 'المنتجات', 'categories' => 'الفئات', 'about' => 'من نحن', 'certificates' => 'الشهادات', 'contact' => 'اتصل بنا', 'contents' => 'القصص'],
     'footer' => ['explore' => 'اكتشف', 'contact' => 'اتصل بنا', 'social' => 'وسائل التواصل', 'reach_us' => 'تواصل معنا', 'tagline' => 'شارك ما هو جيد.', 'description' => 'فكرة طيبة من الطبيعة. اشعر بالرضا في كل لقمة.'],
