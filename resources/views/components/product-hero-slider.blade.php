@@ -7,7 +7,7 @@
         <div class="product-hero__slides">
             @foreach($slides as $index => $slide)
                 <article class="product-hero__slide {{ $index === 0 ? 'is-active' : '' }}" aria-roledescription="slide" aria-label="{{ $index + 1 }} / {{ count($slides) }}" aria-hidden="{{ $index === 0 ? 'false' : 'true' }}" @if($index !== 0) hidden @endif data-product-hero-slide>
-                    <img class="product-hero__background" src="{{ $slide['background_image'] }}" alt="" width="1920" height="1080" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}" decoding="async" data-product-hero-background>
+                    <div class="product-hero__background" data-product-hero-background data-background-image="{{ $slide['background_image'] }}" aria-hidden="true"></div>
                     <div class="product-hero__gradient" aria-hidden="true"></div>
                     <div class="product-hero__backdrop-type" aria-hidden="true"><x-safe-rich-text :value="$slide['name']" /></div>
                     <img class="product-hero__ingredients product-hero__ingredients--back" src="{{ $slide['ingredient_image'] }}" alt="" width="1600" height="1200" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" decoding="async" data-product-hero-decoration>

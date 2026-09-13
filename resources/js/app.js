@@ -1,8 +1,54 @@
 import Alpine from 'alpinejs';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 window.Alpine = Alpine;
 Alpine.start();
+gsap.registerPlugin(ScrollTrigger);
+
+const initializeV2ScrollStories = () => {
+    document.querySelectorAll('[data-v2-scroll-story]').forEach((story) => {
+        const product = story.querySelector('[data-v2-story-product]');
+        const spoon = story.querySelector('[data-v2-story-spoon]');
+        const openingCopy = story.querySelector('[data-v2-story-copy]');
+        const closingCopy = story.querySelector('[data-v2-story-end]');
+        const progress = story.querySelector('[data-v2-scroll-progress]');
+        const orbs = story.querySelectorAll('[data-v2-orb]');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (! product || ! spoon || reduceMotion) {
+            if (reduceMotion && spoon) {
+                gsap.set(spoon, { yPercent: 35, rotation: 4 });
+            }
+
+            return;
+        }
+
+        const animationContext = gsap.context(() => {
+            const timeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: story,
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 0.8,
+                    invalidateOnRefresh: true,
+                },
+            });
+
+            timeline
+                .fromTo(product, { yPercent: 16, rotation: -8, scale: 0.82 }, { yPercent: -4, rotation: 8, scale: 1.08, duration: 1.2, ease: 'none' }, 0)
+                .to(openingCopy, { autoAlpha: 0, xPercent: -18, duration: 0.45 }, 0.18)
+                .fromTo(spoon, { yPercent: 118, rotation: 9 }, { yPercent: 0, rotation: 2, duration: 1.1, ease: 'none' }, 0.48)
+                .to(product, { xPercent: -31, yPercent: 3, rotation: -4, scale: 0.78, duration: 0.85, ease: 'none' }, 1.05)
+                .to(spoon, { xPercent: 8, yPercent: -9, rotation: -2, duration: 0.65, ease: 'none' }, 1.15)
+                .to(closingCopy, { autoAlpha: 1, y: 0, duration: 0.5 }, 1.4)
+                .to(orbs, { xPercent: (index) => index === 0 ? 28 : -22, yPercent: (index) => index === 0 ? 34 : -28, rotation: 40, duration: 1.8, ease: 'none' }, 0)
+                .to(progress, { scaleY: 1, duration: 1.9, ease: 'none' }, 0);
+        }, story);
+
+        window.addEventListener('pagehide', () => animationContext.revert(), { once: true });
+    });
+};
 
 const initializeProductHeroes = () => {
     document.querySelectorAll('[data-product-hero]').forEach((hero) => {
@@ -356,6 +402,8 @@ const initializeProductHeroes = () => {
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeProductHeroes, { once: true });
+    document.addEventListener('DOMContentLoaded', initializeV2ScrollStories, { once: true });
 } else {
     initializeProductHeroes();
+    initializeV2ScrollStories();
 }
