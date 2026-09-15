@@ -35,7 +35,7 @@
 @php($managedHeaderNavigation = app(\App\Support\CmsContentRepository::class)->menu('header-primary', app()->getLocale()))
 @php($managedFooterNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-primary', app()->getLocale()))
 @php($managedLegalNavigation = app(\App\Support\CmsContentRepository::class)->menu('footer-legal', app()->getLocale()))
-<body x-data="{menu:false,language:false,compact:false}" @resize.window="if (window.innerWidth > 900) menu=false" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false; language=false" :class="{'has-menu':menu,'is-compact':compact}">
+<body class="nuttime-v2" x-data="{menu:false,language:false,compact:false}" @resize.window="if (window.innerWidth > 900) menu=false" @scroll.window="compact=window.scrollY>24" @keydown.escape.window="menu=false; language=false" :class="{'has-menu':menu,'is-compact':compact}">
     <a class="skip-link" href="#main-content">{{ __('site.actions.skip_to_content') }}</a>
     <header class="masthead">
         <div class="container masthead__inner">

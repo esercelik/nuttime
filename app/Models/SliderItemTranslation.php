@@ -11,5 +11,8 @@ final class SliderItemTranslation extends Model
 
     protected $fillable = ['locale', 'eyebrow', 'title', 'description', 'cta_label', 'cta_url'];
 
-    public function sliderItem(): BelongsTo { return $this->belongsTo(SliderItem::class); }
+    public function sliderItem(): BelongsTo
+    {
+        return $this->belongsTo(SliderItem::class);
+    }
 }
