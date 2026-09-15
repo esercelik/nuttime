@@ -14,6 +14,6 @@ jobs:
       - run: touch database/database.sqlite
       - run: sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
       - run: php artisan migrate --force
+      - run: npm ci && npm run build
       - run: php artisan test
       - run: vendor/bin/pint --test
-      - run: npm ci && npm run build
