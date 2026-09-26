@@ -93,17 +93,17 @@
 <x-product-information :product="$product" />
 <x-product-packaging :product="$product" />
 @if(count($certificates))
-    <section class="product-certificates">
+    <section class="product-certificates" id="certificates" aria-labelledby="product-certificates-title">
         <div class="container">
             <header class="product-certificates__header">
                 <p class="kicker">{{ __('site.home.quality_kicker') }}</p>
-                <h2>{{ __('site.nav.certificates') }}</h2>
+                <h2 id="product-certificates-title">{{ __('site.nav.certificates') }}</h2>
             </header>
             <div class="product-certificates__grid">
                 @foreach($certificates as $certificate)
                     <article class="product-certificates__card">
                         @if($certificate['image'])
-                            <x-certificate-preview :src="$certificate['image']" :alt="$certificate['name']" width="260" height="180" />
+                            <x-certificate-preview :src="$certificate['image']" :alt="$certificate['name']" width="992" height="1403" />
                         @endif
                         <div>
                             <h3><x-safe-rich-text :value="$certificate['name']" /></h3>

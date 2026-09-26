@@ -261,15 +261,16 @@ final class SiteController extends Controller
             return [];
         }
 
-        return Certificate::query()->with('translations')->active()->orderBy('sort_order')->get()->map(function (Certificate $certificate): array {
+        return Certificate::query()->with('translations')->active()->orderBy('sort_order')->orderBy('id')->get()->map(function (Certificate $certificate): array {
             $translation = $certificate->translationFor(app()->getLocale());
             $image = $translation?->image ?: $certificate->image;
+            $imageUrl = $image ? asset('storage/'.$image) : null;
 
             return [
                 'name' => $translation?->name ?: $certificate->name,
                 'description' => $translation?->description ?: $certificate->description,
-                'image' => $image ? asset('storage/'.$image) : null,
-                'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : $certificate->document_url,
+                'image' => $imageUrl,
+                'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : ($certificate->document_url ?: $imageUrl),
             ];
         })->all();
     }

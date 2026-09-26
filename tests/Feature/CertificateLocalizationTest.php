@@ -34,6 +34,7 @@ final class CertificateLocalizationTest extends TestCase
             ->assertSee('Deutsches Zertifikat')
             ->assertSee('Deutsche Beschreibung')
             ->assertSee('/storage/media/certificates/de.jpg', false)
+            ->assertSee('href="'.asset('storage/media/certificates/de.jpg').'"', false)
             ->assertDontSee('Default certificate');
 
         $this->get(route('site.de.home'))->assertOk()->assertDontSee('Deutsches Zertifikat')->assertDontSee('href="'.route('site.de.certificates').'"', false);
