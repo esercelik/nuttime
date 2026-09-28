@@ -1,0 +1,23 @@
+{
+  "metaTitle": "Nuttime — Ein Löffel Glück", "metaDescription": "Entdecke fünf Nuttime-Aufstriche mit Stückchen, von Pistazie bis Kokosnuss. Lerne die Sorten und Zutaten kennen und finde deinen Favoriten.", "navFlavors": "Sorten", "navInside": "Zutaten", "navRitual": "Das Ritual", "menu": "Hauptmenü", "home": "Nuttime Startseite", "skip": "Zum Inhalt", "language": "Sprache",
+  "heroEyebrow": "NUTTIME · AUFSTRICHE MIT STÜCKCHEN", "heroHeading": "LÖFFEL FÜR LÖFFEL", "heroSubheading": "So köstlich schmeckt Glück.", "heroBody": "Knackige Stückchen. Voller Geschmack. Einfach Nuttime.", "chooseFlavor": "FINDE DEINE SORTE ↗", "beyond": "MEHR ALS EIN GLAS", "secondHeading": "KLEINES GLAS. GROSSE FREUDE.", "secondBody": "Pistazie, Haselnuss, Mandel, Erdnuss und Kokosnuss. Jedes Glas mit eigenem Charakter; jeder Löffel mit feinen Stückchen.", "carouselEyebrow": "FÜNF SORTEN · EIN NUTTIME", "carouselHeading": "DEIN FAVORIT WARTET.", "weightTexture": "250 g · Aufstrich mit Stückchen", "selectFlavor": "Wähle deine Nuttime-Sorte", "previous": "Vorherige Sorte", "next": "Nächste Sorte", "directSelection": "Sorte direkt auswählen", "discoverProduct": "Produkt entdecken ↗", "productNames": ["Pistazienaufstrich", "Haselnussaufstrich", "Kokosaufstrich", "Mandelaufstrich", "Erdnussaufstrich"], "shortNames": ["Pistazie", "Haselnuss", "Kokosnuss", "Mandel", "Erdnuss"],
+  "ritual": "DAS NUTTIME-RITUAL", "ritualHeadings": ["GLAS AUF.", "EIN LÖFFEL VOLL.", "GENUSS VERLÄNGERN."], "ritualBodies": ["Der unverwechselbare Geschmack der Kokosnuss in einem Nuttime-Aufstrich mit 42 % Kokosnuss.", "Entdecke die feinen Stückchen. Zum Frühstück, zum Dessert oder für eine kleine Pause zwischendurch.", "Auf Toast streichen, zu Pfannkuchen geben oder im Lieblingsrezept verwenden. Ganz nach deinem Geschmack."], "dive": "TAUCH IN DEN GENUSS", "breakLabel": "ZEIT FÜR EINE KLEINE PAUSE.", "editorialTitle": ["Ein Löffel.", "Ganz viel", "Glück."], "editorialBody": "Manchmal braucht es nur etwas Zeit für deinen Lieblingsgeschmack. Öffne das Glas und genieße jeden Löffel mit Stückchen.", "discoverInside": "Entdecke, was drinsteckt", "insideEyebrow": "WAS STECKT IM GLAS?", "insideHeading": "GESCHMACK KENNENLERNEN. ZUTATEN ENTDECKEN.", "ingredients": "Zutaten & Allergene", "crunchy": "MIT STÜCKCHEN", "productBody": "Entdecke Nuttime zum Frühstück, im Dessert oder in deinem Lieblingsrezept.", "backFlavors": "Zurück zu den Sorten ↗", "ingredientTexts": ["**Pistazien** (42 %), Rübenzucker, **Vollmilchpulver, Molkenpulver**, pflanzliches Öl (Baumwollsaat), Emulgator (Sonnenblumenlecithin). Kann Spuren von **Erdnüssen, Mandeln und Haselnüssen** enthalten.", "**Kokosnuss** (42 %), Rübenzucker, **Vollmilchpulver, Molkenpulver, Haselnüsse, Mandeln**, pflanzliches Öl (Baumwollsaat), Emulgator (Sonnenblumenlecithin). Kann Spuren von **Erdnüssen und Pistazien** enthalten."], "packaging": "Verpackungsdetails", "packageLabels": ["Nettogewicht", "Bruttogewicht", "Glasdurchmesser", "Glashöhe", "Gläser pro Karton"], "units": "12 Gläser", "footerTagline": "Ein Löffel Glück.", "exploreFlavors": "Sorten entdecken ↗", "backTop": "Nach oben ↑", "allFlavors": "Die Kollektion", "photoAlt": "Originalfoto eines Nuttime-Produkts", "textureAlt": "Nuttime-Aufstrich mit feinen Stückchen", "notFoundLabel": "404 · SEITE NICHT GEFUNDEN", "notFoundHeading": "Diese Seite ist nicht hier. Unsere Sorten schon.", "notFoundBody": "Die Seite wurde vielleicht verschoben. Entdecke weiterhin die Welt von Nuttime.", "scrollHint": "Scrollen und entdecken", "collectionNote": "Fünf Charaktere. Finde deinen.",
+  "certificates": {
+    "eyebrow": "Produktionsstandards",
+    "heading": "Zertifikate",
+    "description": "BRCGS Globaler Standard für Lebensmittelsicherheit, Version 9. Sieh dir das Zertifikat auf Türkisch, Englisch oder Deutsch an.",
+    "number": "Zertifikatsnummer",
+    "issuer": "Zertifizierungsstelle",
+    "validUntil": "Gültig bis",
+    "grade": "Bewertung",
+    "preview": "Zertifikat vergrößern",
+    "open": "Dokument öffnen",
+    "download": "Herunterladen",
+    "close": "Schließen",
+    "languages": {
+      "tr": "Türkisch",
+      "en": "Englisch",
+      "de": "Deutsch"
+    }
+  }
+}

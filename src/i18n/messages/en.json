@@ -1,0 +1,33 @@
+{
+  "metaTitle": "Nuttime — A spoonful of happiness",
+  "metaDescription": "Discover five Nuttime crunchy spreads, from pistachio to coconut. Explore the flavours, ingredients and your next favourite.",
+  "navFlavors": "Flavours", "navInside": "Inside the jar", "navRitual": "The ritual", "menu": "Main menu", "home": "Nuttime home", "skip": "Skip to content", "language": "Language",
+  "heroEyebrow": "NUTTIME · CRUNCHY SPREADS", "heroHeading": "SPOON BY SPOON", "heroSubheading": "Happiness, deliciously served.", "heroBody": "Crunchy texture. Big flavour. Pure Nuttime.", "chooseFlavor": "FIND YOUR FLAVOUR ↗",
+  "beyond": "BEYOND THE JAR", "secondHeading": "SMALL JAR. BIG JOY.", "secondBody": "Pistachio, hazelnut, almond, peanut and coconut. A different character in every jar; a crunchy texture in every spoonful.",
+  "carouselEyebrow": "FIVE FLAVOURS · ONE NUTTIME", "carouselHeading": "MEET YOUR FAVOURITE.", "weightTexture": "250 g · Crunchy spread", "selectFlavor": "Choose your Nuttime flavour", "previous": "Previous flavour", "next": "Next flavour", "directSelection": "Choose a flavour directly", "discoverProduct": "Explore the product ↗",
+  "productNames": ["Pistachio Spread", "Hazelnut Spread", "Coconut Spread", "Almond Spread", "Peanut Spread"],
+  "shortNames": ["Pistachio", "Hazelnut", "Coconut", "Almond", "Peanut"],
+  "ritual": "THE NUTTIME RITUAL", "ritualHeadings": ["OPEN THE JAR.", "TAKE A SPOONFUL.", "SAVOUR THE MOMENT."],
+  "ritualBodies": ["The distinctive flavour of coconut, in a Nuttime spread made with 42% coconut.", "Discover the crunchy texture. Enjoy it at breakfast, with dessert or during a little break in your day.", "Spread it on toast, add it to pancakes or use it in a favourite recipe. Enjoy it your way."],
+  "dive": "DIVE INTO FLAVOUR", "breakLabel": "TAKE A LITTLE BREAK.", "editorialTitle": ["One spoon.", "So much", "happiness."], "editorialBody": "Sometimes all you need is a little time with a flavour you love. Open the jar and enjoy every crunchy spoonful.", "discoverInside": "Discover what's inside", "insideEyebrow": "WHAT'S INSIDE THE JAR?", "insideHeading": "KNOW THE FLAVOUR. EXPLORE THE INGREDIENTS.", "ingredients": "Ingredients & allergens", "crunchy": "CRUNCHY", "productBody": "Discover Nuttime at breakfast, in desserts or in your favourite recipe.", "backFlavors": "Back to flavours ↗",
+  "ingredientTexts": ["**Pistachios** (42%), beet sugar, **whole milk powder, whey powder**, vegetable oil (cottonseed), emulsifier (sunflower lecithin). May contain traces of **peanuts, almonds and hazelnuts**.", "**Coconut** (42%), beet sugar, **whole milk powder, whey powder, hazelnuts, almonds**, vegetable oil (cottonseed), emulsifier (sunflower lecithin). May contain traces of **peanuts and pistachios**."],
+  "packaging": "Packaging details", "packageLabels": ["Net weight", "Gross weight", "Jar diameter", "Jar height", "Jars per case"], "units": "12 jars", "footerTagline": "A spoonful of happiness.", "exploreFlavors": "Explore the flavours ↗", "backTop": "Back to top ↑", "allFlavors": "The collection", "photoAlt": "Original Nuttime product photograph", "textureAlt": "Nuttime spread and its crunchy texture", "notFoundLabel": "404 · PAGE NOT FOUND", "notFoundHeading": "This page isn't here. Our flavours are.", "notFoundBody": "The page may have moved. Keep exploring the world of Nuttime.", "scrollHint": "Scroll to discover", "collectionNote": "Five characters. Find yours.",
+  "certificates": {
+    "eyebrow": "Production standards",
+    "heading": "Certificates",
+    "description": "BRCGS Global Standard Food Safety, Issue 9. View the certificate in Turkish, English or German.",
+    "number": "Certificate no.",
+    "issuer": "Certification body",
+    "validUntil": "Valid until",
+    "grade": "Grade",
+    "preview": "Enlarge certificate",
+    "open": "Open document",
+    "download": "Download",
+    "close": "Close",
+    "languages": {
+      "tr": "Turkish",
+      "en": "English",
+      "de": "German"
+    }
+  }
+}

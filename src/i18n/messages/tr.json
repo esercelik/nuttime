@@ -1,0 +1,25 @@
+{
+  "metaTitle": "Nuttime — Bir kaşık mutluluk", "metaDescription": "Antep fıstığından Hindistan cevizine: Nuttime'ın beş parçacıklı ezmesini, içeriklerini ve yeni favorini keşfet.",
+  "navFlavors": "Lezzetler", "navInside": "İçindekiler", "navRitual": "Ritüel", "menu": "Ana menü", "home": "Nuttime ana sayfa", "skip": "İçeriğe geç", "language": "Dil",
+  "heroEyebrow": "NUTTIME · PARÇACIKLI EZMELER", "heroHeading": "KAŞIK KAŞIK", "heroSubheading": "Mutluluğun en lezzetli hali.", "heroBody": "Parçacıklı doku. Kocaman lezzet. Tam Nuttime.", "chooseFlavor": "LEZZETİNİ SEÇ ↗", "beyond": "KAVANOZUN ÖTESİNDE", "secondHeading": "KÜÇÜK KAVANOZ. BÜYÜK KEYİF.", "secondBody": "Antep fıstığı, fındık, badem, yer fıstığı ve Hindistan cevizi. Her kavanozda farklı bir karakter; her kaşıkta parçacıklı bir doku.",
+  "carouselEyebrow": "BEŞ LEZZET · TEK BİR NUTTIME", "carouselHeading": "BİR FAVORİN OLACAK.", "weightTexture": "250 g · Parçacıklı ezme", "selectFlavor": "Nuttime lezzetini seç", "previous": "Önceki lezzet", "next": "Sonraki lezzet", "directSelection": "Doğrudan lezzet seçimi", "discoverProduct": "Ürün detaylarını keşfet ↗", "productNames": ["Antep Fıstığı Ezmesi", "Fındık Ezmesi", "Hindistan Cevizi Ezmesi", "Badem Ezmesi", "Yer Fıstığı Ezmesi"], "shortNames": ["Antep fıstığı", "Fındık", "Hindistan cevizi", "Badem", "Yer fıstığı"],
+  "ritual": "NUTTIME RİTÜELİ", "ritualHeadings": ["KAPAĞI AÇ.", "BİR KAŞIK AL.", "KEYFİNİ UZAT."], "ritualBodies": ["Hindistan cevizinin kendine özgü lezzeti, %42 Hindistan cevizi içeren Nuttime ezmesinde.", "Parçacıklı dokusunu keşfet. Kahvaltıya, tatlılarına ya da günün küçük bir molasına eşlik etsin.", "Kızarmış ekmeğe sür, krep üzerine ekle veya sevdiğin bir tarifte kullan. Nasıl seviyorsan öyle."], "dive": "LEZZETE DAL", "breakLabel": "KÜÇÜK BİR MOLA VER.", "editorialTitle": ["Bir kaşık.", "Kocaman", "mutluluk."], "editorialBody": "Bazen tek ihtiyacın, sevdiğin lezzete biraz zaman ayırmak. Kavanozu aç; parçacıklı dokunun keyfini çıkar.", "discoverInside": "Kavanozun içini keşfet", "insideEyebrow": "KAVANOZUN İÇİNDE NE VAR?", "insideHeading": "LEZZETİ TANI. İÇERİĞİNİ KEŞFET.", "ingredients": "İçindekiler ve alerjenler", "crunchy": "PARÇACIKLI", "productBody": "Kahvaltıda, tatlılarında ya da sevdiğin bir tarifte Nuttime lezzetini keşfet.", "backFlavors": "Lezzetlere dön ↗", "ingredientTexts": ["**Antep fıstığı** (%42), pancar şekeri, **yağlı süt tozu, peynir altı suyu tozu**, bitkisel yağ (pamuk), emülgatör (ayçiçek lesitini). Eser miktarda **yer fıstığı, badem, fındık** içerebilir.", "**Hindistan cevizi** (%42), pancar şekeri, **yağlı süt tozu, peynir altı suyu tozu, fındık, badem**, bitkisel yağ (pamuk), emülgatör (ayçiçek lesitini). Eser miktarda **yer fıstığı, Antep fıstığı** içerebilir."], "packaging": "Ambalaj bilgileri", "packageLabels": ["Net ağırlık", "Brüt ağırlık", "Kavanoz çapı", "Kavanoz yüksekliği", "Koli içi adet"], "units": "12 adet", "footerTagline": "Bir kaşık mutluluk.", "exploreFlavors": "Lezzetleri keşfet ↗", "backTop": "Başa dön ↑", "allFlavors": "Koleksiyon", "photoAlt": "Nuttime orijinal ürün fotoğrafı", "textureAlt": "Nuttime ezmesi ve parçacıklı dokusu", "notFoundLabel": "404 · SAYFA BULUNAMADI", "notFoundHeading": "Bu sayfa burada değil. Lezzetlerimiz burada.", "notFoundBody": "Aradığın sayfa taşınmış olabilir. Nuttime lezzetlerini keşfetmeye devam et.", "scrollHint": "Keşfetmek için kaydır", "collectionNote": "Beş farklı karakter. Seninkini bul.",
+  "certificates": {
+    "eyebrow": "Üretim standartları",
+    "heading": "Sertifikalar",
+    "description": "BRCGS Küresel Gıda Güvenliği Standardı, Sürüm 9. Sertifikayı Türkçe, İngilizce veya Almanca görüntüleyin.",
+    "number": "Sertifika no.",
+    "issuer": "Belgelendirme kuruluşu",
+    "validUntil": "Geçerlilik tarihi",
+    "grade": "Derece",
+    "preview": "Sertifikayı büyüt",
+    "open": "Belgeyi aç",
+    "download": "İndir",
+    "close": "Kapat",
+    "languages": {
+      "tr": "Türkçe",
+      "en": "İngilizce",
+      "de": "Almanca"
+    }
+  }
+}

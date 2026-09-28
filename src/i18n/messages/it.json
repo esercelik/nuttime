@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Nuttime — Un cucchiaio di felicità", "metaDescription": "Scopri cinque creme Nuttime con pezzetti, dal pistacchio al cocco. Esplora gusti e ingredienti e trova la tua preferita.", "navFlavors": "Gusti", "navInside": "Ingredienti", "navRitual": "Il rituale", "menu": "Menu principale", "home": "Pagina iniziale Nuttime", "skip": "Vai al contenuto", "language": "Lingua", "heroEyebrow": "NUTTIME · CREME CON PEZZETTI", "heroHeading": "CUCCHIAIO DOPO CUCCHIAIO", "heroSubheading": "La felicità ha un gusto delizioso.", "heroBody": "Pezzetti croccanti. Grande gusto. Tutto Nuttime.", "chooseFlavor": "TROVA IL TUO GUSTO ↗", "beyond": "OLTRE IL VASETTO", "secondHeading": "PICCOLO VASETTO. GRANDE PIACERE.", "secondBody": "Pistacchio, nocciola, mandorla, arachide e cocco. Un carattere diverso in ogni vasetto; una consistenza con pezzetti in ogni cucchiaio.", "carouselEyebrow": "CINQUE GUSTI · UN SOLO NUTTIME", "carouselHeading": "TI ASPETTA IL TUO PREFERITO.", "weightTexture": "250 g · Crema con pezzetti", "selectFlavor": "Scegli il tuo gusto Nuttime", "previous": "Gusto precedente", "next": "Gusto successivo", "directSelection": "Seleziona direttamente un gusto", "discoverProduct": "Scopri il prodotto ↗", "productNames": ["Crema al pistacchio", "Crema alla nocciola", "Crema al cocco", "Crema alla mandorla", "Crema all’arachide"], "shortNames": ["Pistacchio", "Nocciola", "Cocco", "Mandorla", "Arachide"], "ritual": "IL RITUALE NUTTIME", "ritualHeadings": ["APRI IL VASETTO.", "PRENDI UN CUCCHIAIO.", "PROLUNGA IL PIACERE."], "ritualBodies": ["Il gusto inconfondibile del cocco in una crema Nuttime con il 42% di cocco.", "Scopri la consistenza con pezzetti. A colazione, con un dolce o durante una piccola pausa della giornata.", "Spalmala sul pane tostato, aggiungila ai pancake o usala nella tua ricetta preferita. Gustala come vuoi."], "dive": "TUFFATI NEL GUSTO", "breakLabel": "CONCEDITI UNA PICCOLA PAUSA.", "editorialTitle": ["Un cucchiaio.", "Tanta", "felicità."], "editorialBody": "A volte basta dedicare un po’ di tempo a un gusto che ami. Apri il vasetto e assapora ogni cucchiaio con pezzetti.", "discoverInside": "Scopri cosa contiene", "insideEyebrow": "COSA C’È NEL VASETTO?", "insideHeading": "CONOSCI IL GUSTO. SCOPRI GLI INGREDIENTI.", "ingredients": "Ingredienti e allergeni", "crunchy": "CON PEZZETTI", "productBody": "Scopri Nuttime a colazione, nei tuoi dolci o nella tua ricetta preferita.", "backFlavors": "Torna ai gusti ↗", "ingredientTexts": ["**Pistacchi** (42%), zucchero di barbabietola, **latte intero in polvere, siero di latte in polvere**, olio vegetale (cotone), emulsionante (lecitina di girasole). Può contenere tracce di **arachidi, mandorle e nocciole**.", "**Cocco** (42%), zucchero di barbabietola, **latte intero in polvere, siero di latte in polvere, nocciole, mandorle**, olio vegetale (cotone), emulsionante (lecitina di girasole). Può contenere tracce di **arachidi e pistacchi**."], "packaging": "Informazioni sulla confezione", "packageLabels": ["Peso netto", "Peso lordo", "Diametro del vasetto", "Altezza del vasetto", "Vasetti per cartone"], "units": "12 vasetti", "footerTagline": "Un cucchiaio di felicità.", "exploreFlavors": "Scopri i gusti ↗", "backTop": "Torna in alto ↑", "allFlavors": "La collezione", "photoAlt": "Fotografia originale del prodotto Nuttime", "textureAlt": "Crema Nuttime e la sua consistenza con pezzetti", "notFoundLabel": "404 · PAGINA NON TROVATA", "notFoundHeading": "Questa pagina non è qui. I nostri gusti sì.", "notFoundBody": "La pagina potrebbe essere stata spostata. Continua a esplorare il mondo Nuttime.", "scrollHint": "Scorri per scoprire", "collectionNote": "Cinque caratteri. Trova il tuo.",
+  "certificates": {
+    "eyebrow": "Standard di produzione",
+    "heading": "Certificati",
+    "description": "Standard globale BRCGS per la sicurezza alimentare, versione 9. Consulta il certificato in turco, inglese o tedesco.",
+    "number": "N. del certificato",
+    "issuer": "Organismo di certificazione",
+    "validUntil": "Valido fino al",
+    "grade": "Valutazione",
+    "preview": "Ingrandisci il certificato",
+    "open": "Apri documento",
+    "download": "Scarica",
+    "close": "Chiudi",
+    "languages": {
+      "tr": "Turco",
+      "en": "Inglese",
+      "de": "Tedesco"
+    }
+  }
+}

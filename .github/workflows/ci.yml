@@ -1,19 +1,30 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  test:
+  frontend:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: npm}
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+  admin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with: {php-version: '8.5', extensions: mbstring, coverage: none}
       - uses: actions/setup-node@v4
-        with: {node-version: '20', cache: npm}
+        with: {node-version: '22', cache: npm, cache-dependency-path: backend/package-lock.json}
       - run: composer install --no-interaction --prefer-dist
       - run: cp .env.example .env && php artisan key:generate
       - run: touch database/database.sqlite
-      - run: sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
-      - run: php artisan migrate --force
+      - run: php artisan migrate --force --no-interaction
       - run: npm ci && npm run build
-      - run: php artisan test
+      - run: php artisan test --compact
       - run: vendor/bin/pint --test

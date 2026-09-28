@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Nuttime — Una cucharada de felicidad", "metaDescription": "Descubre cinco cremas Nuttime con trocitos, del pistacho al coco. Explora sus sabores e ingredientes y encuentra tu favorita.", "navFlavors": "Sabores", "navInside": "Ingredientes", "navRitual": "El ritual", "menu": "Menú principal", "home": "Inicio de Nuttime", "skip": "Ir al contenido", "language": "Idioma", "heroEyebrow": "NUTTIME · CREMAS CON TROCITOS", "heroHeading": "CUCHARADA A CUCHARADA", "heroSubheading": "La felicidad sabe así de bien.", "heroBody": "Textura crujiente. Gran sabor. Puro Nuttime.", "chooseFlavor": "ENCUENTRA TU SABOR ↗", "beyond": "MÁS ALLÁ DEL TARRO", "secondHeading": "TARRO PEQUEÑO. GRAN PLACER.", "secondBody": "Pistacho, avellana, almendra, cacahuete y coco. Un carácter diferente en cada tarro; una textura con trocitos en cada cucharada.", "carouselEyebrow": "CINCO SABORES · UN SOLO NUTTIME", "carouselHeading": "TU FAVORITA TE ESPERA.", "weightTexture": "250 g · Crema con trocitos", "selectFlavor": "Elige tu sabor Nuttime", "previous": "Sabor anterior", "next": "Sabor siguiente", "directSelection": "Elegir un sabor directamente", "discoverProduct": "Descubre el producto ↗", "productNames": ["Crema de pistacho", "Crema de avellana", "Crema de coco", "Crema de almendra", "Crema de cacahuete"], "shortNames": ["Pistacho", "Avellana", "Coco", "Almendra", "Cacahuete"], "ritual": "EL RITUAL NUTTIME", "ritualHeadings": ["ABRE EL TARRO.", "TOMA UNA CUCHARADA.", "ALARGA EL MOMENTO."], "ritualBodies": ["El sabor único del coco en una crema Nuttime con un 42 % de coco.", "Descubre su textura con trocitos. En el desayuno, en tus postres o en una pequeña pausa del día.", "Úntala en una tostada, añádela a tus tortitas o úsala en tu receta favorita. Disfrútala a tu manera."], "dive": "SUMÉRGETE EN EL SABOR", "breakLabel": "REGÁLATE UNA PEQUEÑA PAUSA.", "editorialTitle": ["Una cucharada.", "Mucha", "felicidad."], "editorialBody": "A veces solo necesitas un poco de tiempo con un sabor que te encanta. Abre el tarro y disfruta de cada cucharada con trocitos.", "discoverInside": "Descubre su interior", "insideEyebrow": "¿QUÉ HAY EN EL TARRO?", "insideHeading": "CONOCE EL SABOR. EXPLORA LOS INGREDIENTES.", "ingredients": "Ingredientes y alérgenos", "crunchy": "CON TROCITOS", "productBody": "Descubre Nuttime en el desayuno, en tus postres o en tu receta favorita.", "backFlavors": "Volver a los sabores ↗", "ingredientTexts": ["**Pistachos** (42 %), azúcar de remolacha, **leche entera en polvo, suero de leche en polvo**, aceite vegetal (algodón), emulgente (lecitina de girasol). Puede contener trazas de **cacahuetes, almendras y avellanas**.", "**Coco** (42 %), azúcar de remolacha, **leche entera en polvo, suero de leche en polvo, avellanas, almendras**, aceite vegetal (algodón), emulgente (lecitina de girasol). Puede contener trazas de **cacahuetes y pistachos**."], "packaging": "Información del envase", "packageLabels": ["Peso neto", "Peso bruto", "Diámetro del tarro", "Altura del tarro", "Tarros por caja"], "units": "12 tarros", "footerTagline": "Una cucharada de felicidad.", "exploreFlavors": "Explorar los sabores ↗", "backTop": "Volver arriba ↑", "allFlavors": "La colección", "photoAlt": "Fotografía original del producto Nuttime", "textureAlt": "Crema Nuttime y su textura con trocitos", "notFoundLabel": "404 · PÁGINA NO ENCONTRADA", "notFoundHeading": "Esta página no está aquí. Nuestros sabores, sí.", "notFoundBody": "Puede que la página se haya movido. Sigue explorando el mundo de Nuttime.", "scrollHint": "Desliza para descubrir", "collectionNote": "Cinco personalidades. Encuentra la tuya.",
+  "certificates": {
+    "eyebrow": "Normas de producción",
+    "heading": "Certificados",
+    "description": "Norma Mundial BRCGS de Seguridad Alimentaria, edición 9. Consulta el certificado en turco, inglés o alemán.",
+    "number": "N.º de certificado",
+    "issuer": "Organismo de certificación",
+    "validUntil": "Válido hasta",
+    "grade": "Calificación",
+    "preview": "Ampliar el certificado",
+    "open": "Abrir documento",
+    "download": "Descargar",
+    "close": "Cerrar",
+    "languages": {
+      "tr": "Turco",
+      "en": "Inglés",
+      "de": "Alemán"
+    }
+  }
+}

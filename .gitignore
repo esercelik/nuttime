@@ -1,27 +1,50 @@
-*.log
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
 /node_modules
-/public/build
-/public/fonts-manifest.dev.json
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-_ide_helper.php
-Homestead.json
-Homestead.yaml
-Thumbs.db
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.env*
+
+/backend/vendor
+/backend/node_modules
+/backend/public/storage
+/backend/public/build
+/backend/public/hot
+/backend/database/*.sqlite*
+/backend/.env*
+/backend/storage/app/public/*
+/backend/storage/framework/*
+/backend/storage/logs/*
+/backend/bootstrap/cache/*.php
+/backend/.phpunit.result.cache

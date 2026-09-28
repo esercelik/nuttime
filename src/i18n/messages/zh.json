@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Nuttime — 一勺幸福", "metaDescription": "探索 Nuttime 的五款颗粒酱，从开心果到椰子。了解风味与配料，找到你的心头好。", "navFlavors": "风味", "navInside": "配料", "navRitual": "享用时刻", "menu": "主菜单", "home": "Nuttime 首页", "skip": "跳至正文", "language": "语言", "heroEyebrow": "NUTTIME · 颗粒酱", "heroHeading": "一勺又一勺", "heroSubheading": "幸福原来如此美味。", "heroBody": "丰富颗粒，浓郁滋味，尽在 Nuttime。", "chooseFlavor": "找到你的风味 ↗", "beyond": "不止一罐美味", "secondHeading": "小小一罐。满满快乐。", "secondBody": "开心果、榛子、杏仁、花生和椰子。每罐都有独特个性，每勺都带来丰富的颗粒口感。", "carouselEyebrow": "五种风味 · 一个 NUTTIME", "carouselHeading": "总有你的心头好。", "weightTexture": "250 克 · 颗粒酱", "selectFlavor": "选择你的 Nuttime 风味", "previous": "上一款风味", "next": "下一款风味", "directSelection": "直接选择风味", "discoverProduct": "了解产品详情 ↗", "productNames": ["开心果酱", "榛子酱", "椰子酱", "杏仁酱", "花生酱"], "shortNames": ["开心果", "榛子", "椰子", "杏仁", "花生"], "ritual": "NUTTIME 享用时刻", "ritualHeadings": ["打开罐盖。", "舀上一勺。", "延续好滋味。"], "ritualBodies": ["Nuttime 椰子酱含 42% 椰子，带来椰子特有的风味。", "感受丰富的颗粒口感。配早餐、做甜点，或陪伴一天中的片刻休息。", "涂在吐司上，搭配薄饼，或加入喜欢的食谱。按你的方式享用。"], "dive": "沉浸美味", "breakLabel": "给自己片刻休息。", "editorialTitle": ["一勺。", "满满的", "幸福。"], "editorialBody": "有时，你只需要留一点时间给喜欢的味道。打开罐子，享受每一勺丰富的颗粒口感。", "discoverInside": "探索罐中的美味", "insideEyebrow": "罐子里有什么？", "insideHeading": "认识风味。了解配料。", "ingredients": "配料与过敏原", "crunchy": "颗粒口感", "productBody": "在早餐、甜点或喜爱的食谱中，发现 Nuttime 的美味。", "backFlavors": "返回风味选择 ↗", "ingredientTexts": ["**开心果**（42%）、甜菜糖、**全脂奶粉、乳清粉**、植物油（棉籽油）、乳化剂（葵花籽卵磷脂）。可能含有微量**花生、杏仁和榛子**。", "**椰子**（42%）、甜菜糖、**全脂奶粉、乳清粉、榛子、杏仁**、植物油（棉籽油）、乳化剂（葵花籽卵磷脂）。可能含有微量**花生和开心果**。"], "packaging": "包装信息", "packageLabels": ["净重", "毛重", "罐身直径", "罐身高度", "每箱数量"], "units": "12 罐", "footerTagline": "一勺幸福。", "exploreFlavors": "探索风味 ↗", "backTop": "返回顶部 ↑", "allFlavors": "风味系列", "photoAlt": "Nuttime 产品原始照片", "textureAlt": "Nuttime 酱及其颗粒质地", "notFoundLabel": "404 · 页面未找到", "notFoundHeading": "页面不在这里，美味还在。", "notFoundBody": "页面可能已移动。继续探索 Nuttime 的美味世界吧。", "scrollHint": "向下滑动，发现更多", "collectionNote": "五种个性，找到你的最爱。",
+  "certificates": {
+    "eyebrow": "生产标准",
+    "heading": "认证证书",
+    "description": "BRCGS 全球食品安全标准，第9版。查看土耳其语、英语或德语证书。",
+    "number": "证书编号",
+    "issuer": "认证机构",
+    "validUntil": "有效期至",
+    "grade": "等级",
+    "preview": "放大证书",
+    "open": "打开文件",
+    "download": "下载",
+    "close": "关闭",
+    "languages": {
+      "tr": "土耳其语",
+      "en": "英语",
+      "de": "德语"
+    }
+  }
+}

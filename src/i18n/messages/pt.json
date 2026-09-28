@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Nuttime — Uma colher de felicidade", "metaDescription": "Descubra cinco cremes Nuttime com pedaços, do pistácio ao coco. Explore os sabores, os ingredientes e encontre o seu favorito.", "navFlavors": "Sabores", "navInside": "Ingredientes", "navRitual": "O ritual", "menu": "Menu principal", "home": "Página inicial Nuttime", "skip": "Saltar para o conteúdo", "language": "Idioma", "heroEyebrow": "NUTTIME · CREMES COM PEDAÇOS", "heroHeading": "COLHER A COLHER", "heroSubheading": "A felicidade tem um sabor delicioso.", "heroBody": "Textura crocante. Sabor intenso. Puro Nuttime.", "chooseFlavor": "ENCONTRE O SEU SABOR ↗", "beyond": "PARA ALÉM DO FRASCO", "secondHeading": "FRASCO PEQUENO. GRANDE PRAZER.", "secondBody": "Pistácio, avelã, amêndoa, amendoim e coco. Um caráter diferente em cada frasco; uma textura com pedaços em cada colher.", "carouselEyebrow": "CINCO SABORES · UM SÓ NUTTIME", "carouselHeading": "O SEU FAVORITO ESPERA POR SI.", "weightTexture": "250 g · Creme com pedaços", "selectFlavor": "Escolha o seu sabor Nuttime", "previous": "Sabor anterior", "next": "Sabor seguinte", "directSelection": "Escolher diretamente um sabor", "discoverProduct": "Descobrir o produto ↗", "productNames": ["Creme de pistácio", "Creme de avelã", "Creme de coco", "Creme de amêndoa", "Creme de amendoim"], "shortNames": ["Pistácio", "Avelã", "Coco", "Amêndoa", "Amendoim"], "ritual": "O RITUAL NUTTIME", "ritualHeadings": ["ABRA O FRASCO.", "SIRVA UMA COLHER.", "PROLONGUE O PRAZER."], "ritualBodies": ["O sabor inconfundível do coco num creme Nuttime com 42% de coco.", "Descubra a textura com pedaços. Ao pequeno-almoço, nas sobremesas ou numa pequena pausa do dia.", "Barre numa torrada, junte às panquecas ou use na sua receita favorita. Saboreie à sua maneira."], "dive": "MERGULHE NO SABOR", "breakLabel": "FAÇA UMA PEQUENA PAUSA.", "editorialTitle": ["Uma colher.", "Tanta", "felicidade."], "editorialBody": "Às vezes, basta dedicar algum tempo a um sabor de que gosta. Abra o frasco e desfrute de cada colher com pedaços.", "discoverInside": "Descubra o que está lá dentro", "insideEyebrow": "O QUE ESTÁ DENTRO DO FRASCO?", "insideHeading": "CONHEÇA O SABOR. EXPLORE OS INGREDIENTES.", "ingredients": "Ingredientes e alergénios", "crunchy": "COM PEDAÇOS", "productBody": "Descubra Nuttime ao pequeno-almoço, nas sobremesas ou na sua receita favorita.", "backFlavors": "Voltar aos sabores ↗", "ingredientTexts": ["**Pistácios** (42%), açúcar de beterraba, **leite gordo em pó, soro de leite em pó**, óleo vegetal (algodão), emulsionante (lecitina de girassol). Pode conter vestígios de **amendoins, amêndoas e avelãs**.", "**Coco** (42%), açúcar de beterraba, **leite gordo em pó, soro de leite em pó, avelãs, amêndoas**, óleo vegetal (algodão), emulsionante (lecitina de girassol). Pode conter vestígios de **amendoins e pistácios**."], "packaging": "Informações da embalagem", "packageLabels": ["Peso líquido", "Peso bruto", "Diâmetro do frasco", "Altura do frasco", "Frascos por caixa"], "units": "12 frascos", "footerTagline": "Uma colher de felicidade.", "exploreFlavors": "Explorar os sabores ↗", "backTop": "Voltar ao topo ↑", "allFlavors": "A coleção", "photoAlt": "Fotografia original do produto Nuttime", "textureAlt": "Creme Nuttime e a sua textura com pedaços", "notFoundLabel": "404 · PÁGINA NÃO ENCONTRADA", "notFoundHeading": "Esta página não está aqui. Os nossos sabores estão.", "notFoundBody": "A página pode ter sido movida. Continue a explorar o mundo Nuttime.", "scrollHint": "Deslize para descobrir", "collectionNote": "Cinco personalidades. Encontre a sua.",
+  "certificates": {
+    "eyebrow": "Normas de produção",
+    "heading": "Certificados",
+    "description": "Norma Global BRCGS de Segurança Alimentar, versão 9. Consulte o certificado em turco, inglês ou alemão.",
+    "number": "N.º do certificado",
+    "issuer": "Organismo de certificação",
+    "validUntil": "Válido até",
+    "grade": "Classificação",
+    "preview": "Ampliar certificado",
+    "open": "Abrir documento",
+    "download": "Transferir",
+    "close": "Fechar",
+    "languages": {
+      "tr": "Turco",
+      "en": "Inglês",
+      "de": "Alemão"
+    }
+  }
+}
