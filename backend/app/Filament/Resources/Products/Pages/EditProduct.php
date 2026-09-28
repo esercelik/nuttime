@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Products\Pages;
 
 use App\Filament\Resources\Products\ProductResource;
-use App\Support\LocalizedUrl;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
@@ -20,9 +19,14 @@ class EditProduct extends EditRecord
             Action::make('preview')
                 ->label('Sitede önizle')
                 ->icon('heroicon-o-arrow-top-right-on-square')
-                ->url(fn (): string => app(LocalizedUrl::class)->route('product', config('nuttime.default_locale'), [
-                    'slug' => $this->record->translationFor(config('nuttime.default_locale'))?->slug ?: $this->record->slug,
-                ]), shouldOpenInNewTab: true),
+                ->url(fn (): string => rtrim(config('app.url'), '/').'/'.match ($this->record->slug) {
+                    'antep-fistikli-kremasi' => '#urun-antep-fistigi',
+                    'findik-kremasi' => '#urun-findik',
+                    'hindistan-cevizi-ezmesi' => '#urun-hindistan-cevizi',
+                    'badem-ezmesi' => '#urun-badem',
+                    'yer-fistigi-ezmesi' => '#urun-yer-fistigi',
+                    default => '#lezzetler',
+                }, shouldOpenInNewTab: true),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),

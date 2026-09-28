@@ -43,8 +43,5 @@ next-env.d.ts
 /backend/public/hot
 /backend/database/*.sqlite*
 /backend/.env*
-/backend/storage/app/public/*
-/backend/storage/framework/*
-/backend/storage/logs/*
 /backend/bootstrap/cache/*.php
 /backend/.phpunit.result.cache
