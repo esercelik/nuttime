@@ -138,7 +138,7 @@ final class SiteController extends Controller
 
         return view('pages.static', [
             'page' => $page,
-            'certificates' => $page === 'certificates' ? $this->certificates() : [],
+            'certificates' => $page === 'certificates' ? $this->certificates(true) : [],
             'seo' => $this->seo($key, $this->localizedUrl->route($page), $settings),
         ]);
     }
@@ -255,13 +255,13 @@ final class SiteController extends Controller
     }
 
     /** @return array<int, array<string, mixed>> */
-    private function certificates(): array
+    private function certificates(bool $includeExpired = false): array
     {
         if (! Schema::hasTable('certificates')) {
             return [];
         }
 
-        return Certificate::query()->with('translations')->active()->orderBy('sort_order')->get()->map(function (Certificate $certificate): array {
+        return Certificate::query()->with('translations')->active()->orderBy('sort_order')->get()->filter(fn (Certificate $certificate): bool => $includeExpired || ! ($certificate->expires_at?->lt(today()) ?? false))->map(function (Certificate $certificate): array {
             $translation = $certificate->translationFor(app()->getLocale());
             $image = $translation?->image ?: $certificate->image;
 
@@ -270,6 +270,7 @@ final class SiteController extends Controller
                 'description' => $translation?->description ?: $certificate->description,
                 'image' => $image ? asset('storage/'.$image) : null,
                 'document' => $certificate->document_file ? asset('storage/'.$certificate->document_file) : $certificate->document_url,
+                'is_expired' => $certificate->expires_at?->lt(today()) ?? false,
             ];
         })->all();
     }

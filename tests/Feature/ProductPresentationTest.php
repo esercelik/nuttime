@@ -40,6 +40,17 @@ final class ProductPresentationTest extends TestCase
             ->assertSee('600 kcal');
     }
 
+    public function test_existing_imported_nutrition_values_render_in_the_correct_unit_order_without_a_duplicate_trans_fat_claim(): void
+    {
+        $product = Product::factory()->create([
+            'nutrition_facts' => ['energy' => '544 / 2277', 'saturated_fat' => '5,15', 'trans_fat' => '5,15'],
+        ]);
+
+        $this->get(route('site.fr.product', ['slug' => $product->slug]))
+            ->assertSee('2277 / 544')
+            ->assertDontSee('Acides gras trans');
+    }
+
     public function test_peanut_butter_fallback_renders_the_structured_source_data(): void
     {
         app(InitialCatalogImporter::class)->import();
@@ -48,7 +59,7 @@ final class ProductPresentationTest extends TestCase
             ->assertOk()
             ->assertSee('Cacahuètes (52 %), sucre de betterave')
             ->assertSee('Informations allergènes')
-            ->assertSee('556 / 2337')
+            ->assertSee('2337 / 556')
             ->assertSee('Pot')
             ->assertSee('Palette de cartons')
             ->assertSee('Seau industriel / Europalette')
@@ -70,7 +81,7 @@ final class ProductPresentationTest extends TestCase
             ->assertOk()
             ->assertSee('Pistaches (42 %), sucre de betterave')
             ->assertSee('Informations allergènes')
-            ->assertSee('560 / 2344')
+            ->assertSee('2344 / 560')
             ->assertSee('Pot')
             ->assertSee('Carton')
             ->assertSee('Palette de cartons')
@@ -99,10 +110,10 @@ final class ProductPresentationTest extends TestCase
         app(InitialCatalogImporter::class)->import();
 
         $products = [
-            ['slug' => 'pate-de-noisettes', 'ingredients' => 'Noisettes (45 %), sucre de betterave', 'energy' => '544 / 2277'],
-            ['slug' => 'pate-d-amandes', 'ingredients' => 'Amandes (45 %), sucre de betterave', 'energy' => '561 / 2348'],
-            ['slug' => 'beurre-de-cacahuete-sans-sucre-ajoute', 'ingredients' => 'Cacahuètes (72 %), lait entier en poudre', 'energy' => '570 / 2306'],
-            ['slug' => 'creme-de-coco', 'ingredients' => 'Noix de coco (42 %), sucre de betterave', 'energy' => '567 / 2773'],
+            ['slug' => 'pate-de-noisettes', 'ingredients' => 'Noisettes (45 %), sucre de betterave', 'energy' => '2277 / 544'],
+            ['slug' => 'pate-d-amandes', 'ingredients' => 'Amandes (45 %), sucre de betterave', 'energy' => '2348 / 561'],
+            ['slug' => 'beurre-de-cacahuete-sans-sucre-ajoute', 'ingredients' => 'Cacahuètes (72 %), lait entier en poudre', 'energy' => '2306 / 570'],
+            ['slug' => 'creme-de-coco', 'ingredients' => 'Noix de coco (42 %), sucre de betterave', 'energy' => '2773 / 567'],
         ];
 
         foreach ($products as $product) {

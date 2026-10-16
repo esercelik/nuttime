@@ -101,7 +101,21 @@
             <a class="footer-email" href="mailto:{{ $settings['email'] ?? 'hello@nuttime.com.tr' }}">{{ $settings['email'] ?? 'hello@nuttime.com.tr' }} <span>↗</span></a>
         </div>
         <div class="container site-footer__links">
-            <div><small>{{ __('site.footer.explore') }}</small>@if(count($managedFooterNavigation))@foreach($managedFooterNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach @else<a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a><a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>@endif</div>
+            <div>
+                <small>{{ __('site.footer.explore') }}</small>
+                @if(count($managedFooterNavigation))
+                    @foreach($managedFooterNavigation as $item)<x-managed-menu-item :item="$item" />@endforeach
+                @else
+                    <a href="{{ $localizedRoute('products') }}">{{ __('site.nav.products') }}</a>
+                    <a href="{{ $localizedRoute('about') }}">{{ __('site.nav.about') }}</a>
+                @endif
+                @if(!collect($managedFooterNavigation)->contains('url', $localizedRoute('contents')))
+                    <a href="{{ $localizedRoute('contents') }}">{{ __('site.nav.contents') }}</a>
+                @endif
+                @if(!collect($managedFooterNavigation)->contains('url', $localizedRoute('certificates')))
+                    <a href="{{ $localizedRoute('certificates') }}/">{{ __('site.nav.certificates') }}</a>
+                @endif
+            </div>
             <div><small>{{ __('site.footer.contact') }}</small>@if(filled($settings['phone'] ?? null))<a href="tel:{{ preg_replace('/[^+0-9]/', '', $settings['phone']) }}">{{ $settings['phone'] }}</a>@endif<a href="{{ $localizedRoute('contact') }}">{{ __('site.footer.reach_us') }}</a></div>
             <div><small>{{ __('site.footer.social') }}</small><div class="social-links"><a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>@if(!empty($settings['facebook']))<a href="{{ $settings['facebook'] }}" target="_blank" rel="noopener noreferrer">Facebook ↗</a>@endif @if(!empty($settings['youtube']))<a href="{{ $settings['youtube'] }}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>@endif</div></div>
         </div>

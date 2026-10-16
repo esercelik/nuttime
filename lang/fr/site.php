@@ -3,6 +3,8 @@
 $site = require __DIR__.'/../en/site.php';
 
 $site = array_replace_recursive($site, [
+    'certificate_archive' => ['all' => 'Tous les certificats', 'archived' => 'ARCHIVÉ / EXPIRÉ', 'copy' => 'Consultez les certificats en cours de validité et les documents archivés clairement signalés.'],
+    'contact_data' => ['link' => 'Utilisation de vos données', 'title' => 'Vos coordonnées', 'copy' => 'Votre nom, votre adresse e-mail et votre message sont enregistrés avec votre demande afin que notre équipe puisse l’examiner. Pour toute question sur ces informations, écrivez-nous.'],
     'actions' => ['skip_to_content' => 'Aller au contenu'],
     'meta' => ['contents' => ['title' => 'Articles Nuttime', 'description' => 'Recettes, actualités et histoires de l’univers Nuttime.']],
     'hero' => [

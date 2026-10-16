@@ -27,6 +27,12 @@ final class CertificateLocalizationTest extends TestCase
             ['locale' => 'de', 'name' => 'Deutsches Zertifikat', 'description' => 'Deutsche Beschreibung', 'image' => 'media/certificates/de.jpg'],
         ]);
 
+        Certificate::query()->create([
+            'name' => 'Archived certificate',
+            'expires_at' => today()->subDay(),
+            'is_active' => true,
+        ]);
+
         $product = Product::factory()->create();
 
         $this->get(route('site.de.product', ['slug' => $product->slug]))
@@ -34,15 +40,16 @@ final class CertificateLocalizationTest extends TestCase
             ->assertSee('Deutsches Zertifikat')
             ->assertSee('Deutsche Beschreibung')
             ->assertSee('/storage/media/certificates/de.jpg', false)
+            ->assertDontSee('Archived certificate')
             ->assertDontSee('Default certificate');
 
-        $this->get(route('site.de.home'))->assertOk()->assertDontSee('Deutsches Zertifikat')->assertDontSee('href="'.route('site.de.certificates').'"', false);
+        $this->get(route('site.de.home'))->assertOk()->assertDontSee('Deutsches Zertifikat')->assertSee('href="'.route('site.de.certificates').'/"', false);
         $this->get(route('site.de.products'))->assertOk()->assertDontSee('Deutsches Zertifikat');
-        $this->get(route('site.de.certificates'))->assertRedirectToRoute('site.de.products');
-        $this->get(route('sitemap'))->assertOk()->assertDontSee(route('site.de.certificates'));
+        $this->get(route('site.de.certificates'))->assertOk()->assertSee('Deutsches Zertifikat')->assertSee('Archived certificate')->assertSee('ARCHIVIERT / ABGELAUFEN');
+        $this->get(route('sitemap'))->assertOk()->assertSee(route('site.de.certificates'));
     }
 
-    public function test_managed_home_sections_and_nested_menus_do_not_expose_certificates(): void
+    public function test_managed_home_sections_remain_hidden_while_nested_certificate_links_are_available(): void
     {
         $section = PageSection::query()->create(['page_key' => 'home', 'key' => 'certificates', 'type' => 'certificates', 'status' => 'published', 'is_active' => true]);
         $section->translations()->create(['locale' => 'fr', 'title' => 'Managed certificate section']);
@@ -57,6 +64,6 @@ final class CertificateLocalizationTest extends TestCase
         $this->get(route('site.fr.home'))->assertOk()
             ->assertSee('Product navigation')
             ->assertDontSee('Managed certificate section')
-            ->assertDontSee('Managed certificate link');
+            ->assertSee('Managed certificate link');
     }
 }

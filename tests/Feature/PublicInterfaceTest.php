@@ -16,7 +16,7 @@ final class PublicInterfaceTest extends TestCase
     public function test_public_page_types_render_in_every_supported_language(): void
     {
         foreach (array_keys(config('nuttime.locales')) as $locale) {
-            foreach (['home', 'products', 'about', 'contact', 'contents'] as $page) {
+            foreach (['home', 'products', 'about', 'certificates', 'contact', 'contents'] as $page) {
                 $this->get(route('site.'.$locale.'.'.$page))->assertOk()
                     ->assertSee('id="main-content"', false)
                     ->assertDontSee('href="tel:"', false)
@@ -74,6 +74,23 @@ final class PublicInterfaceTest extends TestCase
         Content::query()->create(['title' => 'Test story', 'slug' => 'test-story', 'body' => 'Story body', 'status' => 'published', 'published_at' => now()]);
         $this->get(route('site.fr.contents'))->assertOk()->assertSee('Test story')->assertDontSee('class="catalog-card__media"', false);
         $this->get(route('site.fr.content', ['slug' => 'test-story']))->assertOk()->assertSee('Story body');
+    }
+
+    public function test_empty_stories_page_shows_the_existing_brand_story(): void
+    {
+        $this->get(route('site.fr.contents'))
+            ->assertSee('Une petite entreprise familiale.')
+            ->assertSee('href="'.route('site.fr.about').'"', false)
+            ->assertDontSee('Notre sélection arrivera bientôt.');
+    }
+
+    public function test_contact_form_links_to_the_data_use_notice_in_each_language(): void
+    {
+        foreach (array_keys(config('nuttime.locales')) as $locale) {
+            $this->get(route('site.'.$locale.'.contact'))
+                ->assertSee('href="#contact-data-notice"', false)
+                ->assertSee('id="contact-data-notice"', false);
+        }
     }
 
     public function test_french_content_uses_its_primary_text_even_when_english_translation_exists(): void

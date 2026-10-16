@@ -3,6 +3,8 @@
 $site = require __DIR__.'/../tr/site.php';
 
 return array_replace_recursive($site, [
+    'certificate_archive' => ['all' => 'All certificates', 'archived' => 'ARCHIVED / EXPIRED', 'copy' => 'View current quality certificates and clearly marked archived documents.'],
+    'contact_data' => ['link' => 'How we use your details', 'title' => 'Your contact details', 'copy' => 'Your name, email address and message are stored with your enquiry so our team can review it. For questions about this information, email us.'],
     'ui' => ['previous' => 'Previous slide', 'next' => 'Next slide', 'show_slide' => 'Show :name slide'],
     'language' => ['label' => 'Language', 'choose' => 'Choose language'],
     'nav' => ['home' => 'Home', 'products' => 'Products', 'categories' => 'Categories', 'about' => 'About us', 'certificates' => 'Certificates', 'contact' => 'Contact', 'contents' => 'Stories'],

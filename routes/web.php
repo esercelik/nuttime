@@ -14,13 +14,13 @@ Route::post('/locale', LocalePreferenceController::class)->name('locale.preferen
 foreach (config('nuttime.locales') as $locale => $configuration) {
     $paths = $configuration['paths'];
 
-    Route::prefix($locale)->middleware('locale:'.$locale)->name('site.'.$locale.'.')->group(function () use ($paths, $locale): void {
+    Route::prefix($locale)->middleware('locale:'.$locale)->name('site.'.$locale.'.')->group(function () use ($paths): void {
         Route::get('/', [SiteController::class, 'home'])->name('home');
         Route::get($paths['products'], [SiteController::class, 'products'])->name('products');
         Route::get($paths['product'], [SiteController::class, 'product'])->name('product');
         Route::get($paths['category'], [SiteController::class, 'category'])->name('category');
         Route::get($paths['about'], fn () => app(SiteController::class)->page('about'))->name('about');
-        Route::redirect($paths['certificates'], '/'.$locale.'/'.$paths['products'], 301)->name('certificates');
+        Route::get($paths['certificates'], fn () => app(SiteController::class)->page('certificates'))->name('certificates');
         Route::get($paths['contact'], [SiteController::class, 'contact'])->name('contact');
         Route::post($paths['contact'], [SiteController::class, 'storeContact'])->middleware('throttle:contact')->name('contact.store');
         Route::get($paths['contents'], [ContentController::class, 'index'])->name('contents');
@@ -30,7 +30,7 @@ foreach (config('nuttime.locales') as $locale => $configuration) {
 
 Route::redirect('/urunlerimiz', '/fr/produits', 301);
 Route::redirect('/hakkimizda', '/fr/a-propos', 301);
-Route::redirect('/sertifikalarimiz', '/fr/produits', 301);
+Route::redirect('/sertifikalarimiz', '/fr/certificats/', 301);
 Route::redirect('/iletisim', '/fr/contact', 301);
 Route::get('/robots.txt', RobotsController::class)->name('robots');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');

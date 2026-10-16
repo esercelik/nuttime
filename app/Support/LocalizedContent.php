@@ -15,6 +15,16 @@ final class LocalizedContent
         $locale ??= app()->getLocale();
         $translation = $product->translationFor($locale);
         $category = $product->category?->translationFor($locale);
+        $nutritionFacts = $product->nutrition_facts ?? [];
+        $energy = $nutritionFacts['energy'] ?? null;
+
+        if (is_string($energy) && preg_match('/^\s*([0-9]+(?:[.,][0-9]+)?)\s*\/\s*([0-9]+(?:[.,][0-9]+)?)\s*$/', $energy, $matches) === 1 && (float) str_replace(',', '.', $matches[1]) < (float) str_replace(',', '.', $matches[2])) {
+            $nutritionFacts['energy'] = $matches[2].' / '.$matches[1];
+        }
+
+        if (isset($nutritionFacts['trans_fat'], $nutritionFacts['saturated_fat']) && $nutritionFacts['trans_fat'] === $nutritionFacts['saturated_fat']) {
+            unset($nutritionFacts['trans_fat']);
+        }
 
         return [
             'id' => $product->id,
@@ -38,7 +48,7 @@ final class LocalizedContent
             'feature_tags' => $product->feature_tags ?? [],
             'ingredients' => $translation?->ingredients,
             'allergen_information' => $translation?->allergen_information,
-            'nutrition_facts' => $product->nutrition_facts ?? [],
+            'nutrition_facts' => $nutritionFacts,
             'packaging_details' => $product->packaging_details ?? [],
             'featured' => $product->is_featured,
             'accent' => '#d7b66c',

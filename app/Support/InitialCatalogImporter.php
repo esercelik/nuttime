@@ -55,12 +55,12 @@ final class InitialCatalogImporter
     private function products(): array
     {
         return [
-            $this->product('findik-kremasi', 45, 'hazelnut', ['544 / 2277', '33,4', '5,15', '5,15', '46,8', '46', '5,05', '11,6', '0,122']),
-            $this->product('antep-fistikli-kremasi', 42, 'pistachio', ['560 / 2344', '37', '7,85', '7,85', '40', '39,3', '5,48', '14,1', '0,065']),
-            $this->product('badem-ezmesi', 45, 'almond', ['561 / 2348', '38,2', '6,56', '6,56', '36', '34,5', '7,45', '14,5', '0,112']),
-            $this->product('yer-fistigi-ezmesi', 52, 'peanut', ['556 / 2337', '36', '8,39', '8,39', '39,3', '34,6', '5,16', '16,2', '0,077']),
-            $this->product('seker-ilavesiz-yer-fistigi-ezmesi', 72, 'peanut', ['570 / 2306', '37,7', '8,21', '8,21', '29,5', '17,3', '7,69', '22,9', '0,101']),
-            $this->product('hindistan-cevizi-ezmesi', 42, 'coconut', ['567 / 2773', '38,8', '28,6', '28,6', '43,6', '39,3', '6,82', '7,43', '0,094']),
+            $this->product('findik-kremasi', 45, 'hazelnut', ['2277 / 544', '33,4', '5,15', '46,8', '46', '5,05', '11,6', '0,122']),
+            $this->product('antep-fistikli-kremasi', 42, 'pistachio', ['2344 / 560', '37', '7,85', '40', '39,3', '5,48', '14,1', '0,065']),
+            $this->product('badem-ezmesi', 45, 'almond', ['2348 / 561', '38,2', '6,56', '36', '34,5', '7,45', '14,5', '0,112']),
+            $this->product('yer-fistigi-ezmesi', 52, 'peanut', ['2337 / 556', '36', '8,39', '39,3', '34,6', '5,16', '16,2', '0,077']),
+            $this->product('seker-ilavesiz-yer-fistigi-ezmesi', 72, 'peanut', ['2306 / 570', '37,7', '8,21', '29,5', '17,3', '7,69', '22,9', '0,101']),
+            $this->product('hindistan-cevizi-ezmesi', 42, 'coconut', ['2773 / 567', '38,8', '28,6', '43,6', '39,3', '6,82', '7,43', '0,094']),
         ];
     }
 
@@ -92,7 +92,7 @@ final class InitialCatalogImporter
             'slug' => $key,
             'percentage' => $percentage,
             'images' => $images,
-            'nutrition_facts' => array_combine(['energy', 'fat', 'saturated_fat', 'trans_fat', 'carbohydrates', 'sugar', 'fibre', 'protein', 'salt'], $nutritionValues),
+            'nutrition_facts' => array_combine(['energy', 'fat', 'saturated_fat', 'carbohydrates', 'sugar', 'fibre', 'protein', 'salt'], $nutritionValues),
             'translations' => collect(array_keys(config('nuttime.locales')))->mapWithKeys(fn (string $locale): array => [$locale => [
                 'name' => $names[$key][$locale],
                 'slug' => $slugs[$key][$locale],

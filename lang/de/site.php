@@ -3,6 +3,8 @@
 $site = require __DIR__.'/../tr/site.php';
 
 return array_replace_recursive($site, [
+    'certificate_archive' => ['all' => 'Alle Zertifikate', 'archived' => 'ARCHIVIERT / ABGELAUFEN', 'copy' => 'Aktuelle Qualitätszertifikate und klar gekennzeichnete archivierte Dokumente ansehen.'],
+    'contact_data' => ['link' => 'Verwendung Ihrer Angaben', 'title' => 'Ihre Kontaktdaten', 'copy' => 'Ihr Name, Ihre E-Mail-Adresse und Ihre Nachricht werden mit Ihrer Anfrage gespeichert, damit unser Team sie prüfen kann. Bei Fragen zu diesen Angaben schreiben Sie uns eine E-Mail.'],
     'ui' => ['previous' => 'Vorherige Folie', 'next' => 'Nächste Folie', 'show_slide' => 'Folie :name anzeigen'],
     'language' => ['label' => 'Sprache', 'choose' => 'Sprache wählen'],
     'nav' => ['home' => 'Startseite', 'products' => 'Produkte', 'categories' => 'Kategorien', 'about' => 'Über uns', 'certificates' => 'Zertifikate', 'contact' => 'Kontakt', 'contents' => 'Geschichten'],

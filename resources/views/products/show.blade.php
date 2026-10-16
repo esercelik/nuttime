@@ -98,6 +98,7 @@
             <header class="product-certificates__header">
                 <p class="kicker">{{ __('site.home.quality_kicker') }}</p>
                 <h2>{{ __('site.nav.certificates') }}</h2>
+                <a class="arrow-link" href="{{ app(\App\Support\LocalizedUrl::class)->route('certificates') }}/">{{ __('site.certificate_archive.all') }} <span>↗</span></a>
             </header>
             <div class="product-certificates__grid">
                 @foreach($certificates as $certificate)
