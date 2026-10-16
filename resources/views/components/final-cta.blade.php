@@ -4,7 +4,7 @@
     @if(filled($section['desktop_image'] ?? null))
         <img src="{{ $section['desktop_image'] }}" alt="{{ strip_tags($section['title'] ?? '') }}" width="1900" height="500" loading="lazy" decoding="async">
     @else
-    <x-optimized-image src="images/nuttime/spread-banner.jpg" alt="Kaşıkta Nuttime yer fıstığı ezmesi" width="1900" height="500" sizes="100vw" />
+        <x-optimized-image src="images/nuttime/spread-banner.jpg" alt="{{ __('site.final_cta.image_alt') }}" width="1900" height="500" sizes="100vw" />
     @endif
     <div class="closing-cta__shade"></div>
     <div class="container closing-cta__inner">

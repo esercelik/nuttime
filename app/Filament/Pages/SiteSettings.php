@@ -35,13 +35,15 @@ class SiteSettings extends Page
     {
         Gate::authorize('view', SiteSetting::current());
         $this->data = SiteSetting::current()->toArray();
-        $this->data['active_locales'] ??= array_keys(config('nuttime.locales'));
-        $this->data['default_locale'] ??= config('nuttime.default_locale');
+        $this->data['active_locales'] = array_keys(config('nuttime.locales'));
+        $this->data['default_locale'] = config('nuttime.default_locale');
     }
 
     public function save(): void
     {
         Gate::authorize('update', SiteSetting::current());
+        $this->data['active_locales'] = array_keys(config('nuttime.locales'));
+        $this->data['default_locale'] = config('nuttime.default_locale');
         $this->validate([
             'data.site_name' => ['required', 'string', 'max:120'],
             'data.email' => ['nullable', 'email', 'max:160'],

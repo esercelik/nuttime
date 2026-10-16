@@ -28,9 +28,9 @@ foreach (config('nuttime.locales') as $locale => $configuration) {
     });
 }
 
-Route::redirect('/urunlerimiz', '/tr/urunler', 301);
-Route::redirect('/hakkimizda', '/tr/hakkimizda', 301);
-Route::redirect('/sertifikalarimiz', '/tr/sertifikalar', 301);
-Route::redirect('/iletisim', '/tr/iletisim', 301);
+Route::redirect('/urunlerimiz', '/fr/produits', 301);
+Route::redirect('/hakkimizda', '/fr/a-propos', 301);
+Route::redirect('/sertifikalarimiz', '/fr/produits', 301);
+Route::redirect('/iletisim', '/fr/contact', 301);
 Route::get('/robots.txt', RobotsController::class)->name('robots');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');

@@ -16,10 +16,10 @@ final class HomeHeroTest extends TestCase
     {
         app(InitialCatalogImporter::class)->import();
 
-        $response = $this->get(route('site.tr.home'));
+        $response = $this->get(route('site.fr.home'));
 
-        $response->assertSee('FINDIĞIN KAVRULMUŞ ZENGİNLİĞİ')
-            ->assertSee('Ürünü incele')
+        $response->assertSee('LA RICHESSE DES NOISETTES GRILLÉES')
+            ->assertSee('Voir le produit')
             ->assertSee('data-product-hero-background', false)
             ->assertSee('data-product-hero-jar', false)
             ->assertSee('data-autoplay="6500"', false)
@@ -30,10 +30,10 @@ final class HomeHeroTest extends TestCase
             ->assertSee('id="home-banners"', false)
             ->assertSee('/images/nuttime/spylt/nuttime-hindistan-cevizi-hero-background.png', false)
             ->assertSee('/images/nuttime/spylt/nuttime-antep-ingredient-elements-transparent.png', false)
-            ->assertSee(route('site.tr.product', ['slug' => 'antep-fistikli-kremasi']), false)
-            ->assertSee(route('site.tr.product', ['slug' => 'findik-kremasi']), false)
-            ->assertSee(route('site.tr.product', ['slug' => 'yer-fistigi-ezmesi']), false)
-            ->assertSee(route('site.tr.products'), false);
+            ->assertSee(route('site.fr.product', ['slug' => 'pate-de-pistache']), false)
+            ->assertSee(route('site.fr.product', ['slug' => 'pate-de-noisettes']), false)
+            ->assertSee(route('site.fr.product', ['slug' => 'beurre-de-cacahuete']), false)
+            ->assertSee(route('site.fr.products'), false);
     }
 
     public function test_product_slider_keeps_localized_product_links(): void

@@ -13,10 +13,11 @@ final class SeoInfrastructureTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('<link rel="canonical" href="'.route('site.de.products').'">', false)
-            ->assertSee('<link rel="alternate" hreflang="tr" href="'.route('site.tr.products').'">', false)
+            ->assertSee('<link rel="alternate" hreflang="fr" href="'.route('site.fr.products').'">', false)
             ->assertSee('<link rel="alternate" hreflang="en" href="'.route('site.en.products').'">', false)
             ->assertSee('<link rel="alternate" hreflang="de" href="'.route('site.de.products').'">', false)
-            ->assertSee('<link rel="alternate" hreflang="x-default" href="'.route('site.tr.products').'">', false)
+            ->assertSee('<link rel="alternate" hreflang="x-default" href="'.route('site.fr.products').'">', false)
+            ->assertDontSee('hreflang="tr"', false)
             ->assertSee('<meta property="og:locale" content="de_DE">', false);
     }
 
@@ -27,7 +28,7 @@ final class SeoInfrastructureTest extends TestCase
         $response
             ->assertOk()
             ->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
-            ->assertSee(route('site.tr.home'), false)
+            ->assertSee(route('site.fr.home'), false)
             ->assertSee(route('site.en.home'), false)
             ->assertSee(route('site.de.home'), false);
     }

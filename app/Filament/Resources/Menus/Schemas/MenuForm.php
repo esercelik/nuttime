@@ -10,6 +10,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class MenuForm
 {
@@ -32,8 +33,8 @@ class MenuForm
                         TextInput::make('url')->label('Harici URL')->url()->maxLength(2048)->visible(fn ($get): bool => $get('link_type') === 'external'),
                         Toggle::make('open_in_new_tab')->label('Yeni sekmede aç'),
                         Toggle::make('is_active')->label('Aktif')->default(true),
-                        Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
-                            Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                        Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                            Select::make('locale')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                             TextInput::make('label')->label('Menü metni')->required(),
                         ])->columns(2),
                         Repeater::make('children')->relationship()->orderColumn('sort_order')->reorderableWithButtons()->collapsed()->schema([
@@ -42,8 +43,8 @@ class MenuForm
                             TextInput::make('url')->label('Harici URL')->url()->maxLength(2048)->visible(fn ($get): bool => $get('link_type') === 'external'),
                             Toggle::make('open_in_new_tab')->label('Yeni sekmede aç'),
                             Toggle::make('is_active')->label('Aktif')->default(true),
-                            Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
-                                Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                            Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                                Select::make('locale')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                                 TextInput::make('label')->label('Menü metni')->required(),
                             ])->columns(2),
                         ])->columns(2),

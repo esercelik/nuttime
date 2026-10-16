@@ -17,7 +17,7 @@
     <meta property="og:description" content="{{ $seo['description'] ?? '' }}">
     <meta property="og:url" content="{{ $seo['canonical'] ?? url()->current() }}">
     <meta property="og:type" content="{{ $seo['type'] ?? 'website' }}">
-    <meta property="og:locale" content="{{ $seo['locale'] ?? 'tr_TR' }}">
+    <meta property="og:locale" content="{{ $seo['locale'] ?? 'fr_FR' }}">
     <meta property="og:site_name" content="{{ $settings['site_name'] ?? 'Nuttime' }}">
     @if(!empty($seo['image']))<meta property="og:image" content="{{ $seo['image'] }}">@endif
     <meta name="twitter:card" content="summary_large_image">

@@ -20,9 +20,9 @@ final class InitialCatalogImporter
                 $product = Product::query()->firstOrCreate(
                     ['slug' => $definition['slug']],
                     [
-                        'name' => $definition['translations']['tr']['name'],
-                        'short_description' => $definition['translations']['tr']['short_description'],
-                        'description' => $definition['translations']['tr']['description'],
+                        'name' => $definition['translations'][config('nuttime.default_locale')]['name'],
+                        'short_description' => $definition['translations'][config('nuttime.default_locale')]['short_description'],
+                        'description' => $definition['translations'][config('nuttime.default_locale')]['description'],
                         'main_image' => $definition['images'][0] ?? null,
                         'additional_images' => array_slice($definition['images'], 1),
                         'nutrition_facts' => $definition['nutrition_facts'],

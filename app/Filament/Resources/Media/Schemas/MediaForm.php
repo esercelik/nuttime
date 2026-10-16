@@ -20,7 +20,7 @@ class MediaForm
                     FileUpload::make('path')->label('Dosya')->required()->disk('public')->directory('media')->storeFileNamesIn('original_name')->getUploadedFileNameForStorageUsing(fn (TemporaryUploadedFile $file): string => Str::uuid().'.'.$file->extension())->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'application/pdf', 'video/mp4'])->maxSize(10240)->helperText('Dosya adı güvenli biçimde üretilir; PNG şeffaflığı dönüştürülmeden korunur.'),
                     TextInput::make('folder')->label('Klasör')->maxLength(120),
                     TextInput::make('title')->label('Başlık')->maxLength(160),
-                    KeyValue::make('alt_texts')->label('Alt metinler')->helperText('tr, en ve de anahtarlarıyla erişilebilir alt metin girin.'),
+                    KeyValue::make('alt_texts')->label('Alt metinler')->helperText('fr, de ve en anahtarlarıyla erişilebilir alt metin girin.'),
                 ])->columns(2),
             ]);
     }

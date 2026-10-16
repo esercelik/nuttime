@@ -13,6 +13,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class SliderForm
 {
@@ -49,8 +50,8 @@ class SliderForm
                         TextInput::make('accent_color')->regex('/^#[0-9A-Fa-f]{6}$/')->placeholder('#EED17F'),
                         DateTimePicker::make('published_from')->label('Yayın başlangıcı'),
                         DateTimePicker::make('published_until')->label('Yayın bitişi')->after('published_from'),
-                        Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
-                            Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                        Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                            Select::make('locale')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                             TextInput::make('eyebrow')->label('Üst etiket'),
                             TextInput::make('title')->label('Başlık')->required(),
                             Textarea::make('description')->label('Açıklama')->rows(3),

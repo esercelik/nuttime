@@ -29,7 +29,7 @@ class ContactMessagesTable
                 TextColumn::make('created_at')->label('Tarih')->dateTime()->sortable(),
             ])
             ->filters([
-                SelectFilter::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch']),
+                SelectFilter::make('locale')->options(['fr' => 'Français', 'de' => 'Deutsch', 'en' => 'English', 'tr' => 'Türkçe (arşiv)']),
                 SelectFilter::make('is_read')->options(['1' => 'Okundu', '0' => 'Okunmadı']),
                 SelectFilter::make('is_answered')->options(['1' => 'Cevaplandı', '0' => 'Cevaplanmadı']),
             ])

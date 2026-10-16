@@ -91,12 +91,12 @@ final class CmsInitialContentSeeder
             foreach (array_keys(config('nuttime.locales')) as $locale) {
                 $translation = $definition['translation'];
                 $localizedValues = $this->sectionTranslationValues($translation, $locale);
-                $turkishValues = $this->sectionTranslationValues($translation, config('nuttime.default_locale'));
+                $previousDefaultValues = $this->sectionTranslationValues($translation, 'tr');
                 $sectionTranslation = $section->translations()->firstOrCreate(['locale' => $locale], $localizedValues);
 
                 $englishValues = $this->sectionTranslationValues($translation, 'en');
                 foreach ($localizedValues as $field => $value) {
-                    if (in_array($sectionTranslation->{$field}, [$turkishValues[$field], $englishValues[$field]], true)) {
+                    if (in_array($sectionTranslation->{$field}, [$previousDefaultValues[$field], $englishValues[$field]], true)) {
                         $sectionTranslation->{$field} = $value;
                     }
                 }

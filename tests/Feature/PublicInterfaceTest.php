@@ -29,31 +29,31 @@ final class PublicInterfaceTest extends TestCase
     {
         $menu = Menu::query()->create(['key' => 'header-primary', 'name' => 'Navigation', 'is_active' => true]);
         $item = $menu->items()->create(['link_type' => 'internal', 'route_name' => 'products', 'is_active' => true]);
-        $item->translations()->create(['locale' => 'tr', 'label' => 'Ürünler']);
+        $item->translations()->create(['locale' => 'fr', 'label' => 'Ürünler']);
 
-        $response = $this->get(route('site.tr.home'))->assertOk();
+        $response = $this->get(route('site.fr.home'))->assertOk();
         $document = new \DOMDocument;
         @$document->loadHTML($response->getContent());
-        $links = (new \DOMXPath($document))->query('//*[@id="mobile-navigation"]//a[@href="'.route('site.tr.contact').'"]');
+        $links = (new \DOMXPath($document))->query('//*[@id="mobile-navigation"]//a[@href="'.route('site.fr.contact').'"]');
         $this->assertSame(1, $links->length);
     }
 
     public function test_configured_phone_is_shown_with_a_dialable_link(): void
     {
         SiteSetting::current()->update(['phone' => '+90 (535) 100 60 30']);
-        $this->get(route('site.tr.contact'))->assertOk()
+        $this->get(route('site.fr.contact'))->assertOk()
             ->assertSee('href="tel:+905351006030"', false)
             ->assertSee('+90 (535) 100 60 30');
     }
 
     public function test_contact_validation_errors_remain_attached_to_the_fields(): void
     {
-        $response = $this->from(route('site.tr.contact'))->post(route('site.tr.contact.store'), [
+        $response = $this->from(route('site.fr.contact'))->post(route('site.fr.contact.store'), [
             'name' => '', 'email' => 'invalid', 'message' => '',
         ]);
         $response->assertSessionHasErrors(['name', 'email', 'message']);
 
-        $this->withCookie(config('session.cookie'), session()->getId())->get(route('site.tr.contact'))->assertOk()
+        $this->withCookie(config('session.cookie'), session()->getId())->get(route('site.fr.contact'))->assertOk()
             ->assertSee('aria-describedby="contact-name-error"', false)
             ->assertSee('aria-describedby="contact-email-error"', false)
             ->assertSee('aria-describedby="contact-message-error"', false);
@@ -62,17 +62,36 @@ final class PublicInterfaceTest extends TestCase
 
     public function test_valid_contact_submission_displays_confirmation_and_stores_the_message(): void
     {
-        $this->from(route('site.tr.contact'))->post(route('site.tr.contact.store'), [
+        $this->from(route('site.fr.contact'))->post(route('site.fr.contact.store'), [
             'name' => 'Test visitor', 'email' => 'visitor@example.test', 'message' => 'Product information request.',
-        ])->assertRedirect(route('site.tr.contact'))->assertSessionHas('success');
-        $this->assertDatabaseHas(ContactMessage::class, ['email' => 'visitor@example.test', 'locale' => 'tr']);
-        $this->get(route('site.tr.contact'))->assertSee('role="status"', false);
+        ])->assertRedirect(route('site.fr.contact'))->assertSessionHas('success');
+        $this->assertDatabaseHas(ContactMessage::class, ['email' => 'visitor@example.test', 'locale' => 'fr']);
+        $this->get(route('site.fr.contact'))->assertSee('role="status"', false);
     }
 
     public function test_content_without_a_cover_has_no_empty_image_box(): void
     {
         Content::query()->create(['title' => 'Test story', 'slug' => 'test-story', 'body' => 'Story body', 'status' => 'published', 'published_at' => now()]);
-        $this->get(route('site.tr.contents'))->assertOk()->assertSee('Test story')->assertDontSee('class="catalog-card__media"', false);
-        $this->get(route('site.tr.content', ['slug' => 'test-story']))->assertOk()->assertSee('Story body');
+        $this->get(route('site.fr.contents'))->assertOk()->assertSee('Test story')->assertDontSee('class="catalog-card__media"', false);
+        $this->get(route('site.fr.content', ['slug' => 'test-story']))->assertOk()->assertSee('Story body');
+    }
+
+    public function test_french_content_uses_its_primary_text_even_when_english_translation_exists(): void
+    {
+        Content::query()->create([
+            'title' => 'Histoire française',
+            'slug' => 'histoire-francaise',
+            'body' => 'Texte français',
+            'status' => 'published',
+            'published_at' => now(),
+            'translations' => [['locale' => 'en', 'title' => 'English story', 'slug' => 'english-story', 'body' => 'English text']],
+        ]);
+
+        $this->get(route('site.fr.content', ['slug' => 'histoire-francaise']))
+            ->assertOk()
+            ->assertSee('Texte français')
+            ->assertDontSee('English text');
+        $this->get(route('site.en.content', ['slug' => 'english-story']))->assertOk()->assertSee('English text');
+        $this->get(route('sitemap'))->assertSee(route('site.fr.content', ['slug' => 'histoire-francaise']), false);
     }
 }

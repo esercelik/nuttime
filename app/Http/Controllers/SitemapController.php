@@ -48,7 +48,7 @@ final class SitemapController extends Controller
                 $translations = collect($content->translations ?? [])->keyBy('locale');
 
                 foreach (array_keys(config('nuttime.locales')) as $locale) {
-                    $slug = $translations->get($locale)['slug'] ?? $translations->get('en')['slug'] ?? $content->slug;
+                    $slug = $translations->get($locale)['slug'] ?? $translations->get(config('nuttime.default_locale'))['slug'] ?? $content->slug;
                     $urls[] = $this->url($this->localizedUrl->route('content', $locale, ['slug' => $slug]), $content->updated_at, 'monthly', '0.6');
                 }
             });

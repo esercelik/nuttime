@@ -84,7 +84,7 @@ final class SeoMetadata
             '@type' => 'WebSite',
             '@id' => url('/').'#website',
             'url' => url('/'),
-            'inLanguage' => config('nuttime.locales.'.app()->getLocale().'.html', 'tr-TR'),
+            'inLanguage' => config('nuttime.locales.'.app()->getLocale().'.html', 'fr-FR'),
         ];
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 final class LocaleRedirectController extends Controller
 {
@@ -32,15 +32,11 @@ final class LocaleRedirectController extends Controller
         foreach (config('nuttime.country_headers') as $header) {
             $country = strtoupper((string) $request->header($header));
 
-            if ($country === 'TR') {
-                return 'tr';
-            }
-
             if (in_array($country, ['DE', 'AT', 'CH', 'LI', 'LU'], true)) {
                 return 'de';
             }
 
-            if (filled($country)) {
+            if (in_array($country, ['GB', 'US', 'IE', 'AU', 'NZ'], true)) {
                 return 'en';
             }
         }

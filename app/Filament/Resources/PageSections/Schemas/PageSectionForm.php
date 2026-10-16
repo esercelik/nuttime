@@ -13,6 +13,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class PageSectionForm
 {
@@ -47,8 +48,8 @@ class PageSectionForm
                     ])->columns(2),
                 ]),
                 Tab::make('Diller')->schema([
-                    Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
-                        Select::make('locale')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                    Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                        Select::make('locale')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                         TextInput::make('eyebrow')->label('Üst başlık'),
                         TextInput::make('title')->label('Başlık'),
                         Textarea::make('description')->label('Açıklama')->rows(4),

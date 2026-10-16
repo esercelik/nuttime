@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductForm
 {
@@ -49,8 +50,8 @@ class ProductForm
                     TextInput::make('seo_canonical')->label('Canonical URL')->url()->maxLength(2048)->helperText('Yalnızca farklı bir asıl URL gerekiyorsa doldurun.'),
                     TagsInput::make('previous_slugs')->label('Eski sluglar')->helperText('Her eski slug için kalıcı 301 yönlendirmesi oluşturulur.'),
                 ]),
-                Section::make('Dil bazlı içerik')->description('Eksik içerik English, ardından Türkçe değerine döner.')->schema([
-                    Repeater::make('translations')->relationship()->schema([
+                Section::make('Dil bazlı içerik')->description('Yayındaki diller Fransızca, Almanca ve İngilizcedir.')->schema([
+                    Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->schema([
                         Select::make('locale')->label('Dil')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                         TextInput::make('name')->label('Ürün adı')->required()->maxLength(255),
                         TextInput::make('slug')->label('Dil bazlı slug')->required()->maxLength(255),

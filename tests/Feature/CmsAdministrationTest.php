@@ -35,10 +35,10 @@ final class CmsAdministrationTest extends TestCase
             'settings' => ['autoplay_ms' => 9100, 'loop' => false, 'show_arrows' => false, 'show_counter' => false, 'show_progress' => false, 'swipe' => false],
         ]);
         $item = $slider->items()->create(['status' => 'published', 'is_active' => true, 'sort_order' => 1]);
-        $item->translations()->create(['locale' => 'tr', 'title' => 'Yönetilen slayt']);
+        $item->translations()->create(['locale' => 'fr', 'title' => 'Yönetilen slayt']);
         app(CmsContentRepository::class)->forgetHomeSlider();
 
-        $this->get(route('site.tr.home'))
+        $this->get(route('site.fr.home'))
             ->assertSee('data-autoplay="9100"', false)
             ->assertSee('data-loop="false"', false)
             ->assertSee('data-swipe="false"', false)
@@ -54,7 +54,7 @@ final class CmsAdministrationTest extends TestCase
         $slider->items()->create(['product_id' => $product->id, 'status' => 'published', 'is_active' => true, 'sort_order' => 1]);
         app(CmsContentRepository::class)->forgetHomeSlider();
 
-        $slide = app(CmsContentRepository::class)->homeSlider('tr')[0];
+        $slide = app(CmsContentRepository::class)->homeSlider('fr')[0];
 
         $this->assertStringContainsString('nuttime-findik-hero-background.png', $slide['background_image']);
         $this->assertStringContainsString('nuttime-findik-ingredient-elements-transparent.png', $slide['ingredient_image']);
@@ -68,14 +68,14 @@ final class CmsAdministrationTest extends TestCase
         $this->createSection('draft', 1, 'Taslak bölüm', 'draft');
         app(CmsContentRepository::class)->forgetHomeSections();
 
-        $response = $this->get(route('site.tr.home'));
+        $response = $this->get(route('site.fr.home'));
 
         $response
             ->assertSee('İlk yönetilen bölüm')
             ->assertSee('İkinci yönetilen bölüm')
             ->assertDontSee('Taslak bölüm')
             ->assertSee('id="home-banners"', false);
-        $this->assertLessThan(strpos($response->getContent(), $second->translationFor('tr')->title), strpos($response->getContent(), $first->translationFor('tr')->title));
+        $this->assertLessThan(strpos($response->getContent(), $second->translationFor('fr')->title), strpos($response->getContent(), $first->translationFor('fr')->title));
     }
 
     public function test_managed_section_text_renders_only_allowed_formatting_in_every_locale(): void
@@ -162,7 +162,7 @@ final class CmsAdministrationTest extends TestCase
 
     public function test_contact_messages_can_be_read_answered_and_archived(): void
     {
-        $message = ContactMessage::query()->create(['name' => 'Ayşe', 'email' => 'ayse@example.test', 'message' => 'Merhaba', 'locale' => 'tr']);
+        $message = ContactMessage::query()->create(['name' => 'Ayşe', 'email' => 'ayse@example.test', 'message' => 'Merhaba', 'locale' => 'fr']);
 
         $message->markRead();
         $message->markAnswered();
@@ -194,30 +194,30 @@ final class CmsAdministrationTest extends TestCase
 
     public function test_page_section_changes_invalidate_only_the_section_cache(): void
     {
-        Cache::put('cms.home.sections.tr', ['stale-section'], now()->addHour());
-        Cache::put('cms.home.slider.tr', ['fresh-slider'], now()->addHour());
+        Cache::put('cms.home.sections.fr', ['stale-section'], now()->addHour());
+        Cache::put('cms.home.slider.fr', ['fresh-slider'], now()->addHour());
 
         $this->createSection('cache-section', 1, 'Cache bölümü');
 
-        $this->assertNull(Cache::get('cms.home.sections.tr'));
-        $this->assertSame(['fresh-slider'], Cache::get('cms.home.slider.tr'));
+        $this->assertNull(Cache::get('cms.home.sections.fr'));
+        $this->assertSame(['fresh-slider'], Cache::get('cms.home.slider.fr'));
     }
 
     public function test_slider_and_menu_changes_invalidate_only_their_own_caches(): void
     {
-        Cache::put('cms.home.sections.tr', ['fresh-section'], now()->addHour());
-        Cache::put('cms.home.slider.tr', ['stale-slider'], now()->addHour());
+        Cache::put('cms.home.sections.fr', ['fresh-section'], now()->addHour());
+        Cache::put('cms.home.slider.fr', ['stale-slider'], now()->addHour());
         $slider = Slider::query()->create(['key' => 'home', 'name' => 'Slider', 'status' => 'draft']);
 
-        $this->assertSame(['fresh-section'], Cache::get('cms.home.sections.tr'));
-        $this->assertNull(Cache::get('cms.home.slider.tr'));
+        $this->assertSame(['fresh-section'], Cache::get('cms.home.sections.fr'));
+        $this->assertNull(Cache::get('cms.home.slider.fr'));
 
-        Cache::put('cms.menu.header-primary.tr', ['stale-menu'], now()->addHour());
-        Cache::put('cms.home.sections.tr', ['still-fresh'], now()->addHour());
+        Cache::put('cms.menu.header-primary.fr', ['stale-menu'], now()->addHour());
+        Cache::put('cms.home.sections.fr', ['still-fresh'], now()->addHour());
         $menu = Menu::query()->create(['key' => 'header-primary', 'name' => 'Header', 'location' => 'header']);
 
-        $this->assertNull(Cache::get('cms.menu.header-primary.tr'));
-        $this->assertSame(['still-fresh'], Cache::get('cms.home.sections.tr'));
+        $this->assertNull(Cache::get('cms.menu.header-primary.fr'));
+        $this->assertSame(['still-fresh'], Cache::get('cms.home.sections.fr'));
     }
 
     public function test_initial_cms_transfer_is_idempotent_and_preserves_existing_records(): void
@@ -232,10 +232,19 @@ final class CmsAdministrationTest extends TestCase
         $this->assertSame(1, Slider::query()->where('key', 'home')->count());
     }
 
+    public function test_site_settings_with_active_locales_remain_readable_from_cache(): void
+    {
+        SiteSetting::current()->update(['active_locales' => ['fr', 'de', 'en'], 'default_locale' => 'fr']);
+
+        $this->assertSame(['fr', 'de', 'en'], SiteSetting::current()->active_locales);
+        $this->assertSame(['fr', 'de', 'en'], SiteSetting::current()->active_locales);
+        $this->get(route('site.fr.home'))->assertOk();
+    }
+
     private function createSection(string $key, int $order, string $title, string $status = 'published'): PageSection
     {
         $section = PageSection::query()->create(['page_key' => 'home', 'key' => $key, 'type' => 'intro', 'status' => $status, 'is_active' => true, 'sort_order' => $order]);
-        $section->translations()->create(['locale' => 'tr', 'title' => $title]);
+        $section->translations()->create(['locale' => 'fr', 'title' => $title]);
 
         return $section;
     }

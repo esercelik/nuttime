@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class CertificateForm
 {
@@ -27,8 +28,8 @@ class CertificateForm
                 Select::make('document_file')->label('Belge (PDF)')->options(fn (): array => MediaLibraryOptions::documents())->searchable(),
                 TextInput::make('document_url')->label('Belge bağlantısı')->url()->maxLength(2048),
                 Toggle::make('is_active')->label('Aktif')->default(true), TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0),
-                Repeater::make('translations')->relationship()->minItems(3)->maxItems(3)->defaultItems(3)->schema([
-                    Select::make('locale')->label('Dil')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->minItems(3)->maxItems(3)->defaultItems(3)->schema([
+                    Select::make('locale')->label('Dil')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                     TextInput::make('name')->label('Sertifika adı')->required(),
                     Textarea::make('description')->label('Açıklama')->rows(3),
                     Select::make('image')->label('Dil görseli')->options(fn (): array => MediaLibraryOptions::images())->searchable(),

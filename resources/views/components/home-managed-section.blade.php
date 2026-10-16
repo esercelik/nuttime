@@ -21,7 +21,7 @@
     @case('featured_products')
         @php($featuredProducts = collect($products)->filter(fn (array $product): bool => $product['featured'] ?? false)->take($section['settings']['limit'] ?? 3))
         @php($featuredProducts = $featuredProducts->isNotEmpty() ? $featuredProducts : collect($products)->take($section['settings']['limit'] ?? 3))
-        @if($featuredProducts->isNotEmpty())<section class="feature-showcase home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" :href="$buttonUrl" :link-text="$section['button_label']" rich-title /><div class="feature-showcase__grid">@foreach($featuredProducts as $key => $product)<x-product-card :product="$product" :index="$key" :variant="$key === 0 ? 'hero' : 'mini'" />@endforeach</div></div></section>@endif
+        @if($featuredProducts->isNotEmpty())<section class="feature-showcase home-section"><div class="container"><x-section-heading :kicker="$section['eyebrow']" :title="$section['title']" :href="$buttonUrl ?? app(\App\Support\LocalizedUrl::class)->route('products')" :link-text="$section['button_label'] ?: __('site.actions.all_products')" rich-title /><div class="feature-showcase__grid">@foreach($featuredProducts as $key => $product)<x-product-card :product="$product" :index="$key" :variant="$key === 0 ? 'hero' : 'mini'" />@endforeach</div></div></section>@endif
         @break
 
     @case('categories')

@@ -30,7 +30,7 @@ final class CmsContentRepositoryTest extends TestCase
             'product_image' => 'sliders/product.png',
         ]);
         $publishedItem->translations()->create([
-            'locale' => 'tr',
+            'locale' => 'fr',
             'title' => 'Yönetilen başlık',
             'description' => 'Yönetilen açıklama',
         ]);

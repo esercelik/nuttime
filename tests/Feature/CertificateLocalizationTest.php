@@ -22,7 +22,7 @@ final class CertificateLocalizationTest extends TestCase
             'is_active' => true,
         ]);
         $certificate->translations()->createMany([
-            ['locale' => 'tr', 'name' => 'Türkçe sertifika', 'description' => 'Türkçe açıklama', 'image' => 'media/certificates/tr.jpg'],
+            ['locale' => 'fr', 'name' => 'Türkçe sertifika', 'description' => 'Türkçe açıklama', 'image' => 'media/certificates/tr.jpg'],
             ['locale' => 'en', 'name' => 'English certificate', 'description' => 'English description', 'image' => 'media/certificates/en.jpg'],
             ['locale' => 'de', 'name' => 'Deutsches Zertifikat', 'description' => 'Deutsche Beschreibung', 'image' => 'media/certificates/de.jpg'],
         ]);
@@ -45,16 +45,16 @@ final class CertificateLocalizationTest extends TestCase
     public function test_managed_home_sections_and_nested_menus_do_not_expose_certificates(): void
     {
         $section = PageSection::query()->create(['page_key' => 'home', 'key' => 'certificates', 'type' => 'certificates', 'status' => 'published', 'is_active' => true]);
-        $section->translations()->create(['locale' => 'tr', 'title' => 'Managed certificate section']);
+        $section->translations()->create(['locale' => 'fr', 'title' => 'Managed certificate section']);
         foreach (['header-primary', 'footer-primary'] as $key) {
             $menu = Menu::query()->create(['key' => $key, 'name' => $key, 'is_active' => true]);
             $parent = $menu->items()->create(['link_type' => 'internal', 'route_name' => 'products', 'is_active' => true]);
-            $parent->translations()->create(['locale' => 'tr', 'label' => 'Product navigation']);
+            $parent->translations()->create(['locale' => 'fr', 'label' => 'Product navigation']);
             $item = $menu->items()->create(['parent_id' => $parent->id, 'link_type' => 'internal', 'route_name' => 'certificates', 'is_active' => true]);
-            $item->translations()->create(['locale' => 'tr', 'label' => 'Managed certificate link']);
+            $item->translations()->create(['locale' => 'fr', 'label' => 'Managed certificate link']);
         }
 
-        $this->get(route('site.tr.home'))->assertOk()
+        $this->get(route('site.fr.home'))->assertOk()
             ->assertSee('Product navigation')
             ->assertDontSee('Managed certificate section')
             ->assertDontSee('Managed certificate link');

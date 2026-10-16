@@ -14,8 +14,9 @@ class SiteSetting extends Model
     public static function current(): self
     {
         $data = Cache::rememberForever('site_settings.current', fn () => static::firstOrCreate([], ['site_name' => 'Nuttime'])->toArray());
+        $settings = new static;
 
-        return (new static)->newFromBuilder($data);
+        return $settings->newFromBuilder($settings->forceFill($data)->getAttributes());
     }
 
     protected static function booted(): void

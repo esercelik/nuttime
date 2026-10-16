@@ -9,6 +9,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class CategoryForm
 {
@@ -26,8 +27,8 @@ class CategoryForm
                 TextInput::make('seo_canonical')->label('Canonical URL')->url()->maxLength(2048),
                 Toggle::make('is_active')->label('Aktif')->default(true),
                 TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0),
-                Repeater::make('translations')->relationship()->schema([
-                    Select::make('locale')->label('Dil')->options(['tr' => 'Türkçe', 'en' => 'English', 'de' => 'Deutsch'])->required()->distinct(),
+                Repeater::make('translations')->relationship(modifyQueryUsing: fn (Builder $query): Builder => $query->whereIn('locale', array_keys(config('nuttime.locales'))))->schema([
+                    Select::make('locale')->label('Dil')->options(collect(config('nuttime.locales'))->mapWithKeys(fn (array $locale, string $key): array => [$key => $locale['label']])->all())->required()->distinct(),
                     TextInput::make('name')->label('Kategori adı')->required()->maxLength(255),
                     TextInput::make('slug')->label('Dil bazlı slug')->required()->maxLength(255),
                     Textarea::make('description')->label('Açıklama')->rows(4),

@@ -53,9 +53,9 @@ final class ContentController extends Controller
     {
         $locale = app()->getLocale();
         $translations = collect($content->translations ?? [])->keyBy('locale');
-        $translation = $translations->get($locale) ?? $translations->get('en') ?? $translations->get('tr') ?? [];
+        $translation = $translations->get($locale) ?? $translations->get(config('nuttime.default_locale')) ?? [];
         $slugs = collect(array_keys(config('nuttime.locales')))->mapWithKeys(function (string $locale) use ($content, $translations): array {
-            return [$locale => $translations->get($locale)['slug'] ?? $translations->get('en')['slug'] ?? $content->slug];
+            return [$locale => $translations->get($locale)['slug'] ?? $translations->get(config('nuttime.default_locale'))['slug'] ?? $content->slug];
         })->all();
 
         return [

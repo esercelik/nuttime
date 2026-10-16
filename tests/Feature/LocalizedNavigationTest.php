@@ -11,38 +11,33 @@ final class LocalizedNavigationTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_language_picker_renders_all_ten_supported_languages(): void
+    public function test_language_picker_renders_only_french_german_and_english(): void
     {
-        $response = $this->get(route('site.tr.home'));
+        $response = $this->get(route('site.fr.home'));
 
         $response
-            ->assertSee('Türkçe')
+            ->assertSee('Français')
             ->assertSee('English')
             ->assertSee('Deutsch')
-            ->assertSee('Français')
-            ->assertSee('Español')
-            ->assertSee('Italiano')
-            ->assertSee('Русский')
-            ->assertSee('العربية')
-            ->assertSee('中文')
-            ->assertSee('Português');
+            ->assertDontSee('Türkçe')
+            ->assertDontSee('Español');
     }
 
     public function test_footer_renders_the_nuttime_instagram_link_and_studio_credit(): void
     {
-        $response = $this->get(route('site.tr.home'));
+        $response = $this->get(route('site.fr.home'));
 
         $response
             ->assertSee('href="https://www.instagram.com/nuttimetr/" target="_blank" rel="noopener noreferrer"', false)
             ->assertSee('Site by <strong>Çelik Studio</strong>', false);
     }
 
-    public function test_new_locales_keep_product_pages_available_with_the_existing_content_fallback(): void
+    public function test_supported_locales_keep_product_pages_and_alternates_available(): void
     {
         app(InitialCatalogImporter::class)->import();
         $product = Product::query()->with('translations')->where('slug', 'findik-kremasi')->firstOrFail();
 
-        foreach (['fr', 'es', 'it', 'ru', 'ar', 'zh', 'pt'] as $locale) {
+        foreach (['fr', 'de', 'en'] as $locale) {
             $slug = $product->translationFor($locale)?->slug ?: $product->slug;
             $response = $this->get(route('site.'.$locale.'.product', ['slug' => $slug]));
 
@@ -65,13 +60,13 @@ final class LocalizedNavigationTest extends TestCase
             ->assertSee('/en/contact"', false);
     }
 
-    public function test_arabic_product_page_sets_rtl_document_direction(): void
+    public function test_french_product_page_sets_french_document_language(): void
     {
         app(InitialCatalogImporter::class)->import();
 
-        $this->get(route('site.ar.product', ['slug' => 'hazelnut-butter']))
-            ->assertSee('<html lang="ar" dir="rtl">', false)
-            ->assertSee('العربية');
+        $this->get(route('site.fr.product', ['slug' => 'pate-de-noisettes']))
+            ->assertSee('<html lang="fr-FR" dir="ltr">', false)
+            ->assertSee('Français');
     }
 
     public function test_initial_catalog_contains_each_supported_product_translation(): void
@@ -86,6 +81,18 @@ final class LocalizedNavigationTest extends TestCase
         $this->assertSame($supportedLocales, $product->translations->pluck('locale')->sort()->values()->all());
     }
 
+    public function test_catalog_import_preserves_historical_translations(): void
+    {
+        app(InitialCatalogImporter::class)->import();
+        $product = Product::query()->where('slug', 'findik-kremasi')->firstOrFail();
+        $product->translations()->create(['locale' => 'tr', 'name' => 'Fındık Ezmesi', 'slug' => 'findik-kremasi']);
+
+        app(InitialCatalogImporter::class)->import();
+
+        $this->assertSame(4, $product->translations()->count());
+        $this->assertSame('Fındık Ezmesi', $product->translations()->where('locale', 'tr')->firstOrFail()->name);
+    }
+
     public function test_product_detail_uses_the_selected_locale_translation_from_the_database(): void
     {
         app(InitialCatalogImporter::class)->import();
@@ -95,6 +102,6 @@ final class LocalizedNavigationTest extends TestCase
         $response
             ->assertSee('Pâte de noisettes')
             ->assertSee('Ingrédients')
-            ->assertSee('href="'.route('site.ar.product', ['slug' => 'hazelnut-butter']).'"', false);
+            ->assertSee('href="'.route('site.de.product', ['slug' => 'haselnusscreme']).'"', false);
     }
 }

@@ -21,7 +21,7 @@ final class ProductDataFlowTest extends TestCase
             'sort_order' => 10,
         ]);
         $product->translations()->create([
-            'locale' => 'tr',
+            'locale' => 'fr',
             'name' => 'Admin veri akışı ürünü',
             'slug' => 'admin-veri-akisi-urunu',
             'short_description' => 'İlk admin açıklaması.',
@@ -29,21 +29,21 @@ final class ProductDataFlowTest extends TestCase
 
         $this->assertSame(Product::class, ProductResource::getModel());
 
-        $this->get(route('site.tr.home'))->assertOk()->assertSee('İlk admin açıklaması.');
-        $this->get(route('site.tr.products'))->assertOk()->assertSee('İlk admin açıklaması.');
-        $this->get(route('site.tr.product', ['slug' => 'admin-veri-akisi-urunu']))->assertOk()->assertSee('İlk admin açıklaması.');
+        $this->get(route('site.fr.home'))->assertOk()->assertSee('İlk admin açıklaması.');
+        $this->get(route('site.fr.products'))->assertOk()->assertSee('İlk admin açıklaması.');
+        $this->get(route('site.fr.product', ['slug' => 'admin-veri-akisi-urunu']))->assertOk()->assertSee('İlk admin açıklaması.');
 
         $product->update(['short_description' => 'Güncellenmiş admin açıklaması.']);
-        $product->translations()->where('locale', 'tr')->update(['short_description' => 'Güncellenmiş admin açıklaması.']);
+        $product->translations()->where('locale', 'fr')->update(['short_description' => 'Güncellenmiş admin açıklaması.']);
 
-        $this->get(route('site.tr.products'))
+        $this->get(route('site.fr.products'))
             ->assertOk()
             ->assertSee('Güncellenmiş admin açıklaması.')
             ->assertDontSee('İlk admin açıklaması.');
 
         $product->update(['is_active' => false]);
 
-        $this->get(route('site.tr.products'))
+        $this->get(route('site.fr.products'))
             ->assertOk()
             ->assertDontSee('Admin veri akışı ürünü');
     }

@@ -17,7 +17,7 @@ final class FactoryLocationTest extends TestCase
 
         $this->createFactorySettings();
 
-        $response = $this->get(route('site.tr.contact'));
+        $response = $this->get(route('site.fr.contact'));
 
         $response
             ->assertSee('factory-location--contact', false)
@@ -29,7 +29,7 @@ final class FactoryLocationTest extends TestCase
             ->assertSee('loading="lazy"', false)
             ->assertSee('referrerpolicy="no-referrer-when-downgrade"', false)
             ->assertSee('https://www.google.com/maps/place/Nuttime', false)
-            ->assertSee('Yol tarifi al');
+            ->assertSee('Itinéraire');
     }
 
     public function test_contact_uses_a_google_maps_link_fallback_when_the_embed_api_key_is_missing(): void
@@ -38,12 +38,12 @@ final class FactoryLocationTest extends TestCase
 
         $this->createFactorySettings();
 
-        $response = $this->get(route('site.tr.contact'));
+        $response = $this->get(route('site.fr.contact'));
 
         $response
             ->assertSee('map-frame--fallback', false)
             ->assertDontSee('maps/embed/v1/place', false)
-            ->assertSee('Haritada gör')
+            ->assertSee('Voir sur la carte')
             ->assertSee('https://www.google.com/maps/place/Nuttime', false);
     }
 
@@ -56,12 +56,12 @@ final class FactoryLocationTest extends TestCase
             'factory_map_longitude' => null,
         ]);
 
-        $response = $this->get(route('site.tr.contact'));
+        $response = $this->get(route('site.fr.contact'));
 
         $response
             ->assertSee('map-frame--fallback', false)
             ->assertDontSee('maps/embed/v1/place', false)
-            ->assertSee('Haritada gör');
+            ->assertSee('Voir sur la carte');
     }
 
     public function test_contact_hides_map_links_when_google_maps_url_is_missing(): void
@@ -72,12 +72,12 @@ final class FactoryLocationTest extends TestCase
             'factory_google_maps_url' => null,
         ]);
 
-        $response = $this->get(route('site.tr.contact'));
+        $response = $this->get(route('site.fr.contact'));
 
         $response
             ->assertSee('maps/embed/v1/place', false)
-            ->assertDontSee('Yol tarifi al')
-            ->assertDontSee('Haritada gör');
+            ->assertDontSee('Itinéraire')
+            ->assertDontSee('Voir sur la carte');
     }
 
     public function test_homepage_and_contact_share_the_same_factory_settings(): void
@@ -87,12 +87,12 @@ final class FactoryLocationTest extends TestCase
             'factory_address' => 'Pendik, İstanbul',
         ]);
 
-        $this->get(route('site.tr.home'))
+        $this->get(route('site.fr.home'))
             ->assertSee('factory-location--homepage', false)
             ->assertSee('Güncellenen Nuttime Tesisi')
             ->assertSee('Pendik, İstanbul');
 
-        $this->get(route('site.tr.contact'))
+        $this->get(route('site.fr.contact'))
             ->assertSee('factory-location--contact', false)
             ->assertSee('Güncellenen Nuttime Tesisi')
             ->assertSee('Pendik, İstanbul');
@@ -103,7 +103,7 @@ final class FactoryLocationTest extends TestCase
     {
         $this->createFactorySettings($overrides);
 
-        $this->get(route('site.tr.contact'))
+        $this->get(route('site.fr.contact'))
             ->assertDontSee('factory-location--contact', false);
     }
 
@@ -120,19 +120,19 @@ final class FactoryLocationTest extends TestCase
     {
         $this->createFactorySettings();
 
-        $response = $this->from(route('site.tr.contact'))->post(route('site.tr.contact.store'), [
+        $response = $this->from(route('site.fr.contact'))->post(route('site.fr.contact.store'), [
             'name' => 'Ayşe Yılmaz',
             'email' => 'ayse@example.test',
             'message' => 'Ürünleriniz hakkında bilgi almak istiyorum.',
             'website' => '',
         ]);
 
-        $response->assertRedirect(route('site.tr.contact'));
+        $response->assertRedirect(route('site.fr.contact'));
         $this->assertDatabaseHas('contact_messages', [
             'name' => 'Ayşe Yılmaz',
             'email' => 'ayse@example.test',
             'message' => 'Ürünleriniz hakkında bilgi almak istiyorum.',
-            'locale' => 'tr',
+            'locale' => 'fr',
         ]);
     }
 
